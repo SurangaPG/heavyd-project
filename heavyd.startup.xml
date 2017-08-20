@@ -20,6 +20,5 @@
         <mkdir dir="${project.basedir}/script" />
         <mkdir dir="${project.basedir}/test" />
         <mkdir dir="${project.basedir}/artifact" />
-        <mkdir dir="${project.basedir}/web" />
     </target>
 </project>
