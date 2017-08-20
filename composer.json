@@ -1,0 +1,16 @@
+{
+    "name": "surangapg/heavyd-platform",
+    "description": "A property and stage manager tool suite. Designed to kickstart and support devops integrations.",
+    "type": "metapackage",
+    "require": {
+        "phing/phing": "^2.16"
+    },
+    "authors": [
+        {
+            "name": "Suranga Panagamuwa Gamage",
+            "email": "suranga.gamage@one-agency.be"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

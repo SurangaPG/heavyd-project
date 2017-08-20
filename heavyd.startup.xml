@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="HeavyD - platform" default="info">
+
+    <target name="info" description="Show some basic information.">
+        <echo message="Welcome to the HeavyD project environment." />
+    </target>
+
+    <target name="heavyd:start-project" description="sets up a heavyD project for the very first time. ">
+        <mkdir dir="${project.basedir}/properties" />
+        <mkdir dir="${project.basedir}/etc" />
+        <mkdir dir="${project.basedir}/script" />
+        <mkdir dir="${project.basedir}/test" />
+        <mkdir dir="${project.basedir}/artifact" />
+        <mkdir dir="${project.basedir}/web" />
+    </target>
+</project>
