@@ -1,10 +1,17 @@
 {
     "name": "surangapg/heavyd-platform",
     "description": "A property and stage manager tool suite. Designed to kickstart and support devops integrations.",
-    "type": "metapackage",
+    "type": "library",
     "require": {
-        "phing/phing": "^2.16"
+        "phing/phing": "^2.16",
+        "surangapg/heavyd-drupal-8": "dev-master"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "https://suranga_panagamuwa_gamage@bitbucket.org/webct/heavyd-drupal-8.git"
+        }
+    ],
     "authors": [
         {
             "name": "Suranga Panagamuwa Gamage",
