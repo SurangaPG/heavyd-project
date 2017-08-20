@@ -6,7 +6,15 @@
         <echo message="Welcome to the HeavyD project environment." />
     </target>
 
-    <target name="heavyd:start-project" description="sets up a heavyD project for the very first time. ">
+    <target name="heavyd:project-retrofit" description="Adds some basics to a pre-existing project">
+        <phingcall target="startup:basic-dirs"/>
+    </target>
+
+    <target name="heavyd:project-start-drupal-8" description="sets up a heavyD drupal 8 project for the very first time. ">
+        <phingcall target="startup:basic-dirs"/>
+    </target>
+
+    <target name="startup:basic-dirs" description="Set up the basic directories for a heavyD project">
         <mkdir dir="${project.basedir}/properties" />
         <mkdir dir="${project.basedir}/etc" />
         <mkdir dir="${project.basedir}/script" />
