@@ -18,6 +18,7 @@
         <mkdir dir="${project.basedir}/properties" />
         <mkdir dir="${project.basedir}/templates" />
         <mkdir dir="${project.basedir}/temp" />
+        <mkdir dir="${project.basedir}/cache" />
         <mkdir dir="${project.basedir}/etc" />
         <mkdir dir="${project.basedir}/script" />
         <mkdir dir="${project.basedir}/test" />
