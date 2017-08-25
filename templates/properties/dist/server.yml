@@ -1,0 +1,9 @@
+prod:
+  label: Production
+  host: "hostname"
+  user: "username"
+  root: "/var/web/root"
+  stage: "prod"
+  env: "level27"
+  hostedBy: "level27" # Duplicate, will be fully replaced by env in time.
+  site: default

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<project name="Project tasks" default="project:help" description="Contains all the task to build a project up from scratch.">
+
+    <!-- @TODO autodetect these -->
+    <import file=".phing/build.composer.xml" />
+    <import file=".phing/build.property.xml" />
+    <import file=".phing/build.drupal.xml" />
+    <import file=".phing/build.theme.xml" />
+    <import file=".phing/build.drush.xml" />
+
+    <target name="project:build" description="Builds an entire environment up from scratch.">
+        <phingcall target="composer:build" />
+    </target>
+
+    <target name="project:setup" description="Setups up an already prepared environment">
+        <phingcall target="theme:get-assets" />
+    </target>
+
+    <target name="project:init" description="Init a new project with all the needed code etc in place.">
+        <phingcall target="drupal:init:config" />
+        <phingcall target="drupal:init:baseline-module" />
+        <phingcall target="drupal:init:baseline-theme" />
+        <phingcall target="drupal:init:site-dir" />
+        <phingcall target="drupal:init:cleanup" />
+    </target>
+
+    <target name="project:property-cleanse" description="Cleanses a project of all properties etc.">
+        <phingcall target="property:cleanse" />
+        <phingcall target="property:write-full" />
+    </target>
+
+    <target name="project:activate-env" description="Activates a full environment">
+        <phingcall target="property:cleanse:env" />
+        <phingcall target="property:activate:env" />
+        <phingcall target="property:write-full" />
+        <phingcall target="drupal:env:settings-file" />
+    </target>
+
+    <target name="project:activate-site-stage" description="Activates a the correct stage (e.g production, acc, etc) for a given site (dir).">
+        <phingcall target="property:cleanse:stage" />
+        <phingcall target="property:activate:stage" />
+        <phingcall target="property:write-full" />
+        <phingcall target="drupal:stage:activate-etc-files" />
+    </target>
+
+    <target name="project:help">
+        <exec passthru="true" command="${bin.phing} -l" />
+    </target>
+
+</project>

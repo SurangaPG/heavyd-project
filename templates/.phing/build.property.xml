@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<project name="Property tasks" default="property:help" description="Contains all the task used to enable and disable the various property sets">
+
+    <target name="property:cleanse" description="Clean out all the active env and stage properties.">
+        <phingcall target="property:cleanse:env" />
+        <phingcall target="property:cleanse:stage" />
+    </target>
+
+    <!-- Activates the properties for a given environment -->
+    <target name="property:cleanse:env" description="Activates an environment by copying all it's property files to the main env property dir.">
+        <delete verbose="${phing.verbose}">
+            <fileset dir="${dir.properties.env}" casesensitive="false">
+                <include name="*.yml"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <!-- Activates the properties for a given -->
+    <target name="property:cleanse:stage" description="Activates an environment by copying all it's property files to the main env property dir.">
+        <delete verbose="${phing.verbose}">
+            <fileset dir="${dir.properties.stage}" casesensitive="false">
+                <include name="*.yml"/>
+            </fileset>
+        </delete>
+
+    </target>
+
+    <!-- Activates the properties for a given environment -->
+    <target name="property:activate:env" description="Activates an environment by copying all it's property files to the main env property dir.">
+        <fail unless="env.to.activate" message="No Env specified. Pass env.to.activate as a property." />
+        <if>
+            <available file="${dir.etc.env}/${env.to.activate}/properties" type="dir" property="env.to.activate.properties.available" />
+            <then>
+                <echo message="Syncing properties for ${env.to.activate} to active properties." />
+                <echo message="Source dir: ${dir.etc.env}/${env.to.activate}/properties/"/>
+                <echo message="Target dir: ${dir.properties.env}/"/>
+                <exec passthru="true" command="rsync -a --delete ${dir.etc.env}/${env.to.activate}/properties/ ${dir.properties.env}/"/>
+            </then>
+        </if>
+    </target>
+
+    <!-- Activates the properties for a given -->
+    <target name="property:activate:stage" description="Activates an environment by copying all it's property files to the main env property dir.">
+        <fail unless="stage.to.activate" message="No Stage specified. Pass stage.to.activate as a property." />
+        <fail unless="site.to.activate" message="No site specified. Pass site.to.activate as a property." />
+        <if>
+            <available file="${dir.etc.env}/${site.to.activate}/stages/${stage.to.activate}/properties" type="dir" property="stage.to.activate.properties.available" />
+            <then>
+                <echo message="Syncing properties for ${stage.to.activate} to active properties." />
+                <echo message="Source dir: ${dir.etc.env}/${site.to.activate}/stages/${stage.to.activate}/properties"/>
+                <echo message="Target dir: ${dir.properties.stage}/"/>
+                <exec passthru="true" command="rsync -a --delete ${dir.etc.env}/${site.to.activate}/stages/${stage.to.activate}/properties/ ${dir.properties.stage}/"/>
+            </then>
+        </if>
+    </target>
+
+    <target name="property:help">
+        <exec passthru="true" command="${bin.phing} -l" />
+    </target>
+
+</project>

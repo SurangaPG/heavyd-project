@@ -1,0 +1,9 @@
+# Contains any project metadata, Such as the label, machine name etc.
+# This item is always loaded early since it's used in somany other implementations.
+label: "Human readable label" # Such as Liveshow 2017
+machineName: "machine_name" # such as liveshow
+group: "group_machine_name" # Such as kotk
+basePath: ${current.basePath}
+services:
+  databases:
+   - default--default

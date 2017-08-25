@@ -1,0 +1,5 @@
+default--default:
+  username: lala
+  password: lall
+  database: llal
+  host: localhost

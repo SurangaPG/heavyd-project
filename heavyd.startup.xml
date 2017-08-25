@@ -1,27 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<project name="HeavyD - platform" default="info">
+<project name="HeavyD - startup" default="info">
+
+    <!-- Auto include all the heavyd build files in the vendor dirs. -->
+    <import>
+        <fileset dir="${project.basedir}/.heavyd/vendor">
+            <patternset>
+                <include name="*.heavyd-startup.xml"/>
+            </patternset>
+        </fileset>
+    </import>
 
     <target name="info" description="Show some basic information.">
-        <echo message="Welcome to the HeavyD project environment." />
+        <echo message="Welcome to the HeavyD project startup. This buildfile is used to wrap around the various phing files needed to start up the project." />
     </target>
 
-    <target name="heavyd:project-retrofit" description="Adds some basics to a pre-existing project">
+    <target name="heavyd-startup:project-retrofit" description="Adds some basics to a pre-existing project">
         <phingcall target="startup:basic-dirs"/>
+        <phingcall target="startup:mirror-templates"/>
     </target>
 
-    <target name="heavyd:project-start-drupal-8" description="sets up a heavyD drupal 8 project for the very first time. ">
+    <target name="heavyd-startup:drupal8" description="sets up a heavyD drupal 8 project for the very first time. ">
         <phingcall target="startup:basic-dirs"/>
+        <phingcall target="startup:mirror-templates"/>
     </target>
 
     <target name="startup:basic-dirs" description="Set up the basic directories for a heavyD project">
         <mkdir dir="${project.basedir}/properties" />
+        <mkdir dir="${project.basedir}/.phing" />
+        <mkdir dir="${project.basedir}/.deployer" />
         <mkdir dir="${project.basedir}/templates" />
         <mkdir dir="${project.basedir}/temp" />
         <mkdir dir="${project.basedir}/cache" />
         <mkdir dir="${project.basedir}/etc" />
-        <mkdir dir="${project.basedir}/script" />
-        <mkdir dir="${project.basedir}/test" />
+        <mkdir dir="${project.basedir}/scripts" />
+        <mkdir dir="${project.basedir}/tests" />
+        <mkdir dir="${project.basedir}/tests/behat" />
+        <mkdir dir="${project.basedir}/tests/phpunit" />
+        <mkdir dir="${project.basedir}/tests/haunt" />
         <mkdir dir="${project.basedir}/artifact" />
+    </target>
+
+    <target name="startup:mirror-templates" description="mirrors all the template files in the .phing dir to the active site.">
+        <copy todir="${project.basedir}/.phing">
+            <fileset dir="${project.basedir}/.heavyd/vendor/platform/templates/.phing">
+                <patternset>
+                    <include name="**"/>
+                </patternset>
+            </fileset>
+        </copy>
     </target>
 </project>

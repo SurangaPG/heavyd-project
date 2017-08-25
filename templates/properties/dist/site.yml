@@ -1,0 +1,9 @@
+url:
+  base: 'https://base.url/haha'
+dir: 'default'
+path:
+  base: ${dir.web.root}/sites/default
+  files: ${dir.web.root}/sites/default/files
+  private: ${dir.web.root}/sites/default/files/private
+  temp: ${dir.web.root}/sites/default/files/temp
+alias:

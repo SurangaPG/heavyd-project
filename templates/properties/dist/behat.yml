@@ -1,0 +1,24 @@
+fixtures:
+  files: '${dir.tests.behat}/fixtures/files'
+  vendor: '${dir.tests.behat}/vendor/one-agency/${project.machineName}'
+# Several pipes can be run in parallel, to ensure all of these have the correct behat config file available we'll list them here.
+pipes:
+  dir: ${dir.tests.behat}/pipes
+  list: 'pipe-1,pipe-2,pipe-3,pipe-4'
+# The behat file is generated from a template.
+# correct information can be found here.
+yml:
+  template: ${dir.etc.template}/behat.yml.dist
+  path: ${dir.tests.behat}/behat.yml
+# Formatter informatie
+formatter:
+  name: pretty
+# Browser information
+webdriver:
+  port: 4444 # The port of the webdriver host (e.g. Selenium or PhantomJS).
+  url: http://localhost:${behat.webdriver.port}/wd/hub # The URL of the webdriver host (e.g. Selenium or PhantomJS).
+# The browser to use for testing, either 'firefox' or 'chrome'.
+browser_name: firefox
+# The driver for javascript sessions.
+javascript_session: selenium2
+api_driver: drush
