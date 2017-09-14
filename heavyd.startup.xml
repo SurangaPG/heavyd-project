@@ -66,7 +66,7 @@
             </fileset>
         </copy>
 
-        <copy todir="${project.basedir}">
+        <copy todir="${project.basedir}/">
             <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/update">
                 <patternset>
                     <include name="**"/>
