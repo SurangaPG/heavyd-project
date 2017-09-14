@@ -1,0 +1,61 @@
+name: drupal
+type: php:7.0
+build:
+  flavor: composer
+# runtime:
+#   extensions:
+#     - ssh2
+#     - ldap
+#   disabled_extensions:
+#     - sqlite3
+#     - pdo_sqlite
+dependencies:
+  php:
+    drush/drush: '^8.1.2'
+    drupal/console: '@stable'
+  nodejs:
+    gulp-cli: '^1.2.1'
+    bower: '^1.7.9'
+    yarn: '0.17.4'
+relationships:
+  database: 'mysql:mysql'
+  solr: 'omnimut:solr'
+  # redis: 'redis:redis'
+access:
+  ssh: contributor
+web:
+  locations:
+    '/':
+      root: 'web'
+      expires: -1
+      passthru: '/index.php'
+disk: 2048
+mounts:
+  '/web/sites/default/files': 'shared:files/files'
+  '/tmp': 'shared:files/tmp'
+  '/private': 'shared:files/private'
+  '/drush-backups': 'shared:files/drush-backups'
+  '/etc/sites/default/translations': 'shared:files/translations'
+hooks:
+  build: |
+    cd .phing
+    composer install
+    cd ..
+    ls -la
+    ./.phing/vendor/bin/phing property:write-full
+    ./.phing/vendor/bin/phing composer:build
+    ./.phing/vendor/bin/phing project:activate-env -Denv.to.activate=platform -Dsite.to.activate=default
+    ./.phing/vendor/bin/phing project:activate-site-stage -Dstage.to.activate="$PLATFORM_BRANCH" -Dsite.to.activate=default
+    ./.phing/vendor/bin/phing property:write-full -Dcurrent.basePath="/app" -Dsite.to.activate=default
+  deploy: |
+    set -e
+    # ./.phing/vendor/bin/phing drush:site-install -Dactive.site=default
+    ./.phing/vendor/bin/phing drush:cache-rebuild  -Dactive.site=default
+    ./.phing/vendor/bin/phing drush:config-import -Dactive.site=default
+    ./.phing/vendor/bin/phing drush:entity-updates -Dactive.site=default
+    ./.phing/vendor/bin/phing drush:update-database -Dactive.site=default
+    ./.phing/vendor/bin/phing drush:cron -Dactive.site=default
+crons:
+  drupal:
+    spec: '*/15 * * * *'
+    cmd: 'cd web; drush cron'

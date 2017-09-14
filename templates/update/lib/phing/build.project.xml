@@ -8,6 +8,31 @@
     <import file=".phing/build.drupal.xml" />
     <import file=".phing/build.theme.xml" />
     <import file=".phing/build.drush.xml" />
+    <import file=".phing/build.server.xml" />
+
+    <target name="project:install" description="Installs a full website from scratch.">
+        <!-- Default values -->
+        <property name="final.env" value="local" />
+        <property name="final.stage" value="dev" />
+
+        <!-- Enable the install time data -->
+        <property name="env.to.activate" value="${final.env}" override="true" />
+        <property name="stage.to.activate" value="install" override="true" />
+
+        <phingcall target="project:activate-env" />
+        <phingcall target="project:activate-stage" />
+
+        <!-- Generate a .etc/.host file for the local environment -->
+        <!-- @TODO implement this -->
+
+        <!-- @TODO Look into the mails being sent during install? -->
+        <phingcall target="drush:site-install" />
+
+        <!-- Install the final stage (was forced to install to prevent issues) -->
+        <property name="stage.to.activate" value="${final.stage}" override="true" />
+        <phingcall target="project:activate-stage" />
+    </target>
+
 
     <target name="project:build" description="Builds an entire environment up from scratch.">
         <phingcall target="composer:build" />
@@ -37,7 +62,7 @@
         <phingcall target="drupal:env:settings-file" />
     </target>
 
-    <target name="project:activate-site-stage" description="Activates a the correct stage (e.g production, acc, etc) for a given site (dir).">
+    <target name="project:activate-stage" description="Activates a the correct stage (e.g production, acc, etc) for a given site (dir).">
         <phingcall target="property:cleanse:stage" />
         <phingcall target="property:activate:stage" />
         <phingcall target="property:write-full" />

@@ -3,6 +3,7 @@
 <project name="Drush tasks" default="drush:help" description="Contains all the task used to enable and disable the various environments">
 
     <target name="drush:maintenance-mode-activate">
+        <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} state-set maintenance_mode 1 "
@@ -10,6 +11,7 @@
     </target>
 
     <target name="drush:maintenance-mode-deactivate">
+        <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} state-set maintenance_mode 0 "
@@ -17,6 +19,7 @@
     </target>
 
     <target name="drush:cache-rebuild">
+        <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} cache-rebuild"
@@ -24,6 +27,7 @@
     </target>
 
     <target name="drush:config-import">
+        <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} config-import -y"
@@ -31,6 +35,7 @@
     </target>
 
     <target name="drush:entity-updates">
+        <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} entity-updates -y"
@@ -38,6 +43,7 @@
     </target>
 
     <target name="drush:update-database">
+        <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} updatedb -y"
@@ -45,6 +51,7 @@
     </target>
 
     <target name="drush:cron">
+        <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} cron -y"
@@ -52,6 +59,7 @@
     </target>
 
     <target name="drush:site-install">
+        <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} site-install -y config_installer"
@@ -59,6 +67,7 @@
     </target>
 
     <target name="drush:site-install-standard">
+        <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} site-install -y standard "
@@ -66,6 +75,7 @@
     </target>
 
     <target name="drush:status">
+        <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} status --sites-subdir=${active.site}"

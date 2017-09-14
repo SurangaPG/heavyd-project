@@ -3,7 +3,8 @@
     "description": "A property and stage manager tool suite. Designed to kickstart and support devops integrations.",
     "type": "library",
     "require": {
-        "phing/phing": "^2.16"
+        "phing/phing": "^2.16",
+        "deployer/deployer": "5"
     },
     "authors": [
         {

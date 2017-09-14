@@ -1,0 +1,28 @@
+image: surangagamage/deployer-bitbucket-pipeline
+pipelines:
+  custom:
+    prod-deploy-unlock:
+      - step:
+          script:
+            - cd .phing && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - cd .deployer && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - dep deploy:unlock prod -vv
+    prod-deploy-code:
+      - step:
+          script:
+            - cd .phing && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - cd .deployer && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - dep deploy:code prod -vv
+    prod-deploy-full:
+      - step:
+          script:
+            - cd .phing && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - cd .deployer && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - dep deploy:full prod -vv
+  tags:
+    '*':
+      - step:
+          script:
+            - cd .phing && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - cd .deployer && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - dep deploy:full prod -vv

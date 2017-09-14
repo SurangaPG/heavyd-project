@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<project name="HeavyD" default="info">
+<project name="HeavyD - Update" default="info">
 
     <target name="info" description="Show some basic information.">
-        <echo message="Welcome to the HeavyD project environment." />
+        <echo message="Welcome to the HeavyD update tasks." />
     </target>
 
     <!--
@@ -74,7 +74,7 @@
     <import>
         <fileset dir="${project.basedir}/.heavyd/vendor">
             <patternset>
-                <include name="*.heavyd.xml"/>
+                <include name="*.update.xml"/>
             </patternset>
         </fileset>
     </import>

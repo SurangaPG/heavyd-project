@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<project name="Server tasks" description="Contains all the task used to enable and disable the various property sets">
+
+    <target name="server:host-file" description="Write out a .host file which contains some data about the server. Similar to a .env file but with a json string of none sensitive info">
+        <fail unless="host.domain" message="Full active domain not set, should be a value in the form: https://www.thisisthedomain.com" />
+        <fail unless="host.allowed-domains" message="List of all the active domains, should be a comma separated list of all the allowed domains for the host." />
+        <if>
+            <available file="${project.basedir}/.host" type="file" property="host.available" />
+            <then>
+                <echo message="Deleting existing .host configuration file" />
+                <delete file="${project.basedir}/.host" failonerror="false" />
+            </then>
+        </if>
+        <echo message="Creating .host configuration file" />
+        <loadfile property="host.file-content" file="${dir.etc.template}/host.json" />
+        <echo message="host.file-content" file="${project.basedir}/.host" />
+    </target>
+
+    <target name="server:env-file:validate" description="Validates the .env file on the server. ">
+        <exec passthru="true"
+              command="${bin.php} ${project.basedir}/lib/php/server-env-file-validate.php ${project.basedir}"/>
+    </target>
+
+    <target name="server:host-file:validate" description="Validates the .host file on the server. ">
+        <exec passthru="true"
+              command="${bin.php} ${project.basedir}/lib/php/server-host-file-validate.php ${project.basedir}"/>
+    </target>
+
+</project>
