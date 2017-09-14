@@ -27,10 +27,12 @@
 
     <target name="startup:basic-dirs" description="Set up the basic directories for a heavyD project">
         <mkdir dir="${project.basedir}/properties" />
-        <mkdir dir="${project.basedir}/templates" />
         <mkdir dir="${project.basedir}/temp" />
         <mkdir dir="${project.basedir}/cache" />
         <mkdir dir="${project.basedir}/etc" />
+        <mkdir dir="${project.basedir}/etc/templates" />
+        <mkdir dir="${project.basedir}/etc/stage" />
+        <mkdir dir="${project.basedir}/etc/env" />
         <mkdir dir="${project.basedir}/scripts" />
         <mkdir dir="${project.basedir}/tests" />
         <mkdir dir="${project.basedir}/tests/behat" />
