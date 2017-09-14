@@ -27,8 +27,6 @@
 
     <target name="startup:basic-dirs" description="Set up the basic directories for a heavyD project">
         <mkdir dir="${project.basedir}/properties" />
-        <mkdir dir="${project.basedir}/.phing" />
-        <mkdir dir="${project.basedir}/.deployer" />
         <mkdir dir="${project.basedir}/templates" />
         <mkdir dir="${project.basedir}/temp" />
         <mkdir dir="${project.basedir}/cache" />
@@ -42,8 +40,24 @@
     </target>
 
     <target name="startup:mirror-templates" description="mirrors all the template files in the .phing dir to the active site.">
-        <copy todir="${project.basedir}/.phing">
-            <fileset dir="${project.basedir}/.heavyd/vendor/platform/templates/.phing">
+        <copy todir="${project.basedir}/">
+            <fileset dir="${project.basedir}/.heavyd/vendor/platform/templates/startup/misc">
+                <patternset>
+                    <include name="**"/>
+                </patternset>
+            </fileset>
+        </copy>
+
+        <copy todir="${project.basedir}/properties/">
+            <fileset dir="${project.basedir}/.heavyd/vendor/platform/templates/startup/properties">
+                <patternset>
+                    <include name="**"/>
+                </patternset>
+            </fileset>
+        </copy>
+
+        <copy todir="${project.basedir}/update">
+            <fileset dir="${project.basedir}/.heavyd/vendor/platform/templates/update">
                 <patternset>
                     <include name="**"/>
                 </patternset>
