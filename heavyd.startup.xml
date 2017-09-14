@@ -41,7 +41,15 @@
 
     <target name="startup:mirror-templates" description="mirrors all the template files in the .phing dir to the active site.">
         <copy todir="${project.basedir}/">
-            <fileset dir="${project.basedir}/.heavyd/vendor/platform/templates/startup/misc">
+            <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/misc">
+                <patternset>
+                    <include name="**"/>
+                </patternset>
+            </fileset>
+        </copy>
+
+        <copy todir="${project.basedir}/web/sites/default/">
+            <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/settings">
                 <patternset>
                     <include name="**"/>
                 </patternset>
@@ -49,7 +57,7 @@
         </copy>
 
         <copy todir="${project.basedir}/properties/">
-            <fileset dir="${project.basedir}/.heavyd/vendor/platform/templates/startup/properties">
+            <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/properties">
                 <patternset>
                     <include name="**"/>
                 </patternset>
@@ -57,7 +65,7 @@
         </copy>
 
         <copy todir="${project.basedir}/update">
-            <fileset dir="${project.basedir}/.heavyd/vendor/platform/templates/update">
+            <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/update">
                 <patternset>
                     <include name="**"/>
                 </patternset>
