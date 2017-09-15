@@ -31,6 +31,6 @@ $databases = $envConf['database'];
 $settings['hash_salt'] = $envConf['hash_salt'];
 
 // Get the extra information from the host file.
-// @TODO Finish this. 
+// @TODO Finish this.
 $hostFile = dirname(dirname(dirname(__DIR__))) . '/.host';
 $hostConf = json_decode(file_get_contents($hostFile), TRUE);
