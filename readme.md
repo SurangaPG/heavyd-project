@@ -31,7 +31,7 @@ with the following content:
   "authors": [
     {
       "name": "Suranga Panagamuwa Gamage",
-      "email": "suranga.gamage@one-agency.be"
+      "email": "suranga@webct.be"
     }
   ],
   "scripts": {
