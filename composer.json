@@ -4,7 +4,8 @@
     "type": "library",
     "require": {
         "phing/phing": "^2.16",
-        "deployer/deployer": "5"
+        "deployer/deployer": "5",
+        "surangapg/phing-property-bundle": "^0"
     },
     "authors": [
         {
