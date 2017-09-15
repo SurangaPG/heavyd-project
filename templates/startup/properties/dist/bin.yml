@@ -3,8 +3,8 @@
 # various phing tasks.
 composer: composer
 drush: ${current.basePath}/vendor/bin/drush
-phing: ${current.basePath}/.phing/vendor/bin/phing
-workflow: ${current.basePath}/.workflow/vendor/bin/workflow
+phing: ${current.basePath}/.heavyd/vendor/bin/phing
+deployer: ${current.basePath}/.heavyd/vendor/bin/deployer
 php: php
 npm: yarn
 bower: bower
