@@ -50,6 +50,7 @@
         <mkdir dir="${project.basedir}/etc/templates" />
         <mkdir dir="${project.basedir}/etc/stage" />
         <mkdir dir="${project.basedir}/etc/env" />
+        <mkdir dir="${project.basedir}/etc/site" />
         <mkdir dir="${project.basedir}/scripts" />
         <mkdir dir="${project.basedir}/tests" />
         <mkdir dir="${project.basedir}/tests/behat" />
