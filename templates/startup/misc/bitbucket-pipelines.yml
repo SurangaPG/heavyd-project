@@ -5,20 +5,31 @@ pipelines:
       - step:
           script:
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - ./.heavyd/vendor/bin/phing property:write-full
             - ./.heavyd/vendor/bin/dep deploy:unlock prod -vvv
     prod-deploy-code:
       - step:
           script:
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - ./.heavyd/vendor/bin/phing property:write-full
             - ./.heavyd/vendor/bin/dep deploy:code prod -vvv
     prod-deploy-full:
       - step:
           script:
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - ./.heavyd/vendor/bin/phing property:write-full
+            - ./.heavyd/vendor/bin/dep deploy:full prod -vvv
+  branches:
+    master:
+      - step:
+          script:
+            - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - ./.heavyd/vendor/bin/phing property:write-full
             - ./.heavyd/vendor/bin/dep deploy:full prod -vvv
   tags:
     '*':
       - step:
           script:
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
-            - ./.heavyd/vendor/bin/dep deploy:full prod -vvv
+            - ./.heavyd/vendor/bin/phing property:write-full
+            - ./.heavyd/vendor/bin/dep deploy:full prod -
