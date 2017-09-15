@@ -35,14 +35,14 @@ task('tar:archive', function () {
       $tar_files[] = $file;
     }
   }
-  runlocally('tar -cvf archive.tar ' . implode(' ', $tar_files));
+  runlocally('tar -cf archive.tar ' . implode(' ', $tar_files));
 });
 
 
 desc('Untar all the files synced');
 task('tar:un-archive', function () {
   cd('{{release_path}}');
-  run('tar -xvf archive.tar ');
+  run('tar -xf archive.tar ');
 });
 
 
