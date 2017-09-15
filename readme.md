@@ -16,7 +16,7 @@ filesystem writable if the site was already installed.
 You can get started by adding a .heavyd/composer.json file in any project 
 with the following content: 
 
-`
+```
 {
   "name": "webct/platform",
   "require": {
@@ -45,5 +45,5 @@ with the following content:
   "minimum-stability": "dev",
   "prefer-stable": true
 }
-`
+```
 Afterwards run `composer install` in the .heavyd directory. 
