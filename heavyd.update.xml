@@ -70,7 +70,7 @@
         />
     </target>
 
-    <!-- Auto include all the heavyd build files in the vendor dirs. -->
+    <!-- Auto include all the heavyd build files in the vendor dirs.
     <import>
         <fileset dir="${project.basedir}/.heavyd/vendor">
             <patternset>
@@ -78,5 +78,6 @@
             </patternset>
         </fileset>
     </import>
+    -->
 
 </project>

@@ -1,6 +1,6 @@
 {
   "name": "surangapg/drupal-project",
-  "description": "Project template for Drupal 8 projects with Composer, Phing and Behat. Generated for the heavyD setup.",
+  "description": "Project template for Drupal 8 projects with Composer, Phing, Deployer and Behat. Generated for the heavyD setup.",
   "type": "project",
   "license": "GPL-2.0+",
   "authors": [

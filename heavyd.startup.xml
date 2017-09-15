@@ -2,7 +2,7 @@
 
 <project name="HeavyD - startup" default="info">
 
-    <!-- Auto include all the heavyd build files in the vendor dirs. -->
+    <!-- Auto include all the heavyd build files in the vendor dirs.
     <import>
         <fileset dir="${project.basedir}/.heavyd/vendor">
             <patternset>
@@ -10,6 +10,7 @@
             </patternset>
         </fileset>
     </import>
+     -->
 
     <target name="info" description="Show some basic information.">
         <echo message="Welcome to the HeavyD project startup. This buildfile is used to wrap around the various phing files needed to start up the project." />
@@ -23,6 +24,22 @@
     <target name="heavyd-startup:drupal8" description="sets up a heavyD drupal 8 project for the very first time. ">
         <phingcall target="startup:basic-dirs"/>
         <phingcall target="startup:mirror-templates"/>
+    </target>
+
+    <target name="heavyd-startup:setup-profile" description="Copies over a heavyD base config profile and connected composer file to kickstart a project..">
+        <property name="profile.to.use" value="default" />
+
+        <copy todir="${project.basedir}/etc/site/default/config">
+            <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/config-profile/${profile.to.use}/config">
+                <patternset>
+                    <include name="**"/>
+                </patternset>
+            </fileset>
+        </copy>
+
+        <!-- Copy over the connected composer.json file -->
+        <copy file="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/config-profile/${profile.to.use}/composer.json"
+              todir="${project.basedir}/" />
     </target>
 
     <target name="startup:basic-dirs" description="Set up the basic directories for a heavyD project">
