@@ -4,8 +4,8 @@ Contains the basic platform template that will be used as the base files
 for any HeavyD setup. This is an opiniated basepoint for a light 
 project setup. 
 It's a personal used project that should be flexible enough to get some 
-automation kickstarted. Feel free to steal, borrow scrap anything in this 
-repo. 
+automation kickstarted. Feel free to steal, borrow or scrap anything in this 
+repo for parts. 
 
 # Setting up 
 NOTE: Always do this in a separate branch, as mentioned this setup is 
