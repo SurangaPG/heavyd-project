@@ -16,7 +16,7 @@
         into a basic set.
     -->
     <!-- Include custom property loading tasks -->
-    <includepath classpath="${project.basedir}/.phing/vendor/surangapg/phing-property-bundle/src" />
+    <includepath classpath="${project.basedir}/.heavyd/vendor/surangapg/phing-property-bundle/src" />
 
     <taskdef classname="PropertyDirWriteTask" name="property-dir-write" />
     <taskdef classname="PropertyDirLoadTask" name="property-dir" />
