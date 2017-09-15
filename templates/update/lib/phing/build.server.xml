@@ -12,9 +12,9 @@
                 <delete file="${project.basedir}/.host" failonerror="false" />
             </then>
         </if>
-        <echo message="Creating .host configuration file" />
-        <loadfile property="host.file-content" file="${dir.etc.template}/host.json" />
-        <echo message="host.file-content" file="${project.basedir}/.host" />
+        <echo message="Creating .host configuration file." />
+        <exec command="${bin.php} ${project.basedir}/lib/php/server-host-file-validate.php ${project.basedir} ${host.domain} ${host.allowed-domains}"
+              passthru="true" />
     </target>
 
     <target name="server:env-file:validate" description="Validates the .env file on the server. ">
