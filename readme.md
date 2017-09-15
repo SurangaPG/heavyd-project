@@ -47,3 +47,17 @@ with the following content:
 }
 ```
 Afterwards run `composer install` in the .heavyd directory. 
+
+Once this is done several files and properties should have appeared 
+in the project. If you don't have a build.xml in the project. Add one 
+to the root. Otherwise ensure it includes the heavyd one. 
+
+```
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Dummy xml in case it doesn't exist, will just load in the more apptly named 'core' file -->
+<project name="HeavyD" default="list">
+
+    <import file="heavyd.project.xml" />
+
+</project>
+```
