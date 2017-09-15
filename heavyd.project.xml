@@ -102,7 +102,6 @@
         <phingcall target="project:activate-stage" />
     </target>
 
-
     <target name="project:build" description="Builds an entire environment up from scratch.">
         <phingcall target="composer:build" />
     </target>
