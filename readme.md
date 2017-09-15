@@ -25,7 +25,7 @@ with the following content:
   "repositories": [
     {
       "type": "vcs",
-      "url":  "https://suranga_panagamuwa_gamage@bitbucket.org/webct/heavyd-platform.git"
+      "url":  "git@github.com:SurangaPG/heavyd.git"
     }
   ],
   "authors": [
