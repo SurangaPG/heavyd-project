@@ -8,16 +8,13 @@
 
     <target name="composer:full" description="Setup a full composer dev install.">
         <phingcall target="composer:dev" />
-        <phingcall target="composer:deployer" />
-        <phingcall target="composer:phing" />
-        <phingcall target="composer:workflow" />
     </target>
 
     <target name="composer:build"
             description="Install the main project ready for a deploy.">
         <exec dir="${project.basedir}"
               passthru="true"
-              command="${bin.composer} install --no-progress --no-dev --optimize-autoloader"
+              command="${bin.composer} install --no-progress --no-dev --optimize-autoloader --ignore-platform-reqs"
         />
     </target>
 
@@ -28,26 +25,4 @@
               command="${bin.composer} install --no-progress"
         />
     </target>
-
-    <target name="composer:phing" description="Install the phing extra helpers.">
-        <exec dir="${project.basedir}/.phing"
-              passthru="true"
-              command="${bin.composer} install"
-        />
-    </target>
-
-    <target name="composer:deployer" description="Install the deployer extra helpers.">
-        <exec dir="${project.basedir}/.deployer"
-              passthru="true"
-              command="${bin.composer} install"
-        />
-    </target>
-
-    <target name="composer:workflow" description="Install the workflow extra helpers.">
-        <exec dir="${project.basedir}/.workflow"
-              passthru="true"
-              command="${bin.composer} install"
-        />
-    </target>
-
 </project>

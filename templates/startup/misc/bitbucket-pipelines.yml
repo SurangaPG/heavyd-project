@@ -4,25 +4,21 @@ pipelines:
     prod-deploy-unlock:
       - step:
           script:
-            - cd .phing && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
-            - cd .deployer && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
-            - dep deploy:unlock prod -vv
+            - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - ./.heavyd/vendor/bin/dep deploy:unlock prod -vvv
     prod-deploy-code:
       - step:
           script:
-            - cd .phing && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
-            - cd .deployer && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
-            - dep deploy:code prod -vv
+            - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - ./.heavyd/vendor/bin/dep deploy:code prod -vvv
     prod-deploy-full:
       - step:
           script:
-            - cd .phing && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
-            - cd .deployer && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
-            - dep deploy:full prod -vv
+            - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - ./.heavyd/vendor/bin/dep deploy:full prod -vvv
   tags:
     '*':
       - step:
           script:
-            - cd .phing && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
-            - cd .deployer && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
-            - dep deploy:full prod -vv
+            - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
+            - ./.heavyd/vendor/bin/dep deploy:full prod -vvv

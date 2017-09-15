@@ -38,23 +38,23 @@ mounts:
   '/etc/sites/default/translations': 'shared:files/translations'
 hooks:
   build: |
-    cd .phing
+    cd .heavyd
     composer install
     cd ..
     ls -la
-    ./.phing/vendor/bin/phing property:write-full
-    ./.phing/vendor/bin/phing composer:build
-    ./.phing/vendor/bin/phing project:activate-env -Denv.to.activate=platform -Dsite.to.activate=default
-    ./.phing/vendor/bin/phing project:activate-site-stage -Dstage.to.activate="$PLATFORM_BRANCH" -Dsite.to.activate=default
-    ./.phing/vendor/bin/phing property:write-full -Dcurrent.basePath="/app" -Dsite.to.activate=default
+    ./.heavyd/vendor/bin/phing property:write-full
+    ./.heavyd/vendor/bin/phing composer:build
+    ./.heavyd/vendor/bin/phing project:activate-env -Denv.to.activate=platform -Dsite.to.activate=default
+    ./.heavyd/vendor/bin/phing project:activate-stage -Dstage.to.activate="$PLATFORM_BRANCH"
+    ./.heavyd/vendor/bin/phing property:write-full -Dcurrent.basePath="/app" -Dsite.to.activate=default
   deploy: |
     set -e
-    # ./.phing/vendor/bin/phing drush:site-install -Dactive.site=default
-    ./.phing/vendor/bin/phing drush:cache-rebuild  -Dactive.site=default
-    ./.phing/vendor/bin/phing drush:config-import -Dactive.site=default
-    ./.phing/vendor/bin/phing drush:entity-updates -Dactive.site=default
-    ./.phing/vendor/bin/phing drush:update-database -Dactive.site=default
-    ./.phing/vendor/bin/phing drush:cron -Dactive.site=default
+    # ./.heavyd/vendor/bin/phing drush:site-install
+    ./.heavyd/vendor/bin/phing drush:cache-rebuild
+    ./.heavyd/vendor/bin/phing drush:config-import
+    ./.heavyd/vendor/bin/phing drush:entity-updates
+    ./.heavyd/vendor/bin/phing drush:update-database
+    ./.heavyd/vendor/bin/phing drush:cron
 crons:
   drupal:
     spec: '*/15 * * * *'
