@@ -43,14 +43,13 @@
     <!-- Activates the properties for a given -->
     <target name="property:activate:stage" description="Activates an environment by copying all it's property files to the main env property dir.">
         <fail unless="stage.to.activate" message="No Stage specified. Pass stage.to.activate as a property." />
-        <fail unless="site.to.activate" message="No site specified. Pass site.to.activate as a property." />
         <if>
-            <available file="${dir.etc.env}/${site.to.activate}/stages/${stage.to.activate}/properties" type="dir" property="stage.to.activate.properties.available" />
+            <available file="${dir.etc.env}/stage/${stage.to.activate}/properties" type="dir" property="stage.to.activate.properties.available" />
             <then>
                 <echo message="Syncing properties for ${stage.to.activate} to active properties." />
-                <echo message="Source dir: ${dir.etc.env}/${site.to.activate}/stages/${stage.to.activate}/properties"/>
+                <echo message="Source dir: ${dir.etc.env}/stage/${stage.to.activate}/properties"/>
                 <echo message="Target dir: ${dir.properties.stage}/"/>
-                <exec passthru="true" command="rsync -a --delete ${dir.etc.env}/${site.to.activate}/stages/${stage.to.activate}/properties/ ${dir.properties.stage}/"/>
+                <exec passthru="true" command="rsync -a --delete ${dir.etc.env}/stage/${stage.to.activate}/properties/ ${dir.properties.stage}/"/>
             </then>
         </if>
     </target>
