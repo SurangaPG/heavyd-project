@@ -28,7 +28,7 @@ task('build:activate-env', function() {
  */
 desc('Run a full deploy from start to end. Building all the code on the build server and tarring it afterwards');
 task('build:activate-stage', function() {
-  runLocally("{{local_workspace}}/{{bin_phing}} project:activate-site-stage -Dstage.to.activate={{stage}} -Dsite.to.activate={{site}}");
+  runLocally("{{local_workspace}}/{{bin_phing}} project:activate-stage -Dstage.to.activate={{stage}}");
 });
 
 /**
