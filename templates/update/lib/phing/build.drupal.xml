@@ -13,7 +13,7 @@
     -->
     <target name="drupal:stage:activate-etc-files"
             description="activates all the correct extra files based on the stage for the dir."
-            depends="_drupal:validate:stage-site-properties">
+            depends="_drupal:validate:stage-properties">
         <phingcall target="drupal:stage:robots" />
         <phingcall target="drupal:stage:htaccess" />
         <phingcall target="drupal:stage:settings-file" />
@@ -26,7 +26,7 @@
         file based on the data for an environment such as level27.
     -->
     <target name="drupal:env:settings-file"
-            depends="drupal:writable-settings-php,_drupal:validate:env-site-properties"
+            depends="drupal:writable-settings-php,_drupal:validate:env-properties"
             description="Activates the correct settings files for the current context">
         <!-- @TODO add support for the generic files in the bundle -->
         <if>
@@ -36,7 +36,7 @@
             <then>
                 <echo message="Copying settings for ${env.to.activate} to active settings.env.php" />
                 <copy file="${dir.etc.env}/${env.to.activate}/settings.env.php"
-                      tofile="${dir.web.root}/sites/${site.to.activate}/settings.env.php"
+                      tofile="${dir.web.root}/sites/default/settings.env.php"
                       overwrite="true"/>
             </then>
         </if>
@@ -44,17 +44,17 @@
 
     <!-- Enable the settings file for a given environment. Such as acc, prod, etc. -->
     <target name="drupal:stage:settings-file"
-            depends="drupal:writable-settings-php,_drupal:validate:stage-site-properties"
+            depends="drupal:writable-settings-php,_drupal:validate:stage-properties"
             description="Activates the correct settings file for the current stage">
         <!-- @TODO add support for the generic files in the bundle -->
         <if>
-            <available file="${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/settings.php"
+            <available file="${dir.etc.site}/stage/${stage.to.activate}/settings.php"
                        type="file"
                        property="stage.to.activate.settings.available"/>
             <then>
-                <echo message="Copying sites for ${stage.to.activate} to active settings.stage.php" />
-                <copy file="${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/settings.stage.php"
-                      tofile="${dir.web.root}/sites/${site.to.activate}/settings.stage.php"
+                <echo message="Copying sites for default to active settings.stage.php" />
+                <copy file="${dir.etc.site}/stage/${stage.to.activate}/settings.stage.php"
+                      tofile="${dir.web.root}/sites/default/settings.stage.php"
                       overwrite="true"/>
             </then>
         </if>
@@ -63,15 +63,15 @@
     <!-- Enable the sites.php files for a given stage. -->
     <target name="drupal:stage:sites"
             description="Activates the correct sites.php file for the current stage"
-            depends="_drupal:validate:stage-site-properties">
+            depends="_drupal:validate:stage-properties">
         <!-- @TODO add support for the generic files in the bundle -->
         <if>
-            <available file="${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/sites.php"
+            <available file="${dir.etc.site}/stage/${stage.to.activate}/sites.php"
                        type="file"
                        property="stage.to.activate.sites.available" />
             <then>
                 <echo message="Copying sites.php for ${stage.to.activate} to active sites.php" />
-                <copy file="${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/sites.php"
+                <copy file="${dir.etc.site}/stage/${stage.to.activate}/sites.php"
                       tofile="${dir.web.root}/sites/sites.php"
                       overwrite="true"/>
             </then>
@@ -81,16 +81,16 @@
     <!-- Enable the stage services.yml  -->
     <target name="drupal:stage:services"
             description="Activates the correct services.yml file for the current stage"
-            depends="_drupal:validate:stage-site-properties">
+            depends="_drupal:validate:stage-properties">
         <!-- @TODO add support for the generic files in the bundle -->
         <if>
-            <available file="${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/services.yml"
+            <available file="${dir.etc.site}/stage/${stage.to.activate}/services.yml"
                        type="file"
                        property="stage.to.activate.services.available" />
             <then>
                 <echo message="Copying services.yml for ${stage.to.activate} to active services.yml" />
-                <copy file="${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/services.yml"
-                      tofile="${dir.web.root}/sites/${stage.to.activate}/services.yml"
+                <copy file="${dir.etc.site}/stage/${stage.to.activate}/services.yml"
+                      tofile="${dir.web.root}/sites/default/services.yml"
                       overwrite="true"/>
             </then>
         </if>
@@ -99,17 +99,17 @@
     <!-- Enable the .htaccess for a given stage. -->
     <target name="drupal:stage:htaccess"
             description="Activates the correct .htaccess file for the current context"
-            depends="_drupal:validate:stage-site-properties">
+            depends="_drupal:validate:stage-properties">
         <if>
-            <available file="${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/.htaccess" type="file" property="stage.to.activate.htaccess.available" />
+            <available file="${dir.etc.site}/stage/${stage.to.activate}/.htaccess" type="file" property="stage.to.activate.htaccess.available" />
             <then>
                 <echo message="Copying .htaccess for ${stage.to.activate} to active .htaccess" />
-                <copy file="${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/.htaccess"
+                <copy file="${dir.etc.site}/stage/${stage.to.activate}/.htaccess"
                       tofile="${dir.web.root}/.htaccess"
                       overwrite="true"/>
             </then>
             <else>
-                <echo message="No .htaccess for ${stage.to.activate} available at: ${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/.htaccess " />
+                <echo message="No .htaccess for ${stage.to.activate} available at: ${dir.etc.site}/stage/${stage.to.activate}/.htaccess " />
             </else>
         </if>
     </target>
@@ -117,14 +117,14 @@
     <!-- Enable the robots.txt file for a given environment. Such as acc, prod, etc. -->
     <target name="drupal:stage:robots"
             description="Activates the correct robots.txt file for the current context"
-            depends="_drupal:validate:stage-site-properties">
+            depends="_drupal:validate:stage-properties">
         <if>
-            <available file="${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/robots.txt"
+            <available file="${dir.etc.site}/stage/${stage.to.activate}/robots.txt"
                        type="file"
                        property="stage.to.activate.robots.available" />
             <then>
                 <echo message="Copying robots.txt for ${stage.to.activate} to active robots.txt" />
-                <copy file="${dir.etc.site}/${site.to.activate}/stages/${stage.to.activate}/robots.txt"
+                <copy file="${dir.etc.site}/stage/${stage.to.activate}/robots.txt"
                       tofile="${dir.web.root}/robots.txt"
                       overwrite="true"/>
             </then>
@@ -190,32 +190,30 @@
     <!-- Make settings.php writeable so that the installer save it. -->
     <target name="drupal:writable-settings-php" depends="drupal:writable-settings-folder">
         <if>
-            <available file="${dir.web.root}/sites/settings.php" type="file" property="website.settings.php.available" />
+            <available file="${dir.web.root}/sites/default/settings.php" type="file" property="website.settings.php.available" />
             <then>
-                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${dir.web.root}/sites/settings.php" />
+                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${dir.web.root}/sites/default/settings.php" />
             </then>
         </if>
         <if>
-            <available file="${dir.web.root}/sites/settings.stage.php" type="file" property="website.settings.stage.php.available" />
+            <available file="${dir.web.root}/sites/default/settings.stage.php" type="file" property="website.settings.stage.php.available" />
             <then>
-                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${dir.web.root}/sites/settings.stage.php" />
+                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${dir.web.root}/sites/default/settings.stage.php" />
             </then>
         </if>
         <if>
-            <available file="${dir.web.root}/sites/settings.env.php" type="file" property="website.settings.env.php.available" />
+            <available file="${dir.web.root}/sites/default/settings.env.php" type="file" property="website.settings.env.php.available" />
             <then>
-                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${dir.web.root}/sites/settings.env.php" />
+                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${dir.web.root}/sites/default/settings.env.php" />
             </then>
         </if>
     </target>
 
-    <target name="_drupal:validate:stage-site-properties">
+    <target name="_drupal:validate:stage-properties">
         <fail unless="stage.to.activate" message="No Stage specified. Pass stage.to.activate as a property." />
-        <fail unless="site.to.activate" message="No Site specified. Pass site.to.activate as a property." />
     </target>
 
-    <target name="_drupal:validate:env-site-properties">
+    <target name="_drupal:validate:env-properties">
         <fail unless="env.to.activate" message="No environment specified. Pass env.to.activate as a property." />
-        <fail unless="site.to.activate" message="No Site specified. Pass site.to.activate as a property." />
     </target>
 </project>
