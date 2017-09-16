@@ -9,7 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 use Deployer\Task\Context;
 
 // Detect the root dir.
-$projectRootDir = dirname(dirname(dirname(dirname(__DIR__))));
+$projectRootDir = dirname(dirname(__DIR__));
 
 /*
  * Since the information is contained in the .properties/*.yml
@@ -51,12 +51,16 @@ set('local_workspace', $heavydProperties['project']['basePath']);
  * This is a more custom implementation to make the system more uniform.
  */
 foreach ($heavydProperties['server'] as $serverKey => $serverData) {
-  server($serverKey, $serverData['host'])
+  host($serverData['host'])
+    ->stage( $serverData['stage'])
+    ->configFile('~/.ssh/config')
+    ->forwardAgent(true)
+    ->multiplexing(true)
+    ->addSshOption('UserKnownHostsFile', '/dev/null')
+    ->addSshOption('StrictHostKeyChecking', 'no')
     ->user($serverData['user'])
+    ->roles('app')
     ->set('deploy_path', $serverData['root'])
-    ->stage($serverData['stage'])
-    ->identityFile()
-    // Context to be activated.
     ->set('env', $serverData['env'])
     ->set('site', $serverData['site'])
     ->set('stage', $serverData['stage'])
