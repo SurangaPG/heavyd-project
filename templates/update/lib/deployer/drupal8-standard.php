@@ -11,7 +11,7 @@ use Deployer\Task\Context; // This is loaded in by the deployer.phar and is acce
 require 'recipe/common.php';
 
 # Extra task requirements
-require 'recipes/tar.php';
+require 'recipes/rsync.php';
 require 'recipes/drupal8.php';
 require 'recipes/cleanup.php';
 require 'recipes/build.php';
@@ -86,10 +86,8 @@ task('step:build', [
 
 desc('Synchronize the current codebase to the remote server.');
 task('step:sync', [
-  'tar:archive',
-  'tar:sftp',
-  'tar:un-archive',
-  'tar:cleanup',
+  'rsync:lock',
+  'rsync:sync',
   'deploy:shared',
 ]);
 

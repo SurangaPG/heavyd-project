@@ -4,18 +4,27 @@ pipelines:
     prod-deploy-unlock:
       - step:
           script:
+            # Places the default bitbucket id in the predictable location to make life easier for all the
+            # subsequent commands (rsync etc).
+            - ln -s /opt/atlassian/pipelines/agent/data/id_rsa ~/.ssh/id_rsa
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
             - ./.heavyd/vendor/bin/phing property:write-full
             - ./.heavyd/vendor/bin/dep deploy:unlock prod -vvv
     prod-deploy-code:
       - step:
           script:
+            # Places the default bitbucket id in the predictable location to make life easier for all the
+            # subsequent commands (rsync etc).
+            - ln -s /opt/atlassian/pipelines/agent/data/id_rsa ~/.ssh/id_rsa
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
             - ./.heavyd/vendor/bin/phing property:write-full
             - ./.heavyd/vendor/bin/dep deploy:code prod -vvv
     prod-deploy-full:
       - step:
           script:
+            # Places the default bitbucket id in the predictable location to make life easier for all the
+            # subsequent commands (rsync etc).
+            - ln -s /opt/atlassian/pipelines/agent/data/id_rsa ~/.ssh/id_rsa
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
             - ./.heavyd/vendor/bin/phing property:write-full
             - ./.heavyd/vendor/bin/dep deploy:full prod -vvv
@@ -23,6 +32,8 @@ pipelines:
     master:
       - step:
           script:
+            # Places the default bitbucket id in the predictable location to make life easier for all the
+            # subsequent commands (rsync etc).
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
             - ./.heavyd/vendor/bin/phing property:write-full
             - ./.heavyd/vendor/bin/dep deploy:full prod -vvv
@@ -30,6 +41,9 @@ pipelines:
     '*':
       - step:
           script:
+            # Places the default bitbucket id in the predictable location to make life easier for all the
+            # subsequent commands (rsync etc).
+            - ln -s /opt/atlassian/pipelines/agent/data/id_rsa ~/.ssh/id_rsa
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
             - ./.heavyd/vendor/bin/phing property:write-full
             - ./.heavyd/vendor/bin/dep deploy:full prod -
