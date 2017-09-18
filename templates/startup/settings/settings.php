@@ -18,8 +18,8 @@ $settings['install_profile'] = 'standard';
 
 $config_directories[CONFIG_SYNC_DIRECTORY] = '../etc/sites/' . basename(__DIR__) . '/config';
 
-$settings['file_private_path'] = __DIR__ . '/files/private';
-$config['system.file']['path']['temporary'] = __DIR__ . '/files/temp';
+$settings['file_private_path'] = dirname(dirname(dirname(__DIR__))) . '/assets/files/private';
+$config['system.file']['path']['temporary'] = dirname(dirname(dirname(__DIR__))) . '/assets/files/temp';
 
 $config['locale.settings']['translation']['path'] = '../etc/sites/' . basename(__DIR__) . '/translations';
 
