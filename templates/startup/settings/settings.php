@@ -16,12 +16,12 @@ $config_directories = [];
 $settings['update_free_access'] = FALSE;
 $settings['install_profile'] = 'standard';
 
-$config_directories[CONFIG_SYNC_DIRECTORY] = '../etc/sites/' . basename(__DIR__) . '/config';
+$config_directories[CONFIG_SYNC_DIRECTORY] = '../etc/site/' . basename(__DIR__) . '/config';
 
 $settings['file_private_path'] = dirname(dirname(dirname(__DIR__))) . '/assets/files/private';
 $config['system.file']['path']['temporary'] = dirname(dirname(dirname(__DIR__))) . '/assets/files/temp';
 
-$config['locale.settings']['translation']['path'] = '../etc/sites/' . basename(__DIR__) . '/translations';
+$config['locale.settings']['translation']['path'] = '../etc/site/' . basename(__DIR__) . '/translations';
 
 /*
  * Get the different level of service.yml files. These follow the same logic as
