@@ -48,12 +48,12 @@
             description="Activates the correct settings file for the current stage">
         <!-- @TODO add support for the generic files in the bundle -->
         <if>
-            <available file="${dir.etc.site}/stage/${stage.to.activate}/settings.php"
+            <available file="${dir.etc.stage}/${stage.to.activate}/settings.php"
                        type="file"
                        property="stage.to.activate.settings.available"/>
             <then>
                 <echo message="Copying sites for default to active settings.stage.php" />
-                <copy file="${dir.etc.site}/stage/${stage.to.activate}/settings.stage.php"
+                <copy file="${dir.etc.stage}/${stage.to.activate}/settings.stage.php"
                       tofile="${dir.web.root}/sites/default/settings.stage.php"
                       overwrite="true"/>
             </then>
@@ -66,12 +66,12 @@
             depends="_drupal:validate:stage-properties">
         <!-- @TODO add support for the generic files in the bundle -->
         <if>
-            <available file="${dir.etc.site}/stage/${stage.to.activate}/sites.php"
+            <available file="${dir.etc.stage}/${stage.to.activate}/sites.php"
                        type="file"
                        property="stage.to.activate.sites.available" />
             <then>
                 <echo message="Copying sites.php for ${stage.to.activate} to active sites.php" />
-                <copy file="${dir.etc.site}/stage/${stage.to.activate}/sites.php"
+                <copy file="${dir.etc.stage}/${stage.to.activate}/sites.php"
                       tofile="${dir.web.root}/sites/sites.php"
                       overwrite="true"/>
             </then>
@@ -84,12 +84,12 @@
             depends="_drupal:validate:stage-properties">
         <!-- @TODO add support for the generic files in the bundle -->
         <if>
-            <available file="${dir.etc.site}/stage/${stage.to.activate}/services.yml"
+            <available file="${dir.etc.stage}/${stage.to.activate}/services.yml"
                        type="file"
                        property="stage.to.activate.services.available" />
             <then>
                 <echo message="Copying services.yml for ${stage.to.activate} to active services.yml" />
-                <copy file="${dir.etc.site}/stage/${stage.to.activate}/services.yml"
+                <copy file="${dir.etc.stage}/${stage.to.activate}/services.yml"
                       tofile="${dir.web.root}/sites/default/services.yml"
                       overwrite="true"/>
             </then>
@@ -101,15 +101,15 @@
             description="Activates the correct .htaccess file for the current context"
             depends="_drupal:validate:stage-properties">
         <if>
-            <available file="${dir.etc.site}/stage/${stage.to.activate}/.htaccess" type="file" property="stage.to.activate.htaccess.available" />
+            <available file="${dir.etc.stage}/${stage.to.activate}/.htaccess" type="file" property="stage.to.activate.htaccess.available" />
             <then>
                 <echo message="Copying .htaccess for ${stage.to.activate} to active .htaccess" />
-                <copy file="${dir.etc.site}/stage/${stage.to.activate}/.htaccess"
+                <copy file="${dir.etc.stage}/${stage.to.activate}/.htaccess"
                       tofile="${dir.web.root}/.htaccess"
                       overwrite="true"/>
             </then>
             <else>
-                <echo message="No .htaccess for ${stage.to.activate} available at: ${dir.etc.site}/stage/${stage.to.activate}/.htaccess " />
+                <echo message="No .htaccess for ${stage.to.activate} available at: ${dir.etc.stage}/${stage.to.activate}/.htaccess " />
             </else>
         </if>
     </target>
@@ -119,12 +119,12 @@
             description="Activates the correct robots.txt file for the current context"
             depends="_drupal:validate:stage-properties">
         <if>
-            <available file="${dir.etc.site}/stage/${stage.to.activate}/robots.txt"
+            <available file="${dir.etc.stage}/${stage.to.activate}/robots.txt"
                        type="file"
                        property="stage.to.activate.robots.available" />
             <then>
                 <echo message="Copying robots.txt for ${stage.to.activate} to active robots.txt" />
-                <copy file="${dir.etc.site}/stage/${stage.to.activate}/robots.txt"
+                <copy file="${dir.etc.stage}/${stage.to.activate}/robots.txt"
                       tofile="${dir.web.root}/robots.txt"
                       overwrite="true"/>
             </then>
