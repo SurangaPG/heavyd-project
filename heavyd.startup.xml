@@ -24,6 +24,7 @@
     <target name="heavyd-startup:drupal8" description="sets up a heavyD drupal 8 project for the very first time. ">
         <phingcall target="startup:basic-dirs"/>
         <phingcall target="startup:mirror-templates"/>
+        <phingcall target="startup:optional-files" />
     </target>
 
     <target name="heavyd-startup:setup-profile" description="Copies over a heavyD base config profile and connected composer file to kickstart a project..">
@@ -91,5 +92,25 @@
                 </patternset>
             </fileset>
         </copy>
+    </target>
+
+    <target name="startup:optional-files">
+        <available file="${project.basedir}/composer.json" property="composer.file.exists" />
+        <if>
+            <isfalse id="composer.file.exists" />
+            <then>
+                <copy file="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/composer.json"
+                      tofile="${project.basedir}/composer.json" />
+            </then>
+        </if>
+
+        <available file="${project.basedir}/.gitignore" property="gitignore.file.exists" />
+        <if>
+            <isfalse id="gitignore.file.exists" />
+            <then>
+                <copy file="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/.gitignore"
+                      tofile="${project.basedir}/.gitignore" />
+            </then>
+        </if>
     </target>
 </project>
