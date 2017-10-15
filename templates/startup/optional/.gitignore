@@ -1,5 +1,17 @@
 vendor
+
 web/sites/default/settings.*.php
 web/sites/default/services.*.yml
+web/sites/default/files
+
+web/core
+web/modules/contrib
+web/modules/generic
+
+web/themes/contrib
+web/themes/generic
+
+web/profiles/contrib
+web/profiles/generic
 
 /temp
