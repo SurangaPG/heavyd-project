@@ -95,22 +95,10 @@
     </target>
 
     <target name="startup:optional-files">
-        <available file="${project.basedir}/composer.json" property="composer.file.exists" />
-        <if>
-            <isfalse id="composer.file.exists" />
-            <then>
-                <copy file="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/composer.json"
-                      tofile="${project.basedir}/composer.json" />
-            </then>
-        </if>
+        <copy file="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/composer.json"
+              tofile="${project.basedir}/composer.json" />
 
-        <available file="${project.basedir}/.gitignore" property="gitignore.file.exists" />
-        <if>
-            <isfalse id="gitignore.file.exists" />
-            <then>
-                <copy file="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/.gitignore"
-                      tofile="${project.basedir}/.gitignore" />
-            </then>
-        </if>
+        <copy file="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/.gitignore"
+              tofile="${project.basedir}/.gitignore" />
     </target>
 </project>
