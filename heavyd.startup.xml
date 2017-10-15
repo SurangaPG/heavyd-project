@@ -45,8 +45,8 @@
 
     <target name="startup:basic-dirs" description="Set up the basic directories for a heavyD project">
         <mkdir dir="${project.basedir}/properties" />
-        <mkdir dir="${project.basedir}/temp" />
-        <mkdir dir="${project.basedir}/cache" />
+        <mkdir dir="${project.basedir}/temp/cache" />
+        <mkdir dir="${project.basedir}/temp/artifact" />
         <mkdir dir="${project.basedir}/etc" />
         <mkdir dir="${project.basedir}/etc/templates" />
         <mkdir dir="${project.basedir}/etc/stage" />
@@ -57,7 +57,6 @@
         <mkdir dir="${project.basedir}/tests/behat" />
         <mkdir dir="${project.basedir}/tests/phpunit" />
         <mkdir dir="${project.basedir}/tests/haunt" />
-        <mkdir dir="${project.basedir}/artifact" />
     </target>
 
     <target name="startup:mirror-templates" description="mirrors all the template files in the .phing dir to the active site.">

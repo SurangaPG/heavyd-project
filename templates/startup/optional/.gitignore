@@ -1,3 +1,5 @@
 vendor
 web/sites/default/settings.*.php
 web/sites/default/services.*.yml
+
+/temp
