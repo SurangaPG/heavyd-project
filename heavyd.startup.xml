@@ -109,6 +109,14 @@
 
             <then>
                 <echo>Baseline module doesn't exist, adding it.</echo>
+                <copy todir="${project.basedir}/web/modules/custom/baseline">
+                    <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/baseline">
+                        <patternset>
+                            <include name="**"/>
+                        </patternset>
+                    </fileset>
+                </copy>
+
             </then>
         </if>
 
@@ -119,6 +127,13 @@
 
             <then>
                 <echo>Baseline theme doesn't exist, adding it.</echo>
+                <copy todir="${project.basedir}/web/themes/custom/baseline_bootstrap">
+                    <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/baseline_bootstrap">
+                        <patternset>
+                            <include name="**"/>
+                        </patternset>
+                    </fileset>
+                </copy>
             </then>
         </if>
     </target>
