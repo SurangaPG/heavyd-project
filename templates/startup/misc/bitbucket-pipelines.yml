@@ -9,7 +9,7 @@ pipelines:
             - ln -s /opt/atlassian/pipelines/agent/data/id_rsa ~/.ssh/id_rsa
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
             - ./.heavyd/vendor/bin/phing property:write-full
-            - ./.heavyd/vendor/bin/dep deploy:unlock prod -vvv
+            - ./.heavyd/vendor/bin/dep deploy:unlock prod -vv
     prod-deploy-code:
       - step:
           script:
@@ -18,7 +18,7 @@ pipelines:
             - ln -s /opt/atlassian/pipelines/agent/data/id_rsa ~/.ssh/id_rsa
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
             - ./.heavyd/vendor/bin/phing property:write-full
-            - ./.heavyd/vendor/bin/dep deploy:code prod -vvv
+            - ./.heavyd/vendor/bin/dep deploy:code prod -vv
     prod-deploy-full:
       - step:
           script:
@@ -27,7 +27,7 @@ pipelines:
             - ln -s /opt/atlassian/pipelines/agent/data/id_rsa ~/.ssh/id_rsa
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
             - ./.heavyd/vendor/bin/phing property:write-full
-            - ./.heavyd/vendor/bin/dep deploy:full prod -vvv
+            - ./.heavyd/vendor/bin/dep deploy:full prod -vv
   branches:
     master:
       - step:
@@ -36,7 +36,7 @@ pipelines:
             # subsequent commands (rsync etc).
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
             - ./.heavyd/vendor/bin/phing property:write-full
-            - ./.heavyd/vendor/bin/dep deploy:full prod -vvv
+            - ./.heavyd/vendor/bin/dep deploy:full prod -vv
   tags:
     '*':
       - step:
@@ -46,4 +46,4 @@ pipelines:
             - ln -s /opt/atlassian/pipelines/agent/data/id_rsa ~/.ssh/id_rsa
             - cd .heavyd && composer install --no-interaction --no-progress --prefer-dist --no-suggest && cd ..
             - ./.heavyd/vendor/bin/phing property:write-full
-            - ./.heavyd/vendor/bin/dep deploy:full prod -
+            - ./.heavyd/vendor/bin/dep deploy:full prod -vv
