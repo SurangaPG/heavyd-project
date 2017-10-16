@@ -1,0 +1,6 @@
+name: Baseline
+type: module
+description: 'Provides a baseline module which can be used for all sorts of standard items etc.'
+core: 8.x
+package : Baseline
+dependencies:

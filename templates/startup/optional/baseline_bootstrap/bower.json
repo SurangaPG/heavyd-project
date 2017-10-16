@@ -1,0 +1,24 @@
+{
+  "name": "Baseline",
+  "description": "baseline theme based of the Panda base theme for Drupal 8 in combination with various ONE-agency extensions.",
+  "main": "",
+  "authors": [
+    "Sander Tirez <me@sqndr.com>",
+    "Suranga Panagamuwa Gamage <suranga@webct.be>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/sqndr/panda",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass": "v3.3.7",
+    "jquery-nice-select": "^1.1.0",
+    "Ionicons": "driftyco/ionicons#^2.0.1"
+  }
+}

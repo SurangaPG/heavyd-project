@@ -1,0 +1,57 @@
+
+@for $i from 1 through 26 {
+  .m-t-#{$i} {
+    margin-top: $narrow-spacing*$i;
+  }
+
+  .m-b-#{$i} {
+    margin-bottom: $narrow-spacing*$i;
+  }
+
+  .m-l-#{$i} {
+    margin-left: $narrow-spacing*$i;
+  }
+
+  .m-r-#{$i} {
+    margin-right: $narrow-spacing*$i;
+  }
+
+  .m-y-#{$i} {
+    margin-top: $narrow-spacing*$i;
+    margin-bottom: $narrow-spacing*$i;
+  }
+
+  .m-x-#{$i} {
+    margin-left: $narrow-spacing*$i;
+    margin-right: $narrow-spacing*$i;
+  }
+
+  .m-#{$i} {
+    margin: $narrow-spacing*$i;
+  }
+
+  .p-t-#{$i} {
+    padding-top: $narrow-spacing*$i;
+  }
+
+  .p-b-#{$i} {
+    padding-bottom: $narrow-spacing*$i;
+  }
+
+  .p-l-#{$i} {
+    padding-left: $narrow-spacing*$i;
+  }
+
+  .p-y-#{$i} {
+    padding-left: $narrow-spacing*$i;
+    padding-right: $narrow-spacing*$i;
+  }
+
+  .p-r-#{$i} {
+    padding-right: $narrow-spacing*$i;
+  }
+
+  .p-#{$i} {
+    padding: $narrow-spacing*$i;
+  }
+}
