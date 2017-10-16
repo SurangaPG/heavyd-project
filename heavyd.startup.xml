@@ -94,10 +94,32 @@
     </target>
 
     <target name="startup:optional-files">
+        <!-- Copy over some base files if they are not present -->
         <copy file="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/composer.json"
               tofile="${project.basedir}/composer.json" />
 
         <copy file="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/.gitignore"
               tofile="${project.basedir}/.gitignore" />
+
+        <!-- Include the baseline module and theme -->
+        <if>
+            <not>
+                <available file='${dir.web.root}/modules/custom/baseline' type='dir' property="exists.baseline.module"/>
+            </not>
+
+            <then>
+                <echo>Baseline module doesn't exist, adding it.</echo>
+            </then>
+        </if>
+
+        <if>
+            <not>
+                <available file='${dir.web.root}/modules/custom/baseline_bootstrap' type='dir' property="exists.baseline.theme"/>
+            </not>
+
+            <then>
+                <echo>Baseline theme doesn't exist, adding it.</echo>
+            </then>
+        </if>
     </target>
 </project>
