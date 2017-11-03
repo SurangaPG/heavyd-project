@@ -1,0 +1,16 @@
+$icon-font-path: '../../../fonts/bootstrap/';
+
+$narrow-spacing: 6px;
+
+// Start by explicitly writing out all the variables. This
+// makes it a lot easier to autocomplete in the various sass files.
+$black: #000;
+$white: #FFF;
+
+// Add all the above colors to the map. This makes it possible to auto generate various
+// background color variations etc.
+// Make sure all the different names match the above variable names for clarity.
+$colors: (
+  white: $white,
+  black: $black,
+) !default;
