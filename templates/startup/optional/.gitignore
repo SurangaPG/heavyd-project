@@ -1,5 +1,8 @@
 vendor
 
+assets/files/private
+assets/files/temp
+
 web/sites/default/settings.*.php
 web/sites/default/services.*.yml
 web/sites/default/files
