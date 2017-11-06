@@ -11,3 +11,9 @@ function baseline_theme_suggestions_block_alter(array &$suggestions, array $vari
     $suggestions[] = 'block__type__' . $variables['elements']['content']['#block_content']->bundle();
   }
 }
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function baseline_theme_suggestions_user_alter(array &$suggestions, array $variables) {
+  $suggestions[] = 'user__' . $variables['elements']['#view_mode'];
+}

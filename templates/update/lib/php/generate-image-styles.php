@@ -6,7 +6,28 @@
  * Very minimal helper file to generate a number of image styles.
  */
 
-require_once dirname(__DIR__) . "/vendor/autoload.php";
+require_once dirname(dirname(__DIR__)) . "/vendor/autoload.php";
+
+// Define this function ourselves to prevent having to load additional php
+// packages.
+if (!function_exists("gcd")) {
+  function gcd($x, $y) {
+    $x = abs($x);
+    $y = abs($y);
+
+    if ($x + $y == 0) {
+      return "0";
+    }
+    else {
+      while ($x > 0) {
+        $z = $x;
+        $x = $y % $x;
+        $y = $z;
+      }
+      return $z;
+    }
+  }
+}
 
 $standardWidth = 120;
 
@@ -29,7 +50,7 @@ $resolutions = [
 $colWidths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 $uuid = new \Drupal\Component\Uuid\Php();
-$outputDir = dirname(__DIR__) . '/etc/site/default/config/';
+$outputDir = dirname(dirname(__DIR__)) . '/etc/site/default/config/';
 
 foreach ($variations as $variationName => $variation) {
   foreach ($resolutions as $resolutionName => $resolution) {
@@ -73,12 +94,14 @@ foreach ($variations as $variationName => $variation) {
       echo "Image Style: Updated " . $imageStyle['label'] . "\n";
       file_put_contents($outputFile, \Symfony\Component\Yaml\Yaml::dump($imageStyle, 4, 2));
 
+      $gcd = gcd($width, $height);
+
       // Generate a manual crop style matching this one.
       $crop = [
           'label' => $label . ' (' . $resolutionName . ')',
           'id' => $machineName,
         // @TODO Use a clean aspect ratio here.
-          'aspect_ratio' => $width . ':' . $height,
+          'aspect_ratio' => ($width / $gcd) . ':' . ($height / $gcd),
           'soft_limit_width' => $width,
           'soft_limit_height' => $height,
       ];
@@ -89,43 +112,3 @@ foreach ($variations as $variationName => $variation) {
     }
   }
 }
-
-// Generate the sets of the responsive image styles.
-foreach ($variations as $variationName => $variation) {
-  for ($colWidth = 1; $colWidth <= 12; $colWidth++) {
-
-    $outputFile = $outputDir . 'responsive_image.styles.col_' . $colWidth . '_' . $variationName . '.yml';
-    $responsiveImageSet = [
-      'id' => 'col_' . $colWidth . '_' . $variationName,
-      'label' => 'Col ' . $colWidth . ' ' . str_replace('_', ' ', $variationName),
-      'image_style_mappings' => [
-        [
-          'breakpoint_id' => 'baseline.lg',
-          'multiplier' => '1x',
-          'image_mapping_type' => 'image_style',
-          'image_mapping' => 'col_' . $colWidth . '_' . $variationName . '_x1'
-        ],
-        [
-            'breakpoint_id' => 'baseline.lg',
-            'multiplier' => '2x',
-            'image_mapping_type' => 'image_style',
-            'image_mapping' => 'col_' . $colWidth . '_' . $variationName . '_x2'
-        ],
-        [
-            'breakpoint_id' => 'baseline.lg',
-            'multiplier' => '3x',
-            'image_mapping_type' => 'image_style',
-            'image_mapping' => 'col_' . $colWidth . '_' . $variationName . '_x3'
-        ]
-      ],
-      'breakpoint_group' => 'baseline',
-      'fallback_image_style' => '_original image_',
-    ];
-
-    echo "Responsive Image Style: Updated " . $responsiveImageSet['label'] . "\n";
-    file_put_contents($outputFile, \Symfony\Component\Yaml\Yaml::dump($responsiveImageSet, 4, 2));
-  }
-}
-
-
-

@@ -6,7 +6,7 @@
  * Very minimal helper file to generate a number of image styles.
  */
 
-require_once dirname(__DIR__) . "/vendor/autoload.php";
+require_once dirname(dirname(__DIR__)) . "/vendor/autoload.php";
 
 $standardWidth = 120;
 
@@ -29,7 +29,7 @@ $resolutions = [
 $colWidths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 $uuid = new \Drupal\Component\Uuid\Php();
-$outputDir = dirname(__DIR__) . '/etc/site/default/config/';
+$outputDir = dirname(dirname(__DIR__)) . '/etc/site/default/config/';
 
 // Generate the sets of the responsive image styles.
 // The first number is the number of columns, roughly equates to 120px/column.
