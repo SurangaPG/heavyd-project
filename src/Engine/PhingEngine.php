@@ -78,93 +78,58 @@ class PhingEngine implements EngineInterface {
   }
 
   /**
-   * Start any needed extra local service.
-   *
-   * This allows items such as solr etc to be started up based on the settings
-   * in the codebase. As required by the environment.
+   * {@inheritdoc}
    */
   public function taskEnvStartServices() {
     echo __FUNCTION__;
   }
   /**
-   * Stop any services needed locally.
-   *
-   * This allows the stopping of any needed services on the local machine.
-   * As required by the environment.
+   * {@inheritdoc}
    */
   public function taskEnvStopServices() {
     echo __FUNCTION__;
   }
 
   /**
-   * Switch the stage.
-   *
-   * Stages are the typical phases of a development cycle. They usually handle
-   * the cache, debug settings etc. A typical example would be the dtap cycle.
-   * It should move any files needed from the /etc folders to the actual project
-   * build.
-   *
-   * Conceptually speaking typical ideas for stage are:
-   *  - dev
-   *  - test
-   *  - acc
-   *  - prod
-   *  - install
-   * etc.
-   *
-   * As a rule a stage should not contain any credentials etc if it can be
-   * avoided.
-   *
-   * @param string $stageMachineName
-   *   The machine name for the "stage" to activate.
+   * {@inheritdoc}
    */
   public function taskStageSwitch(string $stageMachineName) {
-    echo __FUNCTION__;
+    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:activate-stage');
+    $binRunner->addOption('-Dstage.to.activate', $stageMachineName);
+    $binRunner->run();
   }
 
   /**
-   * Import all the default content.
+   * {@inheritdoc}
    */
   public function taskStageSetupContent() {
     echo __FUNCTION__;
   }
 
   /**
-   * Export all the default content.
+   * {@inheritdoc}
    */
   public function taskStageExportContent() {
     echo __FUNCTION__;
   }
 
   /**
-   * Import all the locale data.
+   * {@inheritdoc}
    */
   public function taskImportLocale() {
     echo __FUNCTION__;
   }
 
   /**
-   * Export all the locale data.
+   * {@inheritdoc}
    */
   public function taskExportLocale() {
     echo __FUNCTION__;
   }
 
   /**
-   * Switch the site.
-   *
-   * Sites are the typical items that are based on a drupal multisite idea. They
-   * contain all the settings etc that define a single site. E.g the drupal
-   * config, locale data, asset storage locations etc.
-   * It should move any files needed from the /etc folders to the actual project
-   * build.
-   *
-   * Conceptually speaking typical ideas for site are the things that are in
-   * your sites folders.
-   *
-   * @param string $siteMachineName
-   *   The machine name for the "site" to activate. Should match the name of
-   *   the directory in the sites folder.
+   * {@inheritdoc}
    */
   public function taskSiteSwitch(string $siteMachineName) {
     echo __FUNCTION__;
