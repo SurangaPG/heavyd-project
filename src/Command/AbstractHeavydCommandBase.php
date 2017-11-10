@@ -5,11 +5,7 @@
 
 namespace surangapg\Heavyd\Command;
 
-use surangapg\Heavyd\HeavydApplication;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractHeavydCommandBase extends Command {
 
