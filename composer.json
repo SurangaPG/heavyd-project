@@ -13,6 +13,14 @@
             "email": "suranga@webct.be"
         }
     ],
+    "autoload": {
+      "psr-4": {
+        "surangapg\\Heavyd\\": "src"
+      }
+    },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "bin": [
+        "bin/heavyd"
+    ]
 }
