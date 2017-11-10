@@ -3,7 +3,7 @@
  * @file Contains the command that makes all the actual comparisons.
  */
 
-namespace surangapg\Heavyd\Command\Env;
+namespace surangapg\Heavyd\Command\Stage;
 
 use surangapg\Heavyd\Command\AbstractHeavydCommandBase;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,16 +16,16 @@ class SwitchCommand extends AbstractHeavydCommandBase {
    * @inheritdoc
    */
   protected function configure() {
-    $this->setName('env:switch')
-      ->addArgument('environment', InputArgument::REQUIRED, 'The machine name of the environment to switch to.')
-      ->setDescription('Switch the current file set to match a different environment.');
+    $this->setName('stage:switch')
+      ->addArgument('stage', InputArgument::REQUIRED, 'The machine name of the stage to switch to.')
+      ->setDescription('Switch the current file set to match a different stage.');
   }
 
   /**
    * @inheritdoc
    */
   public function execute(InputInterface $input, OutputInterface $output) {
-    $this->getApplication()->getEngine()->taskEnvSwitch($input->getArgument('environment'));
+    $this->getApplication()->getEngine()->taskStageSwitch($input->getArgument('stage'));
   }
 
 }

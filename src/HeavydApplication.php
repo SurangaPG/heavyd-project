@@ -3,6 +3,7 @@
 namespace surangapg\Heavyd;
 
 use surangapg\Heavyd\Command\Env\SwitchCommand as EnvSwitchCommand;
+use surangapg\Heavyd\Command\Stage\SwitchCommand as StageSwitchCommand;
 use surangapg\Heavyd\Engine\EngineInterface;
 use surangapg\Heavyd\Engine\PhingEngine;
 use Symfony\Component\Console\Application;
@@ -72,6 +73,7 @@ class HeavydApplication extends Application {
     $this->engine = $engine;
 
     $this->add(new EnvSwitchCommand());
+    $this->add(new StageSwitchCommand());
   }
 
   /**
