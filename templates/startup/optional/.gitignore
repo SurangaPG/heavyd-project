@@ -1,7 +1,7 @@
 vendor
 
-assets/files/private
-assets/files/temp
+assets/files/*/private
+assets/files/*/temp
 
 web/sites/default/settings.*.php
 web/sites/default/services.*.yml
