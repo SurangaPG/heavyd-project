@@ -72,8 +72,8 @@ foreach ($heavydProperties['server'] as $serverKey => $serverData) {
     ])
     ->set('writable_dirs', [
       $relativeWebDir . '/sites/' . $serverData['site'] . '/files',
-      'assets/files/temp',
-      'assets/files/private',
+      'assets/files/' . $serverData['site'] . 'temp',
+      'assets/files/' . $serverData['site'] . 'private',
     ])
     // The .env file contains DB credentials etc specific for the environment.
     ->set('shared_files', [
