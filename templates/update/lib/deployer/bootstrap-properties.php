@@ -67,8 +67,8 @@ foreach ($heavydProperties['server'] as $serverKey => $serverData) {
     ->set('root', $serverData['root'])
     ->set('shared_dirs', [
       $relativeWebDir . '/sites/' . $serverData['site'] . '/files',
-      'assets/files/temp',
-      'assets/files/private',
+      'assets/files/' . $serverData['site'] . '/temp',
+      'assets/files/' . $serverData['site'] . '/private',
     ])
     ->set('writable_dirs', [
       $relativeWebDir . '/sites/' . $serverData['site'] . '/files',
