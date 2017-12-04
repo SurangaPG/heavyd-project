@@ -105,6 +105,7 @@
         <if>
             <not>
                 <available file='${dir.web.root}/modules/custom/baseline' type='dir' property="exists.baseline.module"/>
+                <equals arg1="${exists.baseline.module}" arg2="true" />
             </not>
 
             <then>
@@ -116,13 +117,16 @@
                         </patternset>
                     </fileset>
                 </copy>
-
             </then>
+            <else>
+                <echo>Baseline module already present.</echo>
+            </else>
         </if>
 
         <if>
             <not>
                 <available file='${dir.web.root}/modules/custom/baseline_bootstrap' type='dir' property="exists.baseline.theme"/>
+                <equals arg1="${exists.baseline.theme}" arg2="true" />
             </not>
 
             <then>
@@ -135,6 +139,9 @@
                     </fileset>
                 </copy>
             </then>
+            <else>
+                <echo>Baseline theme already present.</echo>
+            </else>
         </if>
     </target>
 </project>
