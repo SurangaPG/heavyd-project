@@ -12,6 +12,40 @@
     </import>
      -->
 
+    <!--
+    Property bundle loading
+
+    Ensure that the full property date is written out in the file system.
+    This is to make it easier to add extra properties etc to the project set.
+
+    All the .yml files in the /properties/dist, env and local folder are combined and aggregated
+    into a basic set.
+-->
+    <!-- Include custom property loading tasks -->
+    <includepath classpath="${project.basedir}/.heavyd/vendor/surangapg/phing-property-bundle/src" />
+
+    <taskdef classname="PropertyDirWriteTask" name="property-dir-write" />
+    <taskdef classname="PropertyDirLoadTask" name="property-dir" />
+
+    <property name="output.FULL_PROPERTIES_EXIST" value="false" />
+    <exec command="if [ -f '${project.basedir}/properties/bin.yml' ]; then echo 'true'; else echo 'false'; fi;" outputProperty="output.FULL_PROPERTIES_EXIST" />
+    <if>
+        <equals arg1="${output.FULL_PROPERTIES_EXIST}" arg2="false" />
+        <then>
+            <echo message="full property files don't appear to be generated yet, generating on the fly via property-dir-write" />
+            <property-dir-write originDir="${project.basedir}/properties"
+                                subLevels="dist,stage,env"
+                                outputDir="${project.basedir}/properties"
+                                order="project,dir,bin,behat"
+                                override="true"
+                                outputFull="false"
+            />
+        </then>
+    </if>
+
+    <!-- Loads the full property files from the base dir -->
+    <property-dir propertyDir="${project.basedir}/properties"/>
+
     <target name="info" description="Show some basic information.">
         <echo message="Welcome to the HeavyD project startup. This buildfile is used to wrap around the various phing files needed to start up the project." />
     </target>
@@ -105,11 +139,10 @@
         <if>
             <not>
                 <available file='${dir.web.root}/modules/custom/baseline' type='dir' property="exists.baseline.module"/>
-                <equals arg1="${exists.baseline.module}" arg2="true" />
             </not>
 
             <then>
-                <echo>Baseline module doesn't exist, adding it.</echo>
+                <echo message="Baseline module doesn't exist, adding it." />
                 <copy todir="${project.basedir}/web/modules/custom/baseline">
                     <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/baseline">
                         <patternset>
@@ -119,18 +152,18 @@
                 </copy>
             </then>
             <else>
-                <echo>Baseline module already present.</echo>
+                <echo message="Baseline module already present." />
             </else>
         </if>
 
         <if>
             <not>
-                <available file='${dir.web.root}/modules/custom/baseline_bootstrap' type='dir' property="exists.baseline.theme"/>
-                <equals arg1="${exists.baseline.theme}" arg2="true" />
+                <available file='${dir.web.root}/themes/custom/baseline_bootstrap' type='dir' property="exists.baseline.theme"/>
             </not>
 
             <then>
-                <echo>Baseline theme doesn't exist, adding it.</echo>
+                <echo message="Baseline theme doesn't exist, adding it." />
+                <echo message="${exists.baseline.theme}" />
                 <copy todir="${project.basedir}/web/themes/custom/baseline_bootstrap">
                     <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/baseline_bootstrap">
                         <patternset>
@@ -140,7 +173,7 @@
                 </copy>
             </then>
             <else>
-                <echo>Baseline theme already present.</echo>
+                <echo message="Baseline theme already present." />
             </else>
         </if>
     </target>
