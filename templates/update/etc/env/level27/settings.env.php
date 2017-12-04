@@ -10,6 +10,8 @@ $envFile = dirname(dirname(dirname(__DIR__))) . '/.env';
 $envConf = base64_decode(file_get_contents($envFile));
 $envConf = json_decode($envConf, TRUE);
 
-$databases = $envConf['database'];
+// Select the config for the correct basename (allows multisite setups).
+$envConf = $envConf[basename(__DIR__)];
 
+$databases = $envConf['databases'];
 $settings['hash_salt'] = $envConf['hash_salt'];
