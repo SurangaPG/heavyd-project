@@ -151,5 +151,18 @@ class PhingEngine implements EngineInterface {
     echo __FUNCTION__;
   }
 
+  /**
+   * @return \Symfony\Component\Console\Output\OutputInterface
+   */
+  public function getOutput() {
+    return $this->output;
+  }
+
+  /**
+   * @param \Symfony\Component\Console\Output\OutputInterface $output
+   */
+  public function setOutput(OutputInterface $output) {
+    $this->output = $output;
+  }
 }
 

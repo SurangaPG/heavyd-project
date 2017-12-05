@@ -5,6 +5,8 @@
 
 namespace surangapg\Heavyd\Engine;
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Interface EngineInterface
  *
@@ -154,5 +156,14 @@ interface EngineInterface {
    */
   public function taskAssetsProxy();
 
+  /**
+   * @return \Symfony\Component\Console\Output\OutputInterface
+   */
+  public function getOutput();
+
+  /**
+   * @param \Symfony\Component\Console\Output\OutputInterface $output
+   */
+  public function setOutput(OutputInterface $output);
 }
 

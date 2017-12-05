@@ -48,7 +48,7 @@
             description="Activates the correct settings file for the current stage">
         <!-- @TODO add support for the generic files in the bundle -->
         <if>
-            <available file="${dir.etc.stage}/${stage.to.activate}/settings.php"
+            <available file="${dir.etc.stage}/${stage.to.activate}/settings.stage.php"
                        type="file"
                        property="stage.to.activate.settings.available"/>
             <then>
