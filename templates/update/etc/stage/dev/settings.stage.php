@@ -6,6 +6,11 @@
  * Warning this file should NOT be active before the site is installed.
  */
 
+// Settings to enable the dev config split.
+
+// Use development config in dev environments.
+$config['config_split.config_split.dev']['status'] = TRUE;
+
 assert_options(ASSERT_ACTIVE, TRUE);
 \Drupal\Component\Assertion\Handle::register();
 
