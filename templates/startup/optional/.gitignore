@@ -21,3 +21,5 @@ node_modules
 /temp
 
 properties/*.yml
+properties/env/*.yml
+properties/stage/*.yml

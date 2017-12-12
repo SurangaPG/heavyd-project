@@ -21,12 +21,13 @@
  */
 
 // Get the DB info etc from the .env file
-$envFile = dirname(dirname(dirname(__DIR__))) . '/.env';
+$envFile = dirname(dirname(dirname(__DIR__))) . '/.env.json';
 
 $envConf = file_get_contents($envFile);
 $envConf = json_decode($envConf, TRUE);
+$envConf = $envConf[basename(__DIR__)];
 
-$databases = $envConf['database'];
+$databases = $envConf['databases'];
 
 $settings['hash_salt'] = $envConf['hash_salt'];
 
