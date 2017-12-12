@@ -19,3 +19,5 @@ web/profiles/generic
 
 node_modules
 /temp
+
+properties/*.yml
