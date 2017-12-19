@@ -84,13 +84,13 @@
             depends="_drupal:validate:stage-properties">
         <!-- @TODO add support for the generic files in the bundle -->
         <if>
-            <available file="${dir.etc.stage}/${stage.to.activate}/services.yml"
+            <available file="${dir.etc.stage}/${stage.to.activate}/services.stage.yml"
                        type="file"
                        property="stage.to.activate.services.available" />
             <then>
                 <echo message="Copying services.yml for ${stage.to.activate} to active services.yml" />
-                <copy file="${dir.etc.stage}/${stage.to.activate}/services.yml"
-                      tofile="${dir.web.root}/sites/default/services.yml"
+                <copy file="${dir.etc.stage}/${stage.to.activate}/services.stage.yml"
+                      tofile="${dir.web.root}/sites/default/services.stage.yml"
                       overwrite="true"/>
             </then>
         </if>
