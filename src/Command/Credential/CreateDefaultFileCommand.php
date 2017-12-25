@@ -50,6 +50,6 @@ class CreateDefaultFileCommand extends AbstractHeavydCommandBase {
     $localFileName = $dirProperties['temp'] . '/.env-default-' . time();
     $fs = new Filesystem();
     $fs->dumpFile($localFileName, json_encode($data, JSON_PRETTY_PRINT));
-    $this->getIo()->writeln('Default version saved in ' . $localFileName);
+    $output->writeln('Default version saved in ' . $localFileName);
   }
 }
