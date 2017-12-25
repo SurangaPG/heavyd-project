@@ -4,11 +4,14 @@ namespace surangapg\Heavyd;
 
 use surangapg\Heavyd\Command\Env\SwitchCommand as EnvSwitchCommand;
 use surangapg\Heavyd\Command\Stage\SwitchCommand as StageSwitchCommand;
+use surangapg\Heavyd\Components\Properties\Properties;
+use surangapg\Heavyd\Components\Properties\PropertiesInterface;
 use surangapg\Heavyd\Engine\EngineInterface;
 use surangapg\Heavyd\Engine\PhingEngine;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use surangapg\Heavyd\Command\Credential\CreateDefaultFileCommand;
 
 class HeavydApplication extends Application {
 
@@ -30,6 +33,20 @@ class HeavydApplication extends Application {
    * @var EngineInterface
    */
   protected $engine;
+
+  /**
+   * Basepath for the project.
+   *
+   * @var string
+   */
+  protected $basePath;
+
+  /**
+   * All the properties for the project.
+   *
+   * @var \surangapg\Heavyd\Components\Properties\PropertiesInterface
+   */
+  protected $properties;
 
   /**
    * Creates and returns a fully functional workflow object based on the current
@@ -56,8 +73,10 @@ class HeavydApplication extends Application {
 
     $engine = new PhingEngine($projectPath);
 
+    $properties = Properties::create($basePath);
+
     // Fully initialize the application with any extra data from the data file.
-    $application = new self($engine);
+    $application = new self($engine, $properties);
 
     return $application;
   }
@@ -67,13 +86,15 @@ class HeavydApplication extends Application {
    *
    * @inheritdoc
    */
-  public function __construct(EngineInterface $engine) {
+  public function __construct(EngineInterface $engine, PropertiesInterface $properties) {
     parent::__construct('HeavyD', static::VERSION);
 
     $this->engine = $engine;
+    $this->properties = $properties;
 
     $this->add(new EnvSwitchCommand());
     $this->add(new StageSwitchCommand());
+    $this->add(new CreateDefaultFileCommand());
   }
 
   /**
@@ -148,5 +169,33 @@ class HeavydApplication extends Application {
    */
   public function setEngine(EngineInterface $engine) {
     $this->engine = $engine;
+  }
+
+  /**
+   * @return string
+   */
+  public function getBasePath() {
+    return $this->basePath;
+  }
+
+  /**
+   * @param $basePath
+   */
+  public function setBasePath(string $basePath) {
+    $this->basePath = $basePath;
+  }
+
+  /**
+   * @return \surangapg\Heavyd\Components\Properties\PropertiesInterface
+   */
+  public function getProperties() {
+    return $this->properties;
+  }
+
+  /**
+   * @param \surangapg\Heavyd\Components\Properties\PropertiesInterface $properties
+   */
+  public function setProperties(PropertiesInterface $properties) {
+    $this->properties = $properties;
   }
 }
