@@ -156,6 +156,21 @@
             </else>
         </if>
 
+        <!-- Include the build.xml file -->
+        <if>
+            <not>
+                <available file='${project.basedir}/build.xml' property="exists.buildxml"/>
+            </not>
+
+            <then>
+                <echo message="build.xml doesn't exist, adding it." />
+                <copy tofile="${project.basedir}/build.xml" file="{project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/build.xml" />
+            </then>
+            <else>
+                <echo message="build.xml already present." />
+            </else>
+        </if>
+
         <if>
             <not>
                 <available file='${dir.web.root}/themes/custom/baseline_style' type='dir' property="exists.baseline.theme"/>
