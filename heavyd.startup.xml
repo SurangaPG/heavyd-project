@@ -158,14 +158,14 @@
 
         <if>
             <not>
-                <available file='${dir.web.root}/themes/custom/baseline_bootstrap' type='dir' property="exists.baseline.theme"/>
+                <available file='${dir.web.root}/themes/custom/baseline_style' type='dir' property="exists.baseline.theme"/>
             </not>
 
             <then>
                 <echo message="Baseline theme doesn't exist, adding it." />
                 <echo message="${exists.baseline.theme}" />
-                <copy todir="${project.basedir}/web/themes/custom/baseline_bootstrap">
-                    <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/baseline_bootstrap">
+                <copy todir="${project.basedir}/web/themes/custom/baseline_style">
+                    <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/templates/startup/optional/baseline_style">
                         <patternset>
                             <include name="**"/>
                         </patternset>

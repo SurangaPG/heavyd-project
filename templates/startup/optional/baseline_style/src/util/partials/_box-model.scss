@@ -1,5 +1,6 @@
+$narrow-spacing: 0.5rem !default;
 
-@for $i from 1 through 26 {
+@for $i from 1 through 15 {
   .m-t-#{$i} {
     margin-top: $narrow-spacing*$i;
   }
@@ -42,9 +43,14 @@
     padding-left: $narrow-spacing*$i;
   }
 
-  .p-y-#{$i} {
+  .p-x-#{$i} {
     padding-left: $narrow-spacing*$i;
     padding-right: $narrow-spacing*$i;
+  }
+
+  .p-y-#{$i} {
+    padding-top: $narrow-spacing*$i;
+    padding-bottom: $narrow-spacing*$i;
   }
 
   .p-r-#{$i} {
