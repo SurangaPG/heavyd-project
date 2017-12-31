@@ -16,6 +16,7 @@
             depends="_drupal:validate:stage-properties">
         <phingcall target="drupal:stage:robots" />
         <phingcall target="drupal:stage:htaccess" />
+        <phingcall target="drupal:stage:htpasswd" />
         <phingcall target="drupal:stage:settings-file" />
         <phingcall target="drupal:stage:services" />
         <phingcall target="drupal:stage:sites" />
@@ -110,6 +111,24 @@
             </then>
             <else>
                 <echo message="No .htaccess for ${stage.to.activate} available at: ${dir.etc.stage}/${stage.to.activate}/.htaccess " />
+            </else>
+        </if>
+    </target>
+
+    <!-- Enable the .htpasswd for a given stage. -->
+    <target name="drupal:stage:htpasswd"
+            description="Activates the correct .htpasswd file for the current context"
+            depends="_drupal:validate:stage-properties">
+        <if>
+            <available file="${dir.etc.stage}/${stage.to.activate}/.htpasswd" type="file" property="stage.to.activate.htpasswd.available" />
+            <then>
+                <echo message="Copying .htpasswd for ${stage.to.activate} to active .htpasswd" />
+                <copy file="${dir.etc.stage}/${stage.to.activate}/.htpasswd"
+                      tofile="${project.basedir}/.htpasswd"
+                      overwrite="true"/>
+            </then>
+            <else>
+                <echo message="No .htpasswd for ${stage.to.activate} available at: ${dir.etc.stage}/${stage.to.activate}/.htpasswd " />
             </else>
         </if>
     </target>
