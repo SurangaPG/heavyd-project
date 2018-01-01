@@ -9,7 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 use Deployer\Task\Context;
 
 // Detect the root dir.
-$projectRootDir = dirname(dirname(__DIR__));
+$projectRootDir = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
 
 /*
  * Since the information is contained in the .properties/*.yml
