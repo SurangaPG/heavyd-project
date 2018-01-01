@@ -16,5 +16,5 @@ set('ssh_multiplexing', true);
  *
  * @TODO Make this less error prone by ensuring this some other way.
  */
-require __DIR__ . '/lib/deployer/bootstrap-properties.php';
-require __DIR__ . '/lib/deployer/drupal8-standard.php';
+require __DIR__ . '/.heavyd/vendor/heavyd/platform/lib/deployer/bootstrap-properties.php';
+require __DIR__ . '/.heavyd/vendor/heavyd/platform/lib/deployer/drupal8-standard.php';

@@ -35,12 +35,6 @@ with the following content:
     }
   ],
   "scripts": {
-    "post-update-cmd": [
-      "cp vendor/heavyd/platform/heavyd.startup.xml ../heavyd.startup.xml",
-      "cd .. && ./.heavyd/vendor/bin/phing heavyd-startup:drupal8 -buildfile heavyd.startup.xml",
-      "cd .. && rm -rf heavyd.startup.xml",
-      "cp vendor/heavyd/platform/heavyd.project.xml ../heavyd.project.xml"
-    ]
   },
   "minimum-stability": "dev",
   "prefer-stable": true
@@ -57,7 +51,16 @@ to the root. Otherwise ensure it includes the heavyd one.
 <!-- Dummy xml in case it doesn't exist, will just load in the more apptly named 'core' file -->
 <project name="HeavyD" default="list">
 
-    <import file="heavyd.project.xml" />
+    <import file=".heavyd/vendor/heavyd/platform/heavyd.project.xml" />
 
 </project>
+```
+
+After installing run 
+
+```
+cp vendor/heavyd/platform/heavyd.startup.xml ../heavyd.startup.xml
+cd .. && ./.heavyd/vendor/bin/phing heavyd-startup:drupal8 -buildfile heavyd.startup.xml
+cd .. && rm -rf heavyd.startup.xml
+cp vendor/heavyd/platform/heavyd.project.xml ../heavyd.project.xml
 ```
