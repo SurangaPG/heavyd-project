@@ -72,7 +72,7 @@
 
     <!-- Auto include all the heavyd build files in the vendor dirs. -->
     <import>
-        <fileset dir="${project.basedir}/lib/phing">
+        <fileset dir="${project.basedir}/.heavyd/vendor/heavyd/platform/lib/phing">
             <patternset>
                 <include name="build.*.xml"/>
             </patternset>
