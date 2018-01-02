@@ -22,6 +22,40 @@
         <phingcall target="drupal:stage:sites" />
     </target>
 
+    <target name="drupal:prepare-default-content">
+        <property name="active.site" value="default" />
+        <fail unless="active.from.stage" message="No stage to export default content from has been specified and none is currently active." />
+        <fail unless="domain.for.install" message="No domain has been specified for the import of the content." />
+
+        <!-- The exports depend on a url which was added by the exporting site, so we need to replace this. -->
+        <echo message="Moving content to source dir." />
+        <delete dir="${dir.web.root}/modules/custom/baseline_content/content" />
+        <mkdir dir="${dir.web.root}/modules/custom/baseline_content/content" />
+
+        <!-- Ensure this dir exists -->
+        <mkdir dir="${dir.etc.assets}/modules/custom/baseline_content/content" />
+        <copy todir="${dir.web.root}/modules/custom/baseline_content/content">
+            <fileset dir="${dir.etc.site}/${active.site}/stages/${active.from.stage}/default_content">
+                <include name="**" />
+            </fileset>
+        </copy>
+
+        <property name="project.uri" value="http://limburgnet.drupal.mamp"/>
+        <prepare-exported-data-for-import webRoot="${dir.web.root}" activeDomain="${domain.for.install}"/>
+    </target>
+
+    <target name="drupal:import-default-content">
+        <echo message="Adding baseline content" />
+        <exec passthru="true" command="${bin.drush} en baseline_content -y" dir="${dir.web.root}" />
+
+        <!-- Clean up the imported entities. -->
+        <exec passthru="true" command="${bin.drush} clean-imported-default-content" dir="${dir.web.root}" />
+
+        <echo message="Removing setup time modules" />
+        <exec passthru="true" command="${bin.drush} pm-uninstall baseline_content -y" dir="${dir.web.root}" />
+        <exec passthru="true" command="${bin.drush} pm-uninstall default_content -y" dir="${dir.web.root}" />
+    </target>
+
     <!--
         Enable the env setting file for a given drupal instance. This will add a basic settings.php
         file based on the data for an environment such as level27.

@@ -50,6 +50,10 @@
     <!-- Loads the full property files from the base dir -->
     <property-dir propertyDir="${project.basedir}/properties"/>
 
+    <includepath classpath="${project.basedir}/.heavyd/vendor/heavyd/platform/phing-tasks" />
+    <taskdef classname="CleanExportedDataTask" name="clean-exported-data" />
+    <taskdef classname="PrepareExportedDataForImportTask" name="prepare-exported-data-for-import" />
+
     <!-- Target to allow forced rebuilding of the properties -->
     <target name="property:write-full">
         <!-- @TODO Left for backwards compat, has been renamed to project:write-property-files -->
@@ -66,9 +70,14 @@
     </import>
 
     <target name="project:install" description="Installs a full website from scratch.">
+        <property name="domain.for.install" value="${host.default.domain}" />
+        <fail unless="domain.for.install" message="Pass the local domain (without a trailing slash and with http(s):// prefix) e.g -Ddomain.for.install=https://mylocaldomain.local "/>
+        <phingcall target="project:unlock" />
+
         <!-- Default values -->
         <property name="final.env" value="local" />
         <property name="final.stage" value="dev" />
+        <property name="site.to.activate" value="default" />
 
         <!-- Enable the install time data -->
         <property name="env.to.activate" value="${final.env}" override="true" />
@@ -77,15 +86,41 @@
         <phingcall target="project:activate-env" />
         <phingcall target="project:activate-stage" />
 
-        <!-- Generate a .etc/.host file for the local environment -->
-        <!-- @TODO implement this -->
-
         <!-- @TODO Look into the mails being sent during install? -->
         <phingcall target="drush:site-install" />
 
         <!-- Install the final stage (was forced to install to prevent issues) -->
+        <phingcall target="project:unlock" />
         <property name="stage.to.activate" value="${final.stage}" override="true" />
         <phingcall target="project:activate-stage" />
+
+        <phingcall target="project:prepare-default-content" >
+            <property name="active.from.stage" value="${stage.to.activate}" />
+        </phingcall>
+        <phingcall target="project:import-default-content" />
+
+        <exec passthru="true" command="${bin.drush} uli --uri=${host.default.domain}" dir="${dir.web.root}"/>
+    </target>
+
+    <!-- Similar to install except that it prevents any form of file manipulation (handy for platform. Do not that this means the settings.php can't contain any non-install time valid cache ssettings -->
+    <target name="project:reset-install" description="Resets an installation to its chosen profile without triggering any file changes.">
+        <property name="domain.for.install" value="${host.default.domain}" />
+
+        <phingcall target="drush:site-install" />
+        <phingcall target="project:import-default-content" />
+    </target>
+
+    <target name="project:import-default-content">
+        <phingcall target="drupal:import-default-content" />
+    </target>
+
+    <target name="project:prepare-default-content">
+        <property name="domain.for.install" value="${host.default.domain}" />
+        <property name="active.from.stage" value="${project.active.stage}" />
+
+        <fail unless="active.from.stage" message="No stage to export default content from has been specified and none is currently active." />
+        <fail unless="domain.for.install" message="Pass the local domain (without a trailing slash and with http(s):// prefix) e.g -Ddomain.for.install=https://mylocaldomain.local "/>
+        <phingcall target="drupal:prepare-default-content" />
     </target>
 
     <target name="project:build" description="Builds an entire environment up from scratch.">

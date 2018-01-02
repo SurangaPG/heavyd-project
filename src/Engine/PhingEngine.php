@@ -133,6 +133,15 @@ class PhingEngine implements EngineInterface {
   /**
    * {@inheritdoc}
    */
+  public function taskProjectResetInstall() {
+    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:reset-install');
+    $binRunner->run();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function taskStageSetupContent() {
     echo __FUNCTION__;
   }

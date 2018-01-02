@@ -122,6 +122,14 @@ interface EngineInterface {
   public function taskStageSwitch(string $stageMachineName);
 
   /**
+   * Resets the current installation to the basic settings.
+   *
+   * This forces a re-install without updating any files etc.
+   * Useful for resetting test environments after they have been build.
+   */
+  public function taskProjectResetInstall();
+
+  /**
    * Import all the default content.
    */
   public function taskStageSetupContent();
