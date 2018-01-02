@@ -130,6 +130,11 @@
         <phingcall target="drupal:env:settings-file" />
     </target>
 
+    <target name="project:install-dependencies" description="Install all the composer dependecies for the project.">
+        <phingcall target="composer:full" />
+    </target>
+
+
     <target name="project:activate-stage" description="Activates a the correct stage (e.g production, acc, etc) for a given site (dir).">
         <phingcall target="property:cleanse:stage" />
         <phingcall target="property:activate:stage" />
@@ -141,4 +146,7 @@
         <exec passthru="true" command="${bin.phing} -l" />
     </target>
 
+    <target name="project:unlock">
+        <exec passthru="true" command="chmod -R u+w ${project.basedir}" />
+    </target>
 </project>

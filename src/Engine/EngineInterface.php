@@ -33,8 +33,16 @@ interface EngineInterface {
    *
    * This should run all the needed steps to fully (re-install) the site.
    * Ending in a clean full site install for the correct stage/env/site.
+   *
+   * @param string $envMachineName
+   *   Machine name for the env being activated.
+   * @param string $stageMachineName
+   *   Machine name for the stage being activated.
+   *
+   * @throws \surangapg\Heavyd\Components\BinRunner\Exception\BinRunFailedException
+   *   When the phing fails to install.
    */
-  public function taskProjectInstall();
+  public function taskProjectInstall(string $envMachineName, string $stageMachineName);
 
   /**
    * Install all the needed dependencies for the project. Gets all the yarn,
