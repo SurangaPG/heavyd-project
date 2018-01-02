@@ -158,6 +158,18 @@ class HeavydApplication extends Application {
   }
 
   /**
+   * Rebuild the current properties.
+   *
+   * Flushes and rebuilds the properties. This will acount for any changes
+   * made to the property set during the course of a single command run.
+   * For example when a command resets an environment and then needs access to
+   * the properties of the new environment.
+   */
+  function rebuildProperties() {
+    $this->setProperties(Properties::create($this->getProperties()->getBasePath()));
+  }
+
+  /**
    * @return \surangapg\Heavyd\Engine\EngineInterface
    */
   public function getEngine() {

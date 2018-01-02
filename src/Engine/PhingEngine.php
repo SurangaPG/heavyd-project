@@ -45,6 +45,15 @@ class PhingEngine implements EngineInterface {
   /**
    * Make the entire filesystem writable.
    */
+  public function taskProjectWriteProperties() {
+    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:write-property-files');
+    $binRunner->run();
+  }
+
+  /**
+   * Make the entire filesystem writable.
+   */
   public function taskProjectUnlock() {
     $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:unlock');

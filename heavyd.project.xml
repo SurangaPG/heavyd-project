@@ -52,22 +52,8 @@
 
     <!-- Target to allow forced rebuilding of the properties -->
     <target name="property:write-full">
-        <if>
-            <not>
-                <isset property="current.basePath" />
-            </not>
-            <then>
-                <echo message="No custom basepath set, using project.basedir" />
-                <property name="current.basePath" value="${project.basedir}" />
-            </then>
-        </if>
-        <property-dir-write originDir="${project.basedir}/properties"
-                            subLevels="dist,stage,env"
-                            outputDir="${project.basedir}/properties"
-                            order="project,dir,bin,behat"
-                            override="true"
-                            outputFull="true"
-        />
+        <!-- @TODO Left for backwards compat, has been renamed to project:write-property-files -->
+        <phingcall target="project:write-property-files" />
     </target>
 
     <!-- Auto include all the heavyd build files in the vendor dirs. -->
@@ -134,6 +120,24 @@
         <phingcall target="composer:full" />
     </target>
 
+    <target name="project:write-property-files" description="Regenerate all the property files.">
+        <if>
+            <not>
+                <isset property="current.basePath" />
+            </not>
+            <then>
+                <echo message="No custom basepath set, using project.basedir" />
+                <property name="current.basePath" value="${project.basedir}" />
+            </then>
+        </if>
+        <property-dir-write originDir="${project.basedir}/properties"
+                            subLevels="dist,stage,env"
+                            outputDir="${project.basedir}/properties"
+                            order="project,dir,bin,behat"
+                            override="true"
+                            outputFull="true"
+        />
+    </target>
 
     <target name="project:activate-stage" description="Activates a the correct stage (e.g production, acc, etc) for a given site (dir).">
         <phingcall target="property:cleanse:stage" />
