@@ -8,3 +8,5 @@ deployer: ${current.basePath}/.heavyd/vendor/bin/deployer
 php: php
 npm: yarn
 bower: bower
+haunt: ${current.basePath}/.heavyd/vendor/bin/haunt
+docker: docker

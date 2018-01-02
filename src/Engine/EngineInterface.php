@@ -69,7 +69,7 @@ interface EngineInterface {
   /**
    * Setup all the services connected to this project.
    *
-   * Builds all the needed containers for the first time. 
+   * Builds all the needed containers for the first time.
    */
   public function taskProjectSetupServices();
 
