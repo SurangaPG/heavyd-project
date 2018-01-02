@@ -51,6 +51,29 @@ interface EngineInterface {
   public function taskProjectInstallDependencies();
 
   /**
+   * Stop any services needed locally.
+   *
+   * This allows the stopping of any needed services on the local machine.
+   * As required by the environment.
+   */
+  public function taskProjectStartServices();
+
+  /**
+   * Stop any services needed locally.
+   *
+   * This allows the stopping of any needed services on the local machine.
+   * As required by the environment.
+   */
+  public function taskProjectStopServices();
+
+  /**
+   * Setup all the services connected to this project.
+   *
+   * Builds all the needed containers for the first time. 
+   */
+  public function taskProjectSetupServices();
+
+  /**
    * Switch the environment.
    *
    * Environments are the information about the actual machine you are on.
@@ -73,22 +96,6 @@ interface EngineInterface {
    *   The machine name for the "environment" to activate.
    */
   public function taskEnvSwitch(string $envMachineName);
-
-  /**
-   * Start any needed extra local service.
-   *
-   * This allows items such as solr etc to be started up based on the settings
-   * in the codebase. As required by the environment.
-   */
-  public function taskEnvStartServices();
-
-  /**
-   * Stop any services needed locally.
-   *
-   * This allows the stopping of any needed services on the local machine.
-   * As required by the environment.
-   */
-  public function taskEnvStopServices();
 
   /**
    * Switch the stage.

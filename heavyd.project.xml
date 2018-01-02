@@ -146,6 +146,18 @@
         <phingcall target="drupal:stage:activate-etc-files" />
     </target>
 
+    <target name="project:setup-services" description="Setup all the docker containers connected to this project.">
+        <phingcall target="docker:setup" />
+    </target>
+
+    <target name="project:start-services" description="Start all the docker containers connected to this project.">
+        <phingcall target="docker:solr:start" />
+    </target>
+
+    <target name="project:stop-services" description="Stop all the docker containers connected to this project.">
+        <phingcall target="docker:solr:start" />
+    </target>
+
     <target name="project:help">
         <exec passthru="true" command="${bin.phing} -l" />
     </target>

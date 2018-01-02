@@ -97,14 +97,27 @@ class PhingEngine implements EngineInterface {
   /**
    * {@inheritdoc}
    */
-  public function taskEnvStartServices() {
-    echo __FUNCTION__;
+  public function taskProjectStartServices() {
+    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:start-services');
+    $binRunner->run();
   }
   /**
    * {@inheritdoc}
    */
-  public function taskEnvStopServices() {
-    echo __FUNCTION__;
+  public function taskProjectStopServices() {
+    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:stop-services');
+    $binRunner->run();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function taskProjectSetupServices() {
+    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:setup-services');
+    $binRunner->run();
   }
 
   /**
