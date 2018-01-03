@@ -29,6 +29,25 @@ interface EngineInterface {
   public function taskProjectUnlock();
 
   /**
+   * Updates all the files in the project to those specified in the package.
+   *
+   * This should copy over/prepare all the files needed to be completely
+   * up to date with the settings in the package.
+   */
+  public function taskProjectUpdate();
+
+  /**
+   * Stars up all the files in the project to those specified in the package.
+   *
+   * This should copy over/prepare all the files needed to make a standard
+   * project into a heavyD one.
+   *
+   * @param string $seedFileLocation
+   *   Absolute path to the startup file location.
+  */
+  public function taskProjectStartup(string $seedFileLocation);
+
+  /**
    * Install a site.
    *
    * This should run all the needed steps to fully (re-install) the site.

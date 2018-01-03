@@ -43,6 +43,29 @@ class PhingEngine implements EngineInterface {
   }
 
   /**
+   * Copy over any files from the scaffold.
+   */
+  public function taskProjectUpdate() {
+    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:update');
+    // Uses a different build.xml file.
+    $binRunner->addOption('-buildfile', $this->projectPath . '/.heavyd/vendor/heavyd/platform/heavyd.startup.xml');
+    $binRunner->run();
+  }
+
+  /**
+   * Copy over any files from the scaffold.
+   */
+  public function taskProjectStartup(string $seedFileLocation) {
+    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:startup');
+    // Uses a different build.xml file.
+    $binRunner->addOption('-buildfile', $this->projectPath . '/.heavyd/vendor/heavyd/platform/heavyd.startup.xml');
+    $binRunner->addOption('-Dseed.file', $seedFileLocation);
+    $binRunner->run();
+  }
+
+  /**
    * Make the entire filesystem writable.
    */
   public function taskProjectWriteProperties() {
@@ -65,6 +88,8 @@ class PhingEngine implements EngineInterface {
    *
    * This should run all the needed steps to fully (re-install) the site.
    * Ending in a clean full site install for the correct stage/env/site.
+   *
+   * {@inheritdoc}
    */
   public function taskProjectInstall(string $envMachineName, string $stageMachineName, string $siteMachineName) {
     $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
