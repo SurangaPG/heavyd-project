@@ -95,7 +95,7 @@ interface EngineInterface {
    * @param string $envMachineName
    *   The machine name for the "environment" to activate.
    */
-  public function taskEnvSwitch(string $envMachineName);
+  public function taskProjectSwitchEnv(string $envMachineName);
 
   /**
    * Switch the stage.
@@ -119,7 +119,25 @@ interface EngineInterface {
    * @param string $stageMachineName
    *   The machine name for the "stage" to activate.
    */
-  public function taskStageSwitch(string $stageMachineName);
+  public function taskProjectSwitchStage(string $stageMachineName);
+
+  /**
+   * Switch the site.
+   *
+   * Sites are all the typical site as provided by a drupal core multisite
+   * instance.
+   *
+   * Conceptually speaking typical ideas for the site are:
+   *  - default
+   * Corresponds with a drupal web/sites/ subdir name.
+   *
+   * As a rule a stage should not contain any credentials etc if it can be
+   * avoided.
+   *
+   * @param string $siteMachineName
+   *   The machine name for the "site" to activate.
+   */
+  public function taskProjectSwitchSite(string $siteMachineName);
 
   /**
    * Resets the current installation to the basic settings.

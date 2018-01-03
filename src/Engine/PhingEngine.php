@@ -87,7 +87,7 @@ class PhingEngine implements EngineInterface {
   /**
    * {@inheritdoc}
    */
-  public function taskEnvSwitch(string $envMachineName) {
+  public function taskProjectSwitchEnv(string $envMachineName) {
     $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:activate-env');
     $binRunner->addOption('-Denv.to.activate', $envMachineName);
@@ -123,10 +123,20 @@ class PhingEngine implements EngineInterface {
   /**
    * {@inheritdoc}
    */
-  public function taskStageSwitch(string $stageMachineName) {
+  public function taskProjectSwitchStage(string $stageMachineName) {
     $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:activate-stage');
     $binRunner->addOption('-Dstage.to.activate', $stageMachineName);
+    $binRunner->run();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function taskProjectSwitchSite(string $siteMachineName) {
+    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:activate-site');
+    $binRunner->addOption('-Dsite.to.activate', $siteMachineName);
     $binRunner->run();
   }
 

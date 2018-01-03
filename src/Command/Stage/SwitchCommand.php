@@ -26,7 +26,7 @@ class SwitchCommand extends AbstractHeavydCommandBase {
    */
   public function execute(InputInterface $input, OutputInterface $output) {
     $this->getApplication()->getEngine()->setOutput($output);
-    $this->getApplication()->getEngine()->taskStageSwitch($input->getArgument('stage'));
+    $this->getApplication()->getEngine()->taskProjectSwitchStage($input->getArgument('stage'));
   }
 
 }
