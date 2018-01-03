@@ -38,7 +38,7 @@
         <then>
             <echo message="full property files don't appear to be generated yet, generating on the fly via property-dir-write" />
             <property-dir-write originDir="${project.basedir}/properties"
-                                subLevels="dist,stage,env"
+                                subLevels="dist,site,stage,env"
                                 outputDir="${project.basedir}/properties"
                                 order="project,dir,bin,behat"
                                 override="true"
@@ -144,13 +144,6 @@
         <phingcall target="property:write-full" />
     </target>
 
-    <target name="project:activate-env" description="Activates a full environment">
-        <phingcall target="property:cleanse:env" />
-        <phingcall target="property:activate:env" />
-        <phingcall target="property:write-full" />
-        <phingcall target="drupal:env:settings-file" />
-    </target>
-
     <target name="project:install-dependencies" description="Install all the composer dependecies for the project.">
         <phingcall target="composer:full" />
     </target>
@@ -172,6 +165,19 @@
                             override="true"
                             outputFull="true"
         />
+    </target>
+
+    <target name="project:activate-site" description="Activates a the correct site (e.g default or another directory under the sites dir).">
+        <phingcall target="property:cleanse:site" />
+        <phingcall target="property:activate:site" />
+        <phingcall target="property:write-full" />
+    </target>
+
+    <target name="project:activate-env" description="Activates a full environment">
+        <phingcall target="property:cleanse:env" />
+        <phingcall target="property:activate:env" />
+        <phingcall target="property:write-full" />
+        <phingcall target="drupal:env:activate-etc-files" />
     </target>
 
     <target name="project:activate-stage" description="Activates a the correct stage (e.g production, acc, etc) for a given site (dir).">

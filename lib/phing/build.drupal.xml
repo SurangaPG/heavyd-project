@@ -22,6 +22,12 @@
         <phingcall target="drupal:stage:sites" />
     </target>
 
+    <target name="drupal:env:activate-etc-files"
+            description="activates all the correct extra files based on the stage for the dir."
+            depends="_drupal:validate:env-properties">
+        <phingcall target="drupal:env:settings-file" />
+    </target>
+
     <target name="drupal:prepare-default-content">
         <property name="active.site" value="default" />
         <fail unless="active.from.stage" message="No stage to export default content from has been specified and none is currently active." />
