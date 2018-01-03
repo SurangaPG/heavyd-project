@@ -20,6 +20,15 @@ web/profiles/generic
 node_modules
 /temp
 
-properties/*.yml
-properties/env/*.yml
-properties/stage/*.yml
+# Ignore the config folders that have to be provisioned manually.
+# The logic is as follows:
+#  - dist: Everything that can be shared globally and universally
+#  - env: Everything environment specific, this is auto provisioned via the phing env:setup command.
+#  - stage: Everything that is completely specific to this site instance.
+#
+# Once all these have been populated the phing command can be used to set up the full "final" config dir.
+
+/properties/env/*.yml
+/properties/stage/*.yml
+/properties/site/*.yml
+/properties/*.yml
