@@ -66,11 +66,12 @@ class PhingEngine implements EngineInterface {
    * This should run all the needed steps to fully (re-install) the site.
    * Ending in a clean full site install for the correct stage/env/site.
    */
-  public function taskProjectInstall(string $envMachineName, string $stageMachineName) {
+  public function taskProjectInstall(string $envMachineName, string $stageMachineName, string $siteMachineName) {
     $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:install');
     $binRunner->addOption('-Dfinal.env', $envMachineName);
     $binRunner->addOption('-Dfinal.stage', $stageMachineName);
+    $binRunner->addOption('-Dfinal.site', $siteMachineName);
     $binRunner->run();
   }
 
