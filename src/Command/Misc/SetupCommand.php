@@ -98,11 +98,7 @@ class SetupCommand extends AbstractHeavydCommandBase {
   }
 
   /**
-   * Adds the basic information for the local server. Based on a few prompts.
-   *
-   * Ask the user to define his or her local db credentials. These will then
-   * be written into the etc/env/local/properties.
-   * Overwritten since it doesn't seem to use the correct keys.
+   * Adds the basic information for the local host uri.
    */
   public function runLocalHostPropertiesHandler() {
     // Select a uri.
