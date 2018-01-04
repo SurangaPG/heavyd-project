@@ -159,7 +159,7 @@
             </then>
         </if>
         <property-dir-write originDir="${project.basedir}/properties"
-                            subLevels="dist,stage,env"
+                            subLevels="dist,site,env,stage"
                             outputDir="${project.basedir}/properties"
                             order="project,dir,bin,behat"
                             override="true"

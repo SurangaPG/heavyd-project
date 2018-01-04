@@ -1,2 +1,3 @@
+requires_local_properties: TRUE
 active:
   env: local

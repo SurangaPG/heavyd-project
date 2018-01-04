@@ -3,6 +3,7 @@
 namespace surangapg\Heavyd;
 
 use surangapg\Heavyd\Command\Env\SwitchCommand as EnvSwitchCommand;
+use surangapg\Heavyd\Command\Misc\SetupCommand as MiscSetupCommand;
 use surangapg\Heavyd\Command\Property\InfoCommand as PropertyInfoCommand;
 use surangapg\Heavyd\Command\Property\RewriteCommand as PropertyRewriteCommand;
 use surangapg\Heavyd\Command\Stage\SwitchCommand as StageSwitchCommand;
@@ -97,6 +98,9 @@ class HeavydApplication extends Application {
     $this->engine = $engine;
     $this->properties = $properties;
 
+    // Misc commands.
+    $this->add(new MiscSetupCommand());
+
     // Property commands.
     $this->add(new PropertyInfoCommand());
     $this->add(new PropertyRewriteCommand());
@@ -148,6 +152,7 @@ class HeavydApplication extends Application {
 
     $isSilentEngine = (true === $input->hasParameterOption(array('--silent-engine', '-S'), true));
     $this->getEngine()->setSilent($isSilentEngine);
+    $this->getEngine()->setOutput($output);
 
     parent::doRun($input, $output);
   }
@@ -199,7 +204,7 @@ class HeavydApplication extends Application {
 
     $io->writeln('<fg=yellow>Current state</>');
     $io->writeln(sprintf(' env: <fg=white>%s</>', $projectProperties['active']['env'] ? $projectProperties['active']['env'] : 'none'));
-    $io->writeln(sprintf(' stage: <fg=white>%s</>', $projectProperties['active']['stage'] ? $projectProperties['active']['env'] : 'none'));
+    $io->writeln(sprintf(' stage: <fg=white>%s</>', $projectProperties['active']['stage'] ? $projectProperties['active']['stage'] : 'none'));
     $io->writeln(sprintf(' site: <fg=white>%s</>', $projectProperties['active']['site'] ? $projectProperties['active']['site'] : 'none'));
     $io->newLine();
   }

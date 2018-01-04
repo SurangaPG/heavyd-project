@@ -29,7 +29,6 @@ class RewriteCommand extends AbstractHeavydCommandBase {
     $this->outputCurrentState();
 
     $this->getIo()->writeln('<fg=yellow>Rebuilding via engine</>');
-    $this->getEngine()->setOutput($output);
     $this->getEngine()->taskProjectWriteProperties();
     $this->getIo()->writeln('<fg=green>Done</>');
     $this->getIo()->newLine();

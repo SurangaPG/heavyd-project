@@ -38,13 +38,16 @@
     <target name="property:activate:site" description="Activates a site by copying all it's property files to the main site property dir.">
         <fail unless="site.to.activate" message="No Site specified. Pass site.to.activate as a property." />
         <if>
-            <available file="${dir.etc.site}/${env.to.activate}/properties" type="dir" property="site.to.activate.properties.available" />
+            <available file="${dir.etc.site}/${site.to.activate}/properties" type="dir" property="site.to.activate.properties.available" />
             <then>
                 <echo message="Syncing properties for ${site.to.activate} to active properties." />
                 <echo message="Source dir: ${dir.etc.site}/${site.to.activate}/properties/"/>
                 <echo message="Target dir: ${dir.properties.site}/"/>
                 <exec passthru="true" command="rsync -a --delete ${dir.etc.site}/${site.to.activate}/properties/ ${dir.properties.site}/"/>
             </then>
+            <else>
+                <echo message="No site properties found." />
+            </else>
         </if>
     </target>
 
@@ -59,6 +62,9 @@
                 <echo message="Target dir: ${dir.properties.env}/"/>
                 <exec passthru="true" command="rsync -a --delete ${dir.etc.env}/${env.to.activate}/properties/ ${dir.properties.env}/"/>
             </then>
+            <else>
+                <echo message="No env properties found." />
+            </else>
         </if>
     </target>
 
@@ -73,6 +79,9 @@
                 <echo message="Target dir: ${dir.properties.stage}/"/>
                 <exec passthru="true" command="rsync -a --delete ${dir.etc.stage}/${stage.to.activate}/properties/ ${dir.properties.stage}/"/>
             </then>
+            <else>
+                <echo message="No stage properties found." />
+            </else>
         </if>
     </target>
 

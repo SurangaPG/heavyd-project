@@ -25,8 +25,7 @@ class SwitchCommand extends AbstractHeavydCommandBase {
    * @inheritdoc
    */
   public function execute(InputInterface $input, OutputInterface $output) {
-    $this->getApplication()->getEngine()->setOutput($output);
-    $this->getApplication()->getEngine()->taskProjectSwitchEnv($input->getArgument('environment'));
+    $this->getEngine()->taskProjectSwitchEnv($input->getArgument('environment'));
   }
 
 }
