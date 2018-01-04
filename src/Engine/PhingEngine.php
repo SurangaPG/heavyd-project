@@ -5,7 +5,7 @@
 
 namespace surangapg\Heavyd\Engine;
 
-use surangapg\Heavyd\Components\BinRunner\BinRunner;
+use surangapg\Heavyd\Components\BinRunner\PhingBinRunner;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -24,6 +24,14 @@ class PhingEngine implements EngineInterface {
    * @var OutputInterface
    */
   protected $output;
+
+  /**
+   * Forces all output to be hidden from the cli.
+   *
+   * @var bool
+   *   Is the engine output suppressed.
+   */
+  protected $silent = FALSE;
 
   /**
    * PhingEngine constructor.
@@ -46,41 +54,41 @@ class PhingEngine implements EngineInterface {
    * Copy over any files from the scaffold.
    */
   public function taskProjectUpdate() {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:update');
     // Uses a different build.xml file.
     $binRunner->addOption('-buildfile', $this->projectPath . '/.heavyd/vendor/heavyd/platform/heavyd.startup.xml');
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
    * Copy over any files from the scaffold.
    */
   public function taskProjectStartup(string $seedFileLocation) {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:startup');
     // Uses a different build.xml file.
     $binRunner->addOption('-buildfile', $this->projectPath . '/.heavyd/vendor/heavyd/platform/heavyd.startup.xml');
     $binRunner->addOption('-Dseed.file', $seedFileLocation);
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
    * Make the entire filesystem writable.
    */
   public function taskProjectWriteProperties() {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:write-property-files');
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
    * Make the entire filesystem writable.
    */
   public function taskProjectUnlock() {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:unlock');
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
@@ -92,12 +100,12 @@ class PhingEngine implements EngineInterface {
    * {@inheritdoc}
    */
   public function taskProjectInstall(string $envMachineName, string $stageMachineName, string $siteMachineName) {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:install');
     $binRunner->addOption('-Dfinal.env', $envMachineName);
     $binRunner->addOption('-Dfinal.stage', $stageMachineName);
     $binRunner->addOption('-Dfinal.site', $siteMachineName);
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
@@ -105,74 +113,74 @@ class PhingEngine implements EngineInterface {
    * npm, composer etc.
    */
   public function taskProjectInstallDependencies() {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:install-dependencies');
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
    * {@inheritdoc}
    */
   public function taskProjectSwitchEnv(string $envMachineName) {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:activate-env');
     $binRunner->addOption('-Denv.to.activate', $envMachineName);
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
    * {@inheritdoc}
    */
   public function taskProjectStartServices() {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:start-services');
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
   /**
    * {@inheritdoc}
    */
   public function taskProjectStopServices() {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:stop-services');
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
    * {@inheritdoc}
    */
   public function taskProjectSetupServices() {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:setup-services');
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
    * {@inheritdoc}
    */
   public function taskProjectSwitchStage(string $stageMachineName) {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:activate-stage');
     $binRunner->addOption('-Dstage.to.activate', $stageMachineName);
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
    * {@inheritdoc}
    */
   public function taskProjectSwitchSite(string $siteMachineName) {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:activate-site');
     $binRunner->addOption('-Dsite.to.activate', $siteMachineName);
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
    * {@inheritdoc}
    */
   public function taskProjectResetInstall() {
-    $binRunner = new BinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
     $binRunner->addArg('project:reset-install');
-    $binRunner->run();
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
@@ -238,6 +246,26 @@ class PhingEngine implements EngineInterface {
    */
   public function setOutput(OutputInterface $output) {
     $this->output = $output;
+  }
+
+  /**
+   * Suppress all the output from the engine.
+   *
+   * @param bool $toggle
+   *  Toggle the output on/off.
+   */
+  public function setSilent($toggle) {
+    $this->silent = $toggle;
+  }
+
+  /**
+   * Checks or the engine is silent.
+   *
+   * @return bool
+   *   Is the engine silent.
+   */
+  public function isSilent() {
+    return $this->silent;
   }
 }
 

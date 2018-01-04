@@ -59,13 +59,7 @@ abstract class AbstractHeavydCommandBase extends Command {
    * Outputs the current state to the cli.
    */
   function outputCurrentState() {
-    $projectProperties = $this->getProperties()->get('project');
-
-    $this->getIo()->writeln('<fg=yellow>Current state</>');
-    $this->getIo()->writeln(sprintf(' env: <fg=white>%s</>', $projectProperties['active']['env'] ? $projectProperties['active']['env'] : 'none'));
-    $this->getIo()->writeln(sprintf(' stage: <fg=white>%s</>', $projectProperties['active']['stage'] ? $projectProperties['active']['env'] : 'none'));
-    $this->getIo()->writeln(sprintf(' site: <fg=white>%s</>', $projectProperties['active']['site'] ? $projectProperties['active']['site'] : 'none'));
-    $this->getIo()->newLine();
+    $this->getApplication()->outputCurrentState($this->getIo());
   }
 
   /**

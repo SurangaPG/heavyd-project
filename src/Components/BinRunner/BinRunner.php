@@ -23,49 +23,49 @@ class BinRunner implements BinRunnerInterface {
    *
    * @var string
    */
-  private $dir;
+  protected $dir;
 
   /**
    * The type of the command bin.
    *
    * @var string
    */
-  private $type;
+  protected $type;
 
   /**
    * The bin for the command.
    *
    * @var string
    */
-  private $bin;
+  protected $bin;
 
   /**
    * Output interface.
    *
    * @var \Symfony\Component\Console\Output\OutputInterface
    */
-  private $outputInterface;
+  protected $outputInterface;
 
   /**
    * File where the temp output will be stored.
    *
    * @var string
    */
-  private $outputFile;
+  protected $outputFile;
 
   /**
    * Array of arrays with all the options in with a key/value pair.
    *
    * @var string[]
    */
-  private $options = [];
+  protected $options = [];
 
   /**
    * Array of all the args.
    *
    * @var string[]
    */
-  private $args = [];
+  protected $args = [];
 
   /**
    * Should a fail throw an exception.
@@ -77,14 +77,26 @@ class BinRunner implements BinRunnerInterface {
   /**
    * @inheritdoc
    */
-  public function getFullCommand() {
-    $command = sprintf('cd %s && %s %s %s &> %s',
-      $this->dir,
-      $this->generateBin(),
-      $this->generateArgs(),
-      $this->generateOptions(),
-      $this->outputFile
-    );
+  public function getFullCommand($outputToCli = TRUE) {
+
+    if ($outputToCli) {
+      $command = sprintf('cd %s && %s %s %s',
+        $this->dir,
+        $this->generateBin(),
+        $this->generateArgs(),
+        $this->generateOptions()
+      );
+    }
+    else {
+      $command = sprintf('cd %s && %s %s %s &> %s',
+        $this->dir,
+        $this->generateBin(),
+        $this->generateArgs(),
+        $this->generateOptions(),
+        $this->outputFile
+      );
+    }
+
     return preg_replace('/\s+/', ' ', $command);
   }
 
@@ -171,13 +183,11 @@ class BinRunner implements BinRunnerInterface {
   }
 
   /**
-   * @TODO Clean up the output.
-   *
    * @inheritdoc
    */
-  public function run() {
+  public function run($outputToCli = TRUE) {
 
-    $command = $this->getFullCommand();
+    $command = $this->getFullCommand($outputToCli);
 
     if ($this->outputInterface->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
       $this->outputInterface->writeln('Running: ' . $command, OutputInterface::VERBOSITY_VERBOSE);
@@ -200,22 +210,37 @@ class BinRunner implements BinRunnerInterface {
     }
 
     $output = [];
-    exec($command, $output, $return);
+    if ($outputToCli) {
+      passthru($command, $return);
 
-    if ($return !== 0 && $this->throwException) {
-      throw new BinRunFailedException($this);
+      if ($return !== 0 && $this->throwException) {
+        throw new BinRunFailedException($this);
+      }
+
+      if ($this->outputInterface->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
+        $this->outputInterface->writeln(' Command output: ' . $this->bin);
+        $this->outputInterface->writeln(file_get_contents($this->outputFile));
+        $this->outputInterface->writeln('');
+      }
+
+      // @TODO This is an improper return code, needs to be checked.
+      return $return;
     }
 
-    if ($this->outputInterface->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
-      $this->outputInterface->writeln(' Command output: ' . $this->bin);
-      $this->outputInterface->writeln(file_get_contents($this->outputFile));
-      $this->outputInterface->writeln('');
+    else {
+      exec($command, $output, $return);
+
+      if ($return !== 0 && $this->throwException) {
+        throw new BinRunFailedException($this);
+      }
+
+      if ($this->outputInterface->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
+        $this->outputInterface->writeln(' Command output: ' . $this->bin);
+        $this->outputInterface->writeln(file_get_contents($this->outputFile));
+        $this->outputInterface->writeln('');
+      }
+
+      return $return;
     }
-
-    return $return;
-  }
-
-  public function passThru() {
-
   }
 }

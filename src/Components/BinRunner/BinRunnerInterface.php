@@ -26,10 +26,13 @@ interface BinRunnerInterface {
   /**
    * Get the full binary command.
    *
+   * @param bool $outputToCli
+   *   Should the output be returned straight to the cli or written to temp file.
+   *
    * @return string
    *   Full command string.
    */
-  public function getFullCommand();
+  public function getFullCommand($outputToCli = TRUE);
 
   /**
    * Basic constructor.
@@ -85,9 +88,12 @@ interface BinRunnerInterface {
   /**
    *  Start running the actual command.
    *
+   * @param bool $outputToCli
+   *   Should the output be returned straight to the cli.
+   *
    * @return int
    *   Return code for the command.
    */
-  public function run();
+  public function run($outputToCli = TRUE);
 
 }

@@ -11,9 +11,12 @@ use surangapg\Heavyd\Components\Properties\PropertiesInterface;
 use surangapg\Heavyd\Engine\EngineInterface;
 use surangapg\Heavyd\Engine\PhingEngine;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use surangapg\Heavyd\Command\Credential\CreateDefaultFileCommand;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class HeavydApplication extends Application {
 
@@ -105,6 +108,19 @@ class HeavydApplication extends Application {
   }
 
   /**
+   * @inheritdoc
+   */
+  public function add(Command $command)
+  {
+    $command = parent::add($command);
+
+    if (isset($command)) {
+      $command->addOption('silent-engine', 'S', InputOption::VALUE_NONE, 'Suppress all the output from the engine.');
+    }
+  }
+
+
+  /**
    * Handle a run of a given command.
    *
    * @param InputInterface $input
@@ -121,21 +137,17 @@ class HeavydApplication extends Application {
      * Display some information about the properties as needed.
      */
     $isInfo = (true === $input->hasParameterOption(array('--info', '-I'), true));
-    if ($isInfo || $output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+    if ($isInfo || $output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
 
-      // $projectPropertiesHelper = new ProjectPropertiesHelper($this->getProperties());
-
-      $output->writeln("");
-      $output->writeln("<comment>Active context:</comment>");
-      $output->writeln(sprintf('  <info>Active env:</info> %s', ''));
-      $output->writeln(sprintf('  <info>Active site:</info> %s', ''));
-      $output->writeln(sprintf('  <info>Active stage:</info> %s', ''));
-      $output->writeln("");
+      $this->outputCurrentState(new SymfonyStyle($input, $output));
 
       if ($isInfo) {
         return 0;
       }
     }
+
+    $isSilentEngine = (true === $input->hasParameterOption(array('--silent-engine', '-S'), true));
+    $this->getEngine()->setSilent($isSilentEngine);
 
     parent::doRun($input, $output);
   }
@@ -174,6 +186,22 @@ class HeavydApplication extends Application {
    */
   function rebuildProperties() {
     $this->setProperties(Properties::create($this->getProperties()->getBasePath()));
+  }
+
+  /**
+   * Outputs the current state to the cli.
+   *
+   * @param \Symfony\Component\Console\Style\SymfonyStyle $io
+   *   Symfony style to use.
+   */
+  function outputCurrentState(SymfonyStyle $io) {
+    $projectProperties = $this->getProperties()->get('project');
+
+    $io->writeln('<fg=yellow>Current state</>');
+    $io->writeln(sprintf(' env: <fg=white>%s</>', $projectProperties['active']['env'] ? $projectProperties['active']['env'] : 'none'));
+    $io->writeln(sprintf(' stage: <fg=white>%s</>', $projectProperties['active']['stage'] ? $projectProperties['active']['env'] : 'none'));
+    $io->writeln(sprintf(' site: <fg=white>%s</>', $projectProperties['active']['site'] ? $projectProperties['active']['site'] : 'none'));
+    $io->newLine();
   }
 
   /**

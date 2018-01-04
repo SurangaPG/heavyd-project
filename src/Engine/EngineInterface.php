@@ -24,6 +24,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 interface EngineInterface {
 
   /**
+   * Suppress all the output from the engine.
+   *
+   * @param bool $toggle
+   *  Toggle the output on/off.
+   */
+  public function setSilent($toggle);
+
+  /**
+   * Checks or the engine is silent.
+   *
+   * @return bool
+   *   Is the engine silent.
+   */
+  public function isSilent();
+
+  /**
    * Make the entire filesystem writable.
    */
   public function taskProjectUnlock();
