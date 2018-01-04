@@ -7,7 +7,6 @@
 namespace surangapg\Heavyd\Command\Property;
 
 use surangapg\Heavyd\Command\AbstractHeavydCommandBase;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
