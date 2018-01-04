@@ -4,6 +4,7 @@ namespace surangapg\Heavyd;
 
 use surangapg\Heavyd\Command\Env\SwitchCommand as EnvSwitchCommand;
 use surangapg\Heavyd\Command\Property\InfoCommand as PropertyInfoCommand;
+use surangapg\Heavyd\Command\Property\RewriteCommand as PropertyRewriteCommand;
 use surangapg\Heavyd\Command\Stage\SwitchCommand as StageSwitchCommand;
 use surangapg\Heavyd\Components\Properties\Properties;
 use surangapg\Heavyd\Components\Properties\PropertiesInterface;
@@ -93,8 +94,12 @@ class HeavydApplication extends Application {
     $this->engine = $engine;
     $this->properties = $properties;
 
-    $this->add(new EnvSwitchCommand());
+    // Property commands.
     $this->add(new PropertyInfoCommand());
+    $this->add(new PropertyRewriteCommand());
+
+    $this->add(new EnvSwitchCommand());
+
     $this->add(new StageSwitchCommand());
     $this->add(new CreateDefaultFileCommand());
   }

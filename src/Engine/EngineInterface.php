@@ -227,5 +227,10 @@ interface EngineInterface {
    * @param \Symfony\Component\Console\Output\OutputInterface $output
    */
   public function setOutput(OutputInterface $output);
+
+  /**
+   * Make the entire filesystem writable.
+   */
+  public function taskProjectWriteProperties();
 }
 
