@@ -186,13 +186,21 @@ interface EngineInterface {
 
   /**
    * Prepare all the default content.
+   *
+   * @param string $hostName
+   *   Full uri of the host (needed to find any files).
+   * @param string $sourceStage
+   *   Stage of content to prepare, e.g dev, acc, prod etc.
    */
-  public function taskProjectPrepareContent();
+  public function taskProjectPrepareContent(string $hostName, string $sourceStage);
 
   /**
    * Export all the default content.
+   *
+   * @param string $targetStage
+   *   Stage to export the current content to, e.g dev, acc, prod etc.
    */
-  public function taskProjectExportContent();
+  public function taskProjectExportContent(string $targetStage);
 
   /**
    * Import all the staged default content.

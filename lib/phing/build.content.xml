@@ -17,7 +17,7 @@
         <mkdir dir="${dir.web.root}/modules/custom/baseline_content/content" />
 
         <!-- Ensure this dir exists -->
-        <mkdir dir="${dir.etc.assets}/modules/custom/baseline_content/content" />
+        <mkdir dir="${dir.web.root}/modules/custom/baseline_content/content" />
         <copy todir="${dir.web.root}/modules/custom/baseline_content/content">
             <fileset dir="${dir.etc.stage}/${active.from.stage}/default_content">
                 <include name="**" />

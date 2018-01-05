@@ -185,16 +185,27 @@ class PhingEngine implements EngineInterface {
 
   /**
    * Prepare all the default content.
+   *
+   * @inheritdoc
    */
-  public function taskProjectPrepareContent() {
-    echo __FUNCTION__;
+  public function taskProjectPrepareContent(string $hostName, string $sourceStage) {
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:prepare-content');
+    $binRunner->addOption('-Ddomain.for.install', $hostName);
+    $binRunner->addOption('-Dactive.from.stage', $sourceStage);
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
    * Export all the default content.
+   *
+   * @inheritdoc
    */
-  public function taskProjectExportContent() {
-    echo __FUNCTION__;
+  public function taskProjectExportContent(string $targetStage) {
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:export-content');
+    $binRunner->addOption('-Dactive.to.stage', $targetStage);
+    $binRunner->run(!$this->isSilent());
   }
 
   /**

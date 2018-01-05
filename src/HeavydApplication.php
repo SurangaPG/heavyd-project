@@ -2,6 +2,10 @@
 
 namespace surangapg\Heavyd;
 
+use surangapg\Heavyd\Command\Content\PrepareCommand as ContentPrepareCommand;
+use surangapg\Heavyd\Command\Content\ExportCommand as ContentExportCommand;
+use surangapg\Heavyd\Command\Content\ImportCommand as ContentImportCommand;
+
 use surangapg\Heavyd\Command\Env\SwitchCommand as EnvSwitchCommand;
 use surangapg\Heavyd\Command\Misc\SetupCommand as MiscSetupCommand;
 use surangapg\Heavyd\Command\Property\InfoCommand as PropertyInfoCommand;
@@ -104,6 +108,11 @@ class HeavydApplication extends Application {
     // Property commands.
     $this->add(new PropertyInfoCommand());
     $this->add(new PropertyRewriteCommand());
+
+    // Content commands.
+    $this->add(new ContentPrepareCommand());
+    $this->add(new ContentExportCommand());
+    $this->add(new ContentImportCommand());
 
     $this->add(new EnvSwitchCommand());
 
