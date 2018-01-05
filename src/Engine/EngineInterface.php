@@ -185,14 +185,19 @@ interface EngineInterface {
   public function taskProjectResetInstall();
 
   /**
-   * Import all the default content.
+   * Prepare all the default content.
    */
-  public function taskStageSetupContent();
+  public function taskProjectPrepareContent();
 
   /**
    * Export all the default content.
    */
-  public function taskStageExportContent();
+  public function taskProjectExportContent();
+
+  /**
+   * Import all the staged default content.
+   */
+  public function taskProjectImportContent();
 
   /**
    * Import all the locale data.

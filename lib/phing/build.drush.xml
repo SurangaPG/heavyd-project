@@ -10,7 +10,7 @@
         <echo message="Exporting ${entity.to.export}" />
         <!-- Note we add the placeholder uri to make it easier to port the default content between different setups, see the prepare content task.' -->
         <exec passthru="true"
-              command="${bin.drush} default-content-export-references ${entity.to.export} --folder=${dir.etc.site}/${active.to.site}/stages/${active.to.stage}/default_content --uri=https://[--placeholder--]"
+              command="${bin.drush} default-content-export-references ${entity.to.export} --folder=${dir.etc.stage}/${active.to.stage}/default_content --uri=https://[--placeholder--]"
               dir="${dir.web.root}/sites/${active.to.site}"
               checkreturn="true" />
     </target>

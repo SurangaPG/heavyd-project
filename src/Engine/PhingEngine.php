@@ -184,16 +184,23 @@ class PhingEngine implements EngineInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Prepare all the default content.
    */
-  public function taskStageSetupContent() {
+  public function taskProjectPrepareContent() {
     echo __FUNCTION__;
   }
 
   /**
-   * {@inheritdoc}
+   * Export all the default content.
    */
-  public function taskStageExportContent() {
+  public function taskProjectExportContent() {
+    echo __FUNCTION__;
+  }
+
+  /**
+   * Import all the staged default content.
+   */
+  public function taskProjectImportContent() {
     echo __FUNCTION__;
   }
 

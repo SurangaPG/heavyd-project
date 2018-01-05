@@ -110,17 +110,61 @@
         <phingcall target="project:import-default-content" />
     </target>
 
-    <target name="project:import-default-content">
-        <phingcall target="drupal:import-default-content" />
-    </target>
-
-    <target name="project:prepare-default-content">
+    <target name="project:prepare-content">
         <property name="domain.for.install" value="${host.default.domain}" />
         <property name="active.from.stage" value="${project.active.stage}" />
 
         <fail unless="active.from.stage" message="No stage to export default content from has been specified and none is currently active." />
         <fail unless="domain.for.install" message="Pass the local domain (without a trailing slash and with http(s):// prefix) e.g -Ddomain.for.install=https://mylocaldomain.local "/>
-        <phingcall target="drupal:prepare-default-content" />
+        <phingcall target="content:prepare" />
+    </target>
+
+    <!-- Crude but effective for now -->
+    <target name="project:export-content">
+        <property name="active.to.site" value="default"/>
+        <property name="active.to.stage" value="${project.active.stage}" />
+
+        <fail unless="active.to.stage" message="No stage to export to has been specified and none is currently active." />
+
+        <!-- Enable the needed module(s) -->
+        <echo message="Enabling needed modules" />
+        <exec passthru="true"
+              command="${bin.drush} en default_content -y "
+              dir="${dir.web.root}/sites/${active.to.site}"
+              checkreturn="true" />
+
+        <!-- Export all the content -->
+        <phingcall target="drush:export-content">
+            <property name="entity.to.export" value="node" override="true"/>
+        </phingcall>
+
+        <phingcall target="drush:export-content">
+            <property name="entity.to.export" value="menu_link_content" override="true"/>
+        </phingcall>
+
+        <phingcall target="drush:export-content">
+            <property name="entity.to.export" value="taxonomy_term" override="true"/>
+        </phingcall>
+
+        <phingcall target="drush:export-content">
+            <property name="entity.to.export" value="user" override="true"/>
+        </phingcall>
+
+        <phingcall target="drush:export-content">
+            <property name="entity.to.export" value="block_content" override="true"/>
+        </phingcall>
+
+        <!-- Enable the needed module(s) -->
+        <echo message="Disable needed modules" />
+        <exec passthru="true"
+              command="${bin.drush} pm-uninstall default_content -y "
+              dir="${dir.web.root}/sites/${active.to.site}"/>
+
+        <clean-exported-data activeDomain="${host.default.domain}" defaultContentDir="${dir.etc.stage}/${active.to.stage}/default_content" />
+    </target>
+
+    <target name="project:import-default-content">
+        <phingcall target="content:import" />
     </target>
 
     <target name="project:build" description="Builds an entire environment up from scratch.">
