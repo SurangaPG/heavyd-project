@@ -16,7 +16,7 @@ class ImportCommand extends AbstractHeavydCommandBase {
    */
   protected function configure() {
     $this->setName('content:import')
-      ->setDescription('Import the prepared content into the an empty site. This will not work on sites that already have content.');
+      ->setDescription('Import the prepared content into the an empty site.');
   }
 
   /**
