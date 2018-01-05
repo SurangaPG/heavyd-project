@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<project name="Haunt tasks" default="haunt:help" description="Contains all the task used by the visual regression.">
+
+    <target name="haunt:help">
+        <exec passthru="true" command="${bin.phing} -l" />
+    </target>
+
+    <target name="haunt:baseline" description="Generate a baseline for all the different haunt comparisons.">
+        <exec passthru="true" command="${bin.haunt} snapshots:selenium --config=${dir.tests.haunt}/full.yml --domain=${haunt.domains.baseline} --target=baseline --output-dir=${haunt.output}" />
+    </target>
+
+    <target name="haunt:compare" description="Generate a baseline for all the different haunt comparisons.">
+        <exec passthru="true" command="${bin.haunt} snapshots:selenium --config=${dir.tests.haunt}/full.yml --domain=${haunt.domains.new} --target=new --output-dir=${haunt.output}" />
+        <exec passthru="true" command="${bin.haunt} compare --source=${haunt.output}" />
+    </target>
+</project>

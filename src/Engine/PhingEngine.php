@@ -212,7 +212,9 @@ class PhingEngine implements EngineInterface {
    * Import all the staged default content.
    */
   public function taskProjectImportContent() {
-    echo __FUNCTION__;
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:import-content');
+    $binRunner->run(!$this->isSilent());
   }
 
   /**
