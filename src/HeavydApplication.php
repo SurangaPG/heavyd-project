@@ -7,7 +7,11 @@ use surangapg\Heavyd\Command\Content\ExportCommand as ContentExportCommand;
 use surangapg\Heavyd\Command\Content\ImportCommand as ContentImportCommand;
 
 use surangapg\Heavyd\Command\Env\SwitchCommand as EnvSwitchCommand;
+
 use surangapg\Heavyd\Command\Misc\SetupCommand as MiscSetupCommand;
+use surangapg\Heavyd\Command\Misc\InstallCommand as MiscInstallCommand;
+use surangapg\Heavyd\Command\Misc\ResetCommand as MiscResetCommand;
+
 use surangapg\Heavyd\Command\Property\InfoCommand as PropertyInfoCommand;
 use surangapg\Heavyd\Command\Property\RewriteCommand as PropertyRewriteCommand;
 use surangapg\Heavyd\Command\Stage\SwitchCommand as StageSwitchCommand;
@@ -104,6 +108,8 @@ class HeavydApplication extends Application {
 
     // Misc commands.
     $this->add(new MiscSetupCommand());
+    $this->add(new MiscInstallCommand());
+    $this->add(new MiscResetCommand());
 
     // Property commands.
     $this->add(new PropertyInfoCommand());
