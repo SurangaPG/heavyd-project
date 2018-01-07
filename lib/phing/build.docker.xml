@@ -8,21 +8,25 @@
 
     <target name="docker:selenium-bridged-start" description="Starts a selenium container bridged which bridges to your local machine.">
         <fail unless="domain.to.bridge" description="Pass the -Ddomain.to.bridge=mysite.local property to bridge a local installation."/>
+        <property name="browser.to.use" value="firefox" />
         <echo message="Starting up temporary docker container" />
         <!-- Dirty hack to bridge your local host to an ip -->
         <exec passthru="true" command="sudo ifconfig lo0 alias 172.16.123.1" />
-        <exec passthru="true" command="${bin.docker} run -p 4444:4444 -p 5900:5900 --add-host ${domain.to.bridge}:172.16.123.1  --rm --name ${project.group}_${project.machineName}_selenium -d selenium/standalone-firefox-debug:2.53.1-beryllium" />
+        <exec passthru="true" command="${bin.docker} run -p 4444:4444 -p 5900:5900 --add-host ${domain.to.bridge}:172.16.123.1  --rm --name ${project.group}_${project.machineName}_selenium -d selenium/standalone-${browser.to.use}-debug:2.53.1-beryllium" />
     </target>
 
     <target name="docker:selenium-start" description="Starts a selenium container to run the regressions in.">
+        <property name="browser.to.use" value="firefox" />
         <echo message="Starting up temporary docker container" />
-        <exec passthru="true" command="${bin.docker} run -p 4444:4444 --rm --name ${project.group}_${project.machineName}_selenium -d selenium/standalone-firefox-debug:2.53.1-beryllium" />
+        <exec passthru="true" command="${bin.docker} run -p 4444:4444 --rm --name ${project.group}_${project.machineName}_selenium -d selenium/standalone-${browser.to.use}:2.53.1-beryllium" />
     </target>
 
     <target name="docker:selenium-start-debug" description="Starts a selenium container to run the regressions in.">
         <fail unless="domain.to.bridge" description="Pass the -Ddomain.to.bridge=mysite.local property to bridge a local installation."/>
+        <property name="browser.to.use" value="firefox" />
         <echo message="Starting up temporary debug docker container" />
-        <exec passthru="true" command="${bin.docker} run -p 4444:4444 -p 5900:5900 --add-host ${domain.to.bridge}:172.16.123.1  --rm --name ${project.group}_${project.machineName}_selenium -d selenium/standalone-firefox-debug:2.53.1-beryllium" />
+        <exec passthru="true" command="sudo ifconfig lo0 alias 172.16.123.1" />
+        <exec passthru="true" command="${bin.docker} run -p 4444:4444 -p 5900:5900 --add-host ${domain.to.bridge}:172.16.123.1  --rm --name ${project.group}_${project.machineName}_selenium -d selenium/standalone-${browser.to.use}-debug:2.53.1-beryllium" />
     </target>
 
     <target name="docker:selenium-stop" description="Stops the selenium to run the regressions in.">

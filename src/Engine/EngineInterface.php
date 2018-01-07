@@ -236,6 +236,23 @@ interface EngineInterface {
   public function taskSiteSwitch(string $siteMachineName);
 
   /**
+   * Start the selenium container for the project.
+   *
+   * @param string $domain
+   *   Which local domain should be connected.
+   * @param string $browser
+   *   Which browser to use.
+   * @param bool $debug
+   *   Should a debug container be activated.
+   */
+  public function taskProjectSeleniumStart(string $domain, string $browser = 'firefox', bool $debug = TRUE);
+
+  /**
+   * Stop the selenium container for the project.
+   */
+  public function taskProjectSeleniumStop();
+
+  /**
    * Clean all the local assets.
    *
    * Empties out all the files in the temp directory for the site.

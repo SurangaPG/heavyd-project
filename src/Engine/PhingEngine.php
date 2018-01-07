@@ -218,6 +218,42 @@ class PhingEngine implements EngineInterface {
   }
 
   /**
+   * Start the selenium container for the project.
+   *
+   * @param string $domain
+   *   Which local domain should be connected.
+   * @param string $browser
+   *   Which browser to use.
+   * @param bool $debug
+   *   Should a debug container be activated.
+   */
+  public function taskProjectSeleniumStart(string $domain, string $browser = 'firefox', bool $debug = TRUE) {
+    if ($debug) {
+      $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+      $binRunner->addArg('project:selenium-start-debug');
+      $binRunner->addOption('-Ddomain.to.bridge', $domain);
+      $binRunner->addOption('-Dbrowser.to.use', $browser);
+      $binRunner->run(!$this->isSilent());
+    }
+    else {
+      $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+      $binRunner->addArg('project:selenium-bridged-start');
+      $binRunner->addOption('-Ddomain.to.bridge', $domain);
+      $binRunner->addOption('-Dbrowser.to.use', $browser);
+      $binRunner->run(!$this->isSilent());
+    }
+  }
+
+  /**
+   * Stop the selenium container for the project.
+   */
+  public function taskProjectSeleniumStop() {
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:selenium-stop');
+    $binRunner->run(!$this->isSilent());
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function taskImportLocale() {

@@ -12,6 +12,8 @@ use surangapg\Heavyd\Command\Misc\SetupCommand as MiscSetupCommand;
 use surangapg\Heavyd\Command\Misc\InstallCommand as MiscInstallCommand;
 use surangapg\Heavyd\Command\Misc\ResetCommand as MiscResetCommand;
 
+use surangapg\Heavyd\Command\Docker\SeleniumCommand as DockerSeleniumCommand;
+
 use surangapg\Heavyd\Command\Property\InfoCommand as PropertyInfoCommand;
 use surangapg\Heavyd\Command\Property\RewriteCommand as PropertyRewriteCommand;
 use surangapg\Heavyd\Command\Stage\SwitchCommand as StageSwitchCommand;
@@ -119,6 +121,9 @@ class HeavydApplication extends Application {
     $this->add(new ContentPrepareCommand());
     $this->add(new ContentExportCommand());
     $this->add(new ContentImportCommand());
+
+    // Docker commands.
+    $this->add(new DockerSeleniumCommand());
 
     $this->add(new EnvSwitchCommand());
 
