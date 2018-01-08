@@ -26,16 +26,18 @@ trait DockerCommandTrait {
   protected function checkContainer(string $type, $onlyCheckRunningContainers = TRUE) {
 
     $projectProperties = $this->getProperties()->get('project');
+
+    $dockerBin = $this->getDockerBin();
     $containerName = $projectProperties['group'] . '_' . $projectProperties['machineName'] . '_' . $type;
 
     // If the needed container isn't available.
     $output = [];
 
     if ($onlyCheckRunningContainers) {
-      exec('docker ps', $output, $return);
+      exec($dockerBin . ' ps', $output, $return);
     }
     else {
-      exec('docker ps -a', $output, $return);
+      exec($dockerBin . ' ps -a', $output, $return);
     }
 
     if ($return != 0) {
@@ -58,9 +60,29 @@ trait DockerCommandTrait {
    * Show the status of the container.
    */
   protected function showContainerStatus() {
+    $dockerBin = $this->getDockerBin();
     $this->getIo()->writeln('<fg=white>Container status: </>');
-    passthru('docker ps');
+    passthru($dockerBin . ' ps');
     $this->getIo()->newLine();
+  }
+
+  /**
+   * Get the docker binary.
+   *
+   * @return string
+   *   Location of the docker binary.
+   *
+   * @throws \Exception
+   *   When the docker bin was not specified.
+   */
+  protected function getDockerBin() {
+    $dockerBin = $this->getProperties()->get('bin')['docker'];
+
+    if (!isset($dockerBin)) {
+      throw new \Exception('Docker binary not specified in properties. Should be under docker: in the bin.yml');
+    }
+
+    return $dockerBin;
   }
 
   /**
