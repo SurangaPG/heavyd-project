@@ -8,6 +8,8 @@ use surangapg\Heavyd\Command\Content\ImportCommand as ContentImportCommand;
 
 use surangapg\Heavyd\Command\Env\SwitchCommand as EnvSwitchCommand;
 
+use surangapg\Heavyd\Command\Haunt\RunCommand as HauntRunCommand;
+
 use surangapg\Heavyd\Command\Misc\SetupCommand as MiscSetupCommand;
 use surangapg\Heavyd\Command\Misc\InstallCommand as MiscInstallCommand;
 use surangapg\Heavyd\Command\Misc\ResetCommand as MiscResetCommand;
@@ -124,6 +126,9 @@ class HeavydApplication extends Application {
 
     // Docker commands.
     $this->add(new DockerSeleniumCommand());
+
+    // Haunt commands.
+    $this->add(new HauntRunCommand());
 
     $this->add(new EnvSwitchCommand());
 

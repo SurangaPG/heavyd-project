@@ -253,6 +253,29 @@ class PhingEngine implements EngineInterface {
     $binRunner->run(!$this->isSilent());
   }
 
+  public function taskProjectRunVisualComparison(string $file, string $domain, string $browser = 'firefox') {
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:haunt-compare');
+    $binRunner->addOption('-Dhaunt.domains.new', $domain);
+    $binRunner->addOption('-Dbrowser', $browser);
+    $binRunner->addOption('-Dfile', $file);
+    $binRunner->run();
+  }
+
+  /**
+   * @param string $file
+   * @param string $domain
+   * @param string $browser
+   */
+  public function taskProjectGenerateVisualBaseline(string $file, string $domain, string $browser = 'firefox') {
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:haunt-baseline');
+    $binRunner->addOption('-Dhaunt.domains.baseline', $domain);
+    $binRunner->addOption('-Dbrowser', $browser);
+    $binRunner->addOption('-Dfile', $file);
+    $binRunner->run();
+  }
+
   /**
    * {@inheritdoc}
    */

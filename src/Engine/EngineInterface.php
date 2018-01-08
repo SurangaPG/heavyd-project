@@ -253,6 +253,30 @@ interface EngineInterface {
   public function taskProjectSeleniumStop();
 
   /**
+   * Run the visual comparison.
+   *
+   * @param string $testFile
+   *   File with the test data.
+   * @param string $domain
+   *   Domain to check items for.
+   * @param string $browser
+   *   Browser to use.
+   */
+  public function taskProjectRunVisualComparison(string $testFile, string $domain, string $browser = 'firefox');
+
+  /**
+   * Generate a baseline for the visual regression.
+   *
+   * @param string $testFile
+   *   File with the test data.
+   * @param string $domain
+   *   Domain to check items for.
+   * @param string $browser
+   *   Browser to use.
+   */
+  public function taskProjectGenerateVisualBaseline(string $testFile, string $domain, string $browser = 'firefox');
+
+  /**
    * Clean all the local assets.
    *
    * Empties out all the files in the temp directory for the site.
