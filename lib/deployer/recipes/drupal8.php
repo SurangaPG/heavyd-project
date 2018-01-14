@@ -81,5 +81,4 @@ task('drupal8:drush:site-install', function () {
   cd('{{release_path}}');
   run('chmod -R u+w {{release_path}}/{{dir_web_relative}}');
   run('{{release_path}}/{{bin_phing}} drush:site-install');
-  run('{{release_path}}/{{bin_drush}} drush:status');
 });
