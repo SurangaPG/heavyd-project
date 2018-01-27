@@ -22,6 +22,16 @@ class CleanExportedDataTask extends Task {
   private $defaultContentDir = null;
 
   /**
+   * @var string Folder where all the files should be exported to.
+   */
+  private $defaultFixtureDir;
+
+  /**
+   * @var string The webroot to use.
+   */
+  private $webRoot;
+
+  /**
    * The setter for the attribute "message"
    */
   public function setActiveDomain($str) {
@@ -36,6 +46,34 @@ class CleanExportedDataTask extends Task {
   }
 
   /**
+   * @return string
+   */
+  public function getDefaultFixtureDir() {
+    return $this->defaultFixtureDir;
+  }
+
+  /**
+   * @param $defaultFixtureDir
+   */
+  public function setDefaultFixtureDir($defaultFixtureDir) {
+    $this->defaultFixtureDir = $defaultFixtureDir;
+  }
+
+  /**
+   * @return string
+   */
+  public function getWebRoot() {
+    return $this->webRoot;
+  }
+
+  /**
+   * @param $webRoot
+   */
+  public function setWebRoot($webRoot) {
+    $this->webRoot = $webRoot;
+  }
+
+  /**
    * The init method: Do init steps.
    */
   public function init() {
@@ -46,10 +84,7 @@ class CleanExportedDataTask extends Task {
    * The main entry point method.
    */
   public function main() {
-
-/**
- * Very minimal helper to ensure that the exported data is cleansed out correctly.
- */
+    $fs = new \Symfony\Component\Filesystem\Filesystem();
     // Currently active domain (where the export was handled).
     $activeDomain = $this->activeDomain;
 
@@ -68,6 +103,24 @@ class CleanExportedDataTask extends Task {
         $fs = new \Symfony\Component\Filesystem\Filesystem();
         $fs->remove($userFile);
         print("  Deleted user/" . $data->uid[0]->value . " export: " . $userFile . "\n");
+      }
+    }
+
+    print("Moving files to committable fixture dir. \n");
+    // Get all the files from the file system and place them somewhere they
+    // can be committed.
+    $fileFiles = glob($this->defaultContentDir . '/file/*.json');
+    foreach ($fileFiles as $fileFile) {
+      $data = json_decode(file_get_contents($fileFile), TRUE);
+      $url = explode('[--placeholder--]', $data['_links']['self']['href']);
+      $url = $url[1];
+
+      if (file_exists($this->getWebRoot() . $url)) {
+        print("  Moved file " . $url . "\n");
+        $fs->copy($this->getWebRoot() . $url, $this->getDefaultFixtureDir() . $url);
+      }
+      else {
+        print("  WARNING - File " . $url . " does not exist \n");
       }
     }
   }

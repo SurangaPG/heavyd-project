@@ -24,7 +24,19 @@
             </fileset>
         </copy>
 
-        <prepare-exported-data-for-import webRoot="${dir.web.root}" activeDomain="${domain.for.install}"/>
+        <!-- Ensure all the fixtures are in the correct place. -->
+        <echo message="Setting up Fixtures." />
+        <copy todir="${dir.web.root}">
+            <fileset dir="${dir.etc.stage}/${project.active.stage}/default_fixtures">
+                <include name="**" />
+            </fileset>
+        </copy>
+
+        <clean-exported-data
+                activeDomain="${host.default.domain}"
+                defaultContentDir="${dir.etc.stage}/${active.to.stage}/default_content"
+                defaultFixtureDir="${dir.etc.stage}/${active.to.stage}/default_fixtures"
+                webRoot="${dir.web.root}" />
     </target>
 
     <target name="content:import">
