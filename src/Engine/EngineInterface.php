@@ -218,6 +218,21 @@ interface EngineInterface {
   public function taskExportLocale();
 
   /**
+   * Start the docker compose instace.
+   */
+  public function taskDockerComposeUp();
+
+  /**
+   * Start the docker compose instace.
+   */
+  public function taskDockerComposeWriteTemplate();
+
+  /**
+   * Start the docker compose instace.
+   */
+  public function taskDockerComposeStop();
+
+  /**
    * Switch the site.
    *
    * Sites are the typical items that are based on a drupal multisite idea. They

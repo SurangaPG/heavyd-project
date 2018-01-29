@@ -277,6 +277,33 @@ class PhingEngine implements EngineInterface {
   }
 
   /**
+   * Start the docker compose instace.
+   */
+  public function taskDockerComposeUp() {
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:up');
+    $binRunner->run();
+  }
+
+  /**
+   * Start the docker compose instace.
+   */
+  public function taskDockerComposeWriteTemplate() {
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:docker-compose-setup');
+    $binRunner->run();
+  }
+
+  /**
+   * Start the docker compose instace.
+   */
+  public function taskDockerComposeStop() {
+    $binRunner = new PhingBinRunner('.heavyd/vendor/bin/phing', $this->projectPath, $this->output);
+    $binRunner->addArg('project:stop');
+    $binRunner->run();
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function taskImportLocale() {

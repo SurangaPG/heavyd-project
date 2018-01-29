@@ -262,4 +262,18 @@
     <target name="project:selenium-stop" description="Stop the selenium container.">
         <phingcall target="docker:selenium-stop" />
     </target>
+
+    <target name="project:up">
+        <phingcall target="docker-compose:up" />
+        <phingcall target="docker-compose:status" />
+    </target>
+
+    <target name="project:docker-compose-setup">
+        <phingcall target="docker:setup-compose" />
+    </target>
+
+    <target name="project:stop">
+        <phingcall target="docker-compose:status" />
+        <phingcall target="docker-compose:up" />
+    </target>
 </project>
