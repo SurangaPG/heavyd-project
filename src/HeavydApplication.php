@@ -25,6 +25,7 @@ use surangapg\Heavyd\Command\Property\RewriteCommand as PropertyRewriteCommand;
 use surangapg\Heavyd\Command\Stage\SwitchCommand as StageSwitchCommand;
 use surangapg\Heavyd\Components\Properties\Properties;
 use surangapg\Heavyd\Components\Properties\PropertiesInterface;
+use surangapg\Heavyd\Engine\DockerPhingEngine;
 use surangapg\Heavyd\Engine\EngineInterface;
 use surangapg\Heavyd\Engine\PhingEngine;
 use Symfony\Component\Console\Application;
@@ -93,9 +94,15 @@ class HeavydApplication extends Application {
     // Find the .workflow.yml file and use that as source of the settings
     $projectPath = self::defineBasePath($basePath);
 
-    $engine = new PhingEngine($projectPath);
-
     $properties = Properties::create($basePath);
+
+    $dockerProperties = $properties->get('docker');
+    if (isset($dockerProperties['containerActive']) && $dockerProperties['containerActive']) {
+      $engine = new DockerPhingEngine($projectPath);
+    }
+    else {
+      $engine = new PhingEngine($projectPath);
+    }
 
     // Fully initialize the application with any extra data from the data file.
     $application = new self($engine, $properties);
@@ -240,6 +247,10 @@ class HeavydApplication extends Application {
     $io->writeln(sprintf(' env: <fg=white>%s</>', $projectProperties['active']['env'] ? $projectProperties['active']['env'] : 'none'));
     $io->writeln(sprintf(' stage: <fg=white>%s</>', $projectProperties['active']['stage'] ? $projectProperties['active']['stage'] : 'none'));
     $io->writeln(sprintf(' site: <fg=white>%s</>', $projectProperties['active']['site'] ? $projectProperties['active']['site'] : 'none'));
+    $io->newLine();
+
+    $io->writeln('<fg=yellow>Current Engine</>');
+    $io->writeln(sprintf(' engine: <fg=white>%s</>', get_class($this->engine)));
     $io->newLine();
   }
 
