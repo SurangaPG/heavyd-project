@@ -3,6 +3,7 @@
 <project name="Property tasks" default="property:help" description="Contains all the task used to enable and disable the various property sets">
 
     <target name="property:cleanse" description="Clean out all the active env and stage properties.">
+        <phingcall target="property:cleanse:generated" />
         <phingcall target="property:cleanse:env" />
         <phingcall target="property:cleanse:stage" />
     </target>
@@ -11,6 +12,14 @@
     <target name="property:cleanse:env" description="Deactivates an environment by deleting all it's properties from the main env dir.">
         <delete verbose="${phing.verbose}">
             <fileset dir="${dir.properties.env}" casesensitive="false">
+                <include name="*.yml"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="property:cleanse:generated" description="Cleans out all the currently generated items.">
+        <delete verbose="${phing.verbose}">
+            <fileset dir="${dir.properties.generated}" casesensitive="false">
                 <include name="*.yml"/>
             </fileset>
         </delete>

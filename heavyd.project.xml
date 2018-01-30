@@ -185,7 +185,6 @@
 
     <target name="project:property-cleanse" description="Cleanses a project of all properties etc.">
         <phingcall target="property:cleanse" />
-        <phingcall target="property:write-full" />
     </target>
 
     <target name="project:install-dependencies" description="Install all the composer dependecies for the project.">
@@ -193,6 +192,7 @@
     </target>
 
     <target name="project:write-property-files" description="Regenerate all the property files.">
+        <phingcall target="property:cleanse:generated" />
         <if>
             <not>
                 <isset property="current.basePath" />
@@ -213,12 +213,14 @@
 
     <target name="project:activate-site" description="Activates a the correct site (e.g default or another directory under the sites dir).">
         <phingcall target="property:cleanse:site" />
+        <phingcall target="property:cleanse:generated" />
         <phingcall target="property:activate:site" />
         <phingcall target="property:write-full" />
     </target>
 
     <target name="project:activate-env" description="Activates a full environment">
         <phingcall target="property:cleanse:env" />
+        <phingcall target="property:cleanse:generated" />
         <phingcall target="property:activate:env" />
         <phingcall target="property:write-full" />
         <phingcall target="drupal:env:activate-etc-files" />
@@ -226,6 +228,7 @@
 
     <target name="project:activate-stage" description="Activates a the correct stage (e.g production, acc, etc) for a given site (dir).">
         <phingcall target="property:cleanse:stage" />
+        <phingcall target="property:cleanse:generated" />
         <phingcall target="property:activate:stage" />
         <phingcall target="property:write-full" />
         <phingcall target="drupal:stage:activate-etc-files" />
