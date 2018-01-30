@@ -79,7 +79,7 @@ class SetupCommand extends AbstractHeavydCommandBase {
     $projectProperties = $this->getProperties()->get('project');
     if (isset($projectProperties['requires_local_properties']) && $projectProperties['requires_local_properties']) {
       $this->runLocalHostPropertiesHandler();
-      // $this->runLocalDbPropertiesHandler();
+      $this->runLocalDbPropertiesHandler();
     }
 
     $this->getIo()->title('Install site');

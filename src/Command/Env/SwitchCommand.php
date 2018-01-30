@@ -17,15 +17,30 @@ class SwitchCommand extends AbstractHeavydCommandBase {
    */
   protected function configure() {
     $this->setName('env:switch')
-      ->addArgument('environment', InputArgument::REQUIRED, 'The machine name of the environment to switch to.')
+      ->addArgument('environment', InputArgument::OPTIONAL, 'The machine name of the environment to switch to.')
       ->setDescription('Switch the current file set to match a different environment.');
   }
 
   /**
    * @inheritdoc
    */
+  public function interact(InputInterface $input, OutputInterface $output) {
+    parent::interact($input, $output);
+
+    $environment = $input->getArgument('environment');
+
+    if (!isset($environment)) {
+      $environment = $this->askEnv();
+    }
+
+    $environment->environment = $environment;
+  }
+
+  /**
+   * @inheritdoc
+   */
   public function execute(InputInterface $input, OutputInterface $output) {
-    $this->getEngine()->taskProjectSwitchEnv($input->getArgument('environment'));
+    $this->getEngine()->taskProjectSwitchEnv($this->environment);
   }
 
 }
