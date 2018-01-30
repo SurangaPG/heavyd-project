@@ -1,6 +1,6 @@
 <?php
 
-namespace surangapg\Heavyd\Command\Docker;
+namespace surangapg\Heavyd\Command\DockerCompose;
 
 use surangapg\Heavyd\Command\AbstractHeavydCommandBase;
 use surangapg\Heavyd\Command\Base\DockerCommandTrait;
@@ -18,8 +18,8 @@ class StopCommand extends AbstractHeavydCommandBase {
    * @inheritdoc
    */
   protected function configure() {
-    $this->setName('stop')
-      ->setDescription('This will start a the underlying docker network.');
+    $this->setName('docker-compose:stop')
+      ->setDescription('Stop the underlying docker network.');
   }
 
   /**

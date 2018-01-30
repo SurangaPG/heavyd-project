@@ -1,6 +1,6 @@
 <?php
 
-namespace surangapg\Heavyd\Command\Docker;
+namespace surangapg\Heavyd\Command\DockerCompose;
 
 use surangapg\Heavyd\Command\AbstractHeavydCommandBase;
 use surangapg\Heavyd\Command\Base\DockerCommandTrait;
@@ -18,8 +18,8 @@ class SetupCommand extends AbstractHeavydCommandBase {
    * @inheritdoc
    */
   protected function configure() {
-    $this->setName('setup')
-      ->setDescription('This will start a the underlying docker network.');
+    $this->setName('docker-compose:setup')
+      ->setDescription('This sets up a docker compose file ready for use.');
   }
 
   /**
@@ -27,6 +27,7 @@ class SetupCommand extends AbstractHeavydCommandBase {
    */
   public function execute(InputInterface $input, OutputInterface $output) {
     $this->getEngine()->taskDockerComposeWriteTemplate();
+    $this->getIo()->writeln('Generated new docker-compose.yml in the root of the project.');
   }
 
 }

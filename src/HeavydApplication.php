@@ -6,6 +6,10 @@ use surangapg\Heavyd\Command\Content\PrepareCommand as ContentPrepareCommand;
 use surangapg\Heavyd\Command\Content\ExportCommand as ContentExportCommand;
 use surangapg\Heavyd\Command\Content\ImportCommand as ContentImportCommand;
 
+use surangapg\Heavyd\Command\DockerCompose\UpCommand as DockerComposeUpCommand;
+use surangapg\Heavyd\Command\DockerCompose\StopCommand as DockerComposeStopCommand;
+use surangapg\Heavyd\Command\DockerCompose\SetupCommand as DockerComposeSetupCommand;
+
 use surangapg\Heavyd\Command\Env\SwitchCommand as EnvSwitchCommand;
 
 use surangapg\Heavyd\Command\Haunt\RunCommand as HauntRunCommand;
@@ -126,6 +130,11 @@ class HeavydApplication extends Application {
 
     // Docker commands.
     $this->add(new DockerSeleniumCommand());
+
+    // Docker Compose commands.
+    $this->add(new DockerComposeSetupCommand());
+    $this->add(new DockerComposeStopCommand());
+    $this->add(new DockerComposeUpCommand());
 
     // Haunt commands.
     $this->add(new HauntRunCommand());

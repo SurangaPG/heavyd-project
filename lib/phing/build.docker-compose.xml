@@ -11,7 +11,7 @@
             </then>
         </if>
         <echo message="Creating docker-compose.yml configuration file" />
-        <loadfile property="docker-compose.yml.content" file="${dir.etc.template}/docker-compose.yml" />
+        <loadfile property="docker-compose.yml.content" file="${dir.etc.template}/docker-compose.template.yml" />
         <echo message="${docker-compose.yml.content}" file="${project.basedir}/docker-compose.yml" />
     </target>
 
