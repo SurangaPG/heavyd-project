@@ -69,7 +69,7 @@
     <target name="drupal:env:settings-file"
             depends="drupal:writable-settings-php,_drupal:validate:env-properties"
             description="Activates the correct settings files for the current context">
-        <!-- @TODO add support for the generic files in the bundle -->
+        <delete file="${dir.web.root}/sites/default/settings.env.php" />
         <if>
             <available file="${dir.etc.env}/${env.to.activate}/settings.env.php"
                        type="file" property="env.to.activate.settings.available"
@@ -87,7 +87,7 @@
     <target name="drupal:stage:settings-file"
             depends="drupal:writable-settings-php,_drupal:validate:stage-properties"
             description="Activates the correct settings file for the current stage">
-        <!-- @TODO add support for the generic files in the bundle -->
+        <delete file="${dir.web.root}/sites/default/settings.stage.php" />
         <if>
             <available file="${dir.etc.stage}/${stage.to.activate}/settings.stage.php"
                        type="file"
@@ -101,11 +101,10 @@
         </if>
     </target>
 
-    <!-- Enable the sites.php files for a given stage. -->
+    <!-- @TODO Untested -->
     <target name="drupal:stage:sites"
             description="Activates the correct sites.php file for the current stage"
             depends="_drupal:validate:stage-properties">
-        <!-- @TODO add support for the generic files in the bundle -->
         <if>
             <available file="${dir.etc.stage}/${stage.to.activate}/sites.php"
                        type="file"
@@ -123,7 +122,7 @@
     <target name="drupal:stage:services"
             description="Activates the correct services.yml file for the current stage"
             depends="_drupal:validate:stage-properties">
-        <!-- @TODO add support for the generic files in the bundle -->
+        <delete file="${dir.web.root}/sites/default/services.stage.yml" />
         <if>
             <available file="${dir.etc.stage}/${stage.to.activate}/services.stage.yml"
                        type="file"

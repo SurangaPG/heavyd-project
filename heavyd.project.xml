@@ -2,10 +2,6 @@
 
 <project name="HeavyD" default="project:help">
 
-    <target name="info" description="Show some basic information.">
-        <echo message="Welcome to the HeavyD project environment." />
-    </target>
-
     <!--
         Property bundle loading
 
