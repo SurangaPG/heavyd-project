@@ -106,7 +106,7 @@
         <phingcall target="project:import-default-content" />
     </target>
 
-    <target name="project:prepare-content">
+    <target name="project:prepare-default-content">
         <property name="domain.for.install" value="${host.default.domain}" />
         <property name="active.from.stage" value="${project.active.stage}" />
 
