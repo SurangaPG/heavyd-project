@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<project name="Behat tasks" default="behat:help" description="Contains all the tasks that prepare the default content for a project.">
+
+    <target name="behat:help">
+        <exec passthru="true" command="${bin.phing} -l" />
+    </target>
+
+    <target name="behat:setup-config" description="Generate the configuration file for Behat.">
+        <if>
+            <available file="${dir.tests.behat}/behat.yml" type="file" property="behat.yml.available" />
+            <then>
+                <echo message="Deleting existing behat.yml configuration file" />
+                <delete file="${dir.tests.behat}/behat.yml" failonerror="false" />
+            </then>
+        </if>
+        <echo message="Creating behat.yml configuration file" />
+        <loadfile property="behat.yml.content" file="${dir.tests.behat}/behat.template.yml" />
+        <echo message="${behat.yml.content}" file="${dir.tests.behat}/behat.yml" />
+    </target>
+
+    <target name="behat:run-tests" description="Run the actual behat test suite.">
+
+    </target>
+
+</project>

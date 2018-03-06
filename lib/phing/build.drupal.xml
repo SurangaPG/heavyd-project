@@ -111,8 +111,8 @@
                        property="stage.to.activate.sites.available" />
             <then>
                 <echo message="Copying sites.php for ${stage.to.activate} to active sites.php" />
-                <copy file="${dir.etc.stage}/${stage.to.activate}/sites.php"
-                      tofile="${dir.web.root}/sites/sites.php"
+                <copy file="${dir.etc.stage}/${stage.to.activate}/sites.stage.php"
+                      tofile="${dir.web.root}/sites/sites.stage.php"
                       overwrite="true"/>
             </then>
         </if>

@@ -275,4 +275,9 @@
         <phingcall target="docker-compose:status" />
         <phingcall target="docker-compose:up" />
     </target>
+
+    <target name="project:run-behat">
+        <phingcall target="behat:setup-config" />
+        <phingcall target="behat:run-tests" />
+    </target>
 </project>
