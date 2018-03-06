@@ -105,8 +105,9 @@
     <target name="drupal:stage:sites"
             description="Activates the correct sites.php file for the current stage"
             depends="_drupal:validate:stage-properties">
+        <delete file="${dir.web.root}/sites/sites.stage.php" failonerror="false" />
         <if>
-            <available file="${dir.etc.stage}/${stage.to.activate}/sites.php"
+            <available file="${dir.etc.stage}/${stage.to.activate}/sites.stage.php"
                        type="file"
                        property="stage.to.activate.sites.available" />
             <then>
@@ -158,6 +159,7 @@
     <target name="drupal:stage:htpasswd"
             description="Activates the correct .htpasswd file for the current context"
             depends="_drupal:validate:stage-properties">
+        <delete file="${project.basedir}/.htpasswd" />
         <if>
             <available file="${dir.etc.stage}/${stage.to.activate}/.htpasswd" type="file" property="stage.to.activate.htpasswd.available" />
             <then>
