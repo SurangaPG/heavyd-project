@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="HeavyD Platform dev documentation" default="dev:help">
+
+    <includepath classpath="${project.basedir}/dev/phing-tasks" />
+    <taskdef classname="GenerateDocumentationTask" name="generate-documentation" />
+
+    <!-- Target to allow forced rebuilding of the properties -->
+    <target name="dev:generate-documentation">
+        <generate-documentation />
+    </target>
+
+    <target name="dev:help">
+        <echo message="Contains a number of helpers to aid in dev tasks"/>
+    </target>
+</project>
