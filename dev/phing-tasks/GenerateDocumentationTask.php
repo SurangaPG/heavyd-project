@@ -45,8 +45,27 @@ class GenerateDocumentationTask extends Task {
    * The main entry point method.
    */
   public function main() {
+    $mainTargets = $this->getTargetInfoFromFile($this->getMainTaskFile());
+  }
 
+  /**
+   * Load an xml file and extract all the targets.
+   *
+   * @param string $xmlFile
+   *   Location of an xml file.
+   *
+   * @return array
+   *   Array with all the targets.
+   */
+  protected function getTargetInfoFromFile($xmlFile) {
+    $xml = new SimpleXMLElement(file_get_contents($xmlFile));
+    $xml = $xml->xpath('target');
+    $return = [];
+    foreach ($xml as $target) {
+      $return[] = (string) $target->attributes()['name'];
+    }
 
+    return $return;
   }
 
   /**

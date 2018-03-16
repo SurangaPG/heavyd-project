@@ -10,7 +10,7 @@
         <generate-documentation outputDir="${project.basedir}/doc"
                                 mainTaskFile="${project.basedir}/heavyd.project.xml"
                                 subTaskDir="${project.basedir}/lib/phing"
-                                htmlPartialsDir="${project.basedir}/dev/partial-docs"
+                                htmlPartialsDir="${project.basedir}/doc/_partials"
             />
     </target>
 
