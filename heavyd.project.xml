@@ -163,28 +163,8 @@
         <phingcall target="content:import" />
     </target>
 
-    <target name="project:build" description="Builds an entire environment up from scratch.">
-        <phingcall target="composer:build" />
-    </target>
-
-    <target name="project:setup" description="Setups up an already prepared environment">
-        <phingcall target="theme:get-assets" />
-    </target>
-
-    <target name="project:init" description="Init a new project with all the needed code etc in place.">
-        <phingcall target="drupal:init:config" />
-        <phingcall target="drupal:init:baseline-module" />
-        <phingcall target="drupal:init:baseline-theme" />
-        <phingcall target="drupal:init:site-dir" />
-        <phingcall target="drupal:init:cleanup" />
-    </target>
-
     <target name="project:property-cleanse" description="Cleanses a project of all properties etc.">
         <phingcall target="property:cleanse" />
-    </target>
-
-    <target name="project:install-dependencies" description="Install all the composer dependecies for the project.">
-        <phingcall target="composer:full" />
     </target>
 
     <target name="project:write-property-files" description="Regenerate all the property files.">
@@ -230,6 +210,10 @@
         <phingcall target="drupal:stage:activate-etc-files" />
     </target>
 
+    <target name="project:unlock">
+        <exec passthru="true" command="chmod -R u+w ${project.basedir}" />
+    </target>
+
     <target name="project:setup-services" description="Setup all the docker containers connected to this project.">
         <phingcall target="docker:setup" />
     </target>
@@ -244,10 +228,6 @@
 
     <target name="project:help">
         <exec passthru="true" command="${bin.phing} -l" />
-    </target>
-
-    <target name="project:unlock">
-        <exec passthru="true" command="chmod -R u+w ${project.basedir}" />
     </target>
 
     <target name="project:selenium-start" description="Start a stand alone selenium container.">
@@ -279,5 +259,30 @@
     <target name="project:run-behat">
         <phingcall target="behat:setup-config" />
         <phingcall target="behat:run-tests" />
+    </target>
+
+    <!-- Items to be deprecated / Up for review. -->
+    <!-- @TODO Standardize these -->
+    <target name="project:install-dependencies" description="Install all the composer dependecies for the project.">
+        <phingcall target="composer:full" />
+    </target>
+
+    <!-- @TODO Standardize these -->
+    <target name="project:build" description="Builds an entire environment up from scratch.">
+        <phingcall target="composer:build" />
+    </target>
+
+    <!-- @TODO Standardize these -->
+    <target name="project:setup" description="Setups up an already prepared environment">
+        <phingcall target="theme:get-assets" />
+    </target>
+
+    <!-- @TODO Remove this -->
+    <target name="project:init" description="Init a new project with all the needed code etc in place.">
+        <phingcall target="drupal:init:config" />
+        <phingcall target="drupal:init:baseline-module" />
+        <phingcall target="drupal:init:baseline-theme" />
+        <phingcall target="drupal:init:site-dir" />
+        <phingcall target="drupal:init:cleanup" />
     </target>
 </project>
