@@ -2,39 +2,17 @@
 
 namespace surangapg\Heavyd;
 
-use surangapg\Heavyd\Command\Content\PrepareCommand as ContentPrepareCommand;
-use surangapg\Heavyd\Command\Content\ExportCommand as ContentExportCommand;
-use surangapg\Heavyd\Command\Content\ImportCommand as ContentImportCommand;
-
-use surangapg\Heavyd\Command\DockerCompose\UpCommand as DockerComposeUpCommand;
-use surangapg\Heavyd\Command\DockerCompose\StopCommand as DockerComposeStopCommand;
-use surangapg\Heavyd\Command\DockerCompose\SetupCommand as DockerComposeSetupCommand;
-
-use surangapg\Heavyd\Command\Env\SwitchCommand as EnvSwitchCommand;
-
-use surangapg\Heavyd\Command\Haunt\RunCommand as HauntRunCommand;
-
-use surangapg\Heavyd\Command\Misc\SetupCommand as MiscSetupCommand;
-use surangapg\Heavyd\Command\Misc\InstallCommand as MiscInstallCommand;
-use surangapg\Heavyd\Command\Misc\ResetCommand as MiscResetCommand;
-
-use surangapg\Heavyd\Command\Docker\SeleniumCommand as DockerSeleniumCommand;
-
-use surangapg\Heavyd\Command\Property\InfoCommand as PropertyInfoCommand;
-use surangapg\Heavyd\Command\Property\RewriteCommand as PropertyRewriteCommand;
-use surangapg\Heavyd\Command\Stage\SwitchCommand as StageSwitchCommand;
-use surangapg\Heavyd\Components\Properties\Properties;
-use surangapg\Heavyd\Components\Properties\PropertiesInterface;
 use surangapg\Heavyd\Engine\DockerPhingEngine;
 use surangapg\Heavyd\Engine\EngineInterface;
 use surangapg\Heavyd\Engine\PhingEngine;
+use surangapg\HeavydComponents\Properties\Properties;
+use surangapg\HeavydComponents\Properties\PropertiesInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use surangapg\Heavyd\Command\Credential\CreateDefaultFileCommand;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Filesystem\Filesystem;
 
 class HeavydApplication extends Application {
 
@@ -45,7 +23,7 @@ class HeavydApplication extends Application {
    * later.
    * @const VERSION
    */
-  const VERSION = '0.0.1';
+  const VERSION = 'alpha';
 
   /**
    * The engine that does all the heavy lifting.
@@ -54,6 +32,7 @@ class HeavydApplication extends Application {
    * similar later.
    *
    * @var EngineInterface
+   *   The engine to be used to handle the underlying commands.
    */
   protected $engine;
 
@@ -67,13 +46,14 @@ class HeavydApplication extends Application {
   /**
    * All the properties for the project.
    *
-   * @var \surangapg\Heavyd\Components\Properties\PropertiesInterface
+   * @var \surangapg\HeavydComponents\Properties\PropertiesInterface
+   *   Properties interface to handle to properties for the project.
    */
   protected $properties;
 
   /**
-   * Creates and returns a fully functional workflow object based on the current
-   * data in a selected .workflow.yml file (this is auto detected).
+   * Creates and returns a fully functional heavyd application based on the current
+   * data in a selected heavyd project (this is auto detected).
    *
    * @param string $basePath|null The base directory to start searching for
    *    the .workflow.yml file. Defaults to the current directory. if not set.
@@ -82,7 +62,9 @@ class HeavydApplication extends Application {
    *
    * @return HeavydApplication
    *   Fully build application.
+   *
    * @throws \Exception
+   *
    */
   public static function create($basePath = null) {
 
@@ -105,7 +87,7 @@ class HeavydApplication extends Application {
     }
 
     // Fully initialize the application with any extra data from the data file.
-    $application = new self($engine, $properties);
+    $application = new self($engine, $properties, $projectPath);
 
     return $application;
   }
@@ -113,43 +95,19 @@ class HeavydApplication extends Application {
   /**
    * HeavydApplication constructor.
    *
-   * @inheritdoc
+   * @param \surangapg\Heavyd\Engine\EngineInterface $engine
+   *   Engine to do all the heavy lifting.
+   * @param \surangapg\HeavydComponents\Properties\PropertiesInterface $properties
+   *   Properties set as loaded from the project.
+   * @param string $projectPath
+   *   The root location for the project.
    */
-  public function __construct(EngineInterface $engine, PropertiesInterface $properties) {
+  public function __construct(EngineInterface $engine, PropertiesInterface $properties, string $projectPath) {
     parent::__construct('HeavyD', static::VERSION);
 
     $this->engine = $engine;
     $this->properties = $properties;
-
-    // Misc commands.
-    $this->add(new MiscSetupCommand());
-    $this->add(new MiscInstallCommand());
-    $this->add(new MiscResetCommand());
-
-    // Property commands.
-    $this->add(new PropertyInfoCommand());
-    $this->add(new PropertyRewriteCommand());
-
-    // Content commands.
-    $this->add(new ContentPrepareCommand());
-    $this->add(new ContentExportCommand());
-    $this->add(new ContentImportCommand());
-
-    // Docker commands.
-    $this->add(new DockerSeleniumCommand());
-
-    // Docker Compose commands.
-    $this->add(new DockerComposeSetupCommand());
-    $this->add(new DockerComposeStopCommand());
-    $this->add(new DockerComposeUpCommand());
-
-    // Haunt commands.
-    $this->add(new HauntRunCommand());
-
-    $this->add(new EnvSwitchCommand());
-
-    $this->add(new StageSwitchCommand());
-    $this->add(new CreateDefaultFileCommand());
+    $this->basePath = $projectPath;
   }
 
   /**
@@ -163,7 +121,6 @@ class HeavydApplication extends Application {
       $command->addOption('silent-engine', 'S', InputOption::VALUE_NONE, 'Suppress all the output from the engine.');
     }
   }
-
 
   /**
    * Handle a run of a given command.
@@ -205,21 +162,9 @@ class HeavydApplication extends Application {
    * @throws \Exception
    */
   public static function defineBasePath($basePath = null) {
-
     $basePath = isset($basePath) ? $basePath : getcwd();
-
-    $maxDepth = 100;
-    $curDepth = 0;
-
-    while (!file_exists($basePath . '/.heavyd.yml')) {
-      $basePath = realpath($basePath . '/..');
-      $curDepth++;
-      if($curDepth > $maxDepth) {
-        throw new \Exception("Couldn't locate .heavyd marker in any of the directories. Are you sure heavyd has been properly initialized?");
-      }
-    }
-
-    return $basePath;
+    $marker = static::findHeavydMarkerInTree($basePath);
+    return dirname($marker);
   }
 
   /**
@@ -283,16 +228,42 @@ class HeavydApplication extends Application {
   }
 
   /**
-   * @return \surangapg\Heavyd\Components\Properties\PropertiesInterface
+   * @return \surangapg\HeavydComponents\Properties\PropertiesInterface
    */
   public function getProperties() {
     return $this->properties;
   }
 
   /**
-   * @param \surangapg\Heavyd\Components\Properties\PropertiesInterface $properties
+   * @param \surangapg\HeavydComponents\Properties\PropertiesInterface $properties
    */
   public function setProperties(PropertiesInterface $properties) {
     $this->properties = $properties;
+  }
+
+  /**
+   * Find the heavyD marker recursively in the directory tree.
+   *
+   * @param string $dir
+   *   The directory to search in.
+   *
+   * @return string
+   *   The heavyd file detected.
+   *
+   * @throws \Exception
+   *   If no file could be found in the current tree.
+   */
+  private static function findHeavydMarkerInTree(string $dir) {
+    $path = rtrim($dir, '/') . '/.heavyd.yml';
+    if (!file_exists($path)) {
+
+      if ($dir == '/') {
+        throw new \Exception("Couldn't locate .heavyd marker in any of the directories. Are you sure heavyd has been properly initialized?");
+      }
+
+      return static::findHeavydMarkerInTree(dirname($dir));
+    }
+
+    return $path;
   }
 }

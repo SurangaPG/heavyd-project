@@ -2,19 +2,6 @@
 
 <project name="Drush tasks" default="drush:help" description="Contains all the task used to enable and disable the various environments">
 
-    <target name="drush:export-content">
-        <property name="active.to.site" value="default"/>
-        <fail unless="active.to.stage" message="No stage to export to has been specified and none is currently active." />
-        <fail unless="entity.to.export" message="No entity type to export has been specified.." />
-
-        <echo message="Exporting ${entity.to.export}" />
-        <!-- Note we add the placeholder uri to make it easier to port the default content between different setups, see the prepare content task.' -->
-        <exec passthru="true"
-              command="${bin.drush} default-content-export-references ${entity.to.export} --folder=${dir.etc.stage}/${active.to.stage}/default_content --user=1 --uri=https://[--placeholder--]"
-              dir="${dir.web.root}/sites/${active.to.site}"
-              checkreturn="true" />
-    </target>
-
     <target name="drush:maintenance-mode-activate">
         <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />

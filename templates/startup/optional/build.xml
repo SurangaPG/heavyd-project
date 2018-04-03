@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!-- Dummy xml in case it doesn't exist, will just load in the more apptly named 'core' file -->
-<project name="HeavyD" default="list">
-
-    <import file="heavyd.project.xml" />
-
-</project>

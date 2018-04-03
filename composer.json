@@ -1,12 +1,18 @@
 {
-    "name": "heavyd/platform",
+    "name": "surangapg/heavyd-project",
     "description": "A property and stage manager tool suite. Designed to kickstart and support devops integrations.",
     "type": "library",
+    "repositories": [
+      {
+        "type": "vcs",
+        "url":  "git@github.com:SurangaPG/heavyd-components.git"
+      }
+    ],
     "require": {
         "phing/phing": "^2.16",
         "deployer/deployer": "5",
         "surangapg/phing-property-bundle": "^0",
-        "symfony/filesystem": "^3.0"
+        "surangapg/heavyd-components": "dev-master"
     },
     "authors": [
         {
@@ -16,6 +22,7 @@
     ],
     "autoload": {
       "psr-4": {
+        "surangapg\\Heavyd\\Test\\": "tests/Test",
         "surangapg\\Heavyd\\": "src"
       }
     },

@@ -1,8 +1,0 @@
-{
-  "url": "${url}",
-  "allowed:": [
-    "allowed.domain1",
-    "allowed.domain2",
-    "allowed.domain3"
-  ]
-}

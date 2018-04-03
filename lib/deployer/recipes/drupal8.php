@@ -51,26 +51,6 @@ task('drupal8:drush:cron', function () {
 });
 
 /**
-// Enables stage file proxy
-// @TODO Add support for hotlinking. The setting doesn't appear to be part of state.
-desc('Drush Stage file proxy');
-task('drupal8:drush:stage-file-proxy', function () {
-  cd('{{release_path}}/{{dir_web_relative}}/sites/{{site}}');
-
-  // Check or the needed vars are set
-  $stageFileProxySource = get('stage_file_proxy_source');
-  $stageFileProxySource = rtrim('/', $stageFileProxySource); // Trim of trailing slashes as stage_file_proxy doesn't allow those.)
-
-  $stageFileProxyActive = get('stage_file_proxy_active');
-
-  if($stageFileProxyActive && !empty($stageFileProxySource)) {
-    run('{{drush_bin}} en stage_file_proxy -y');
-    run('{{drush_bin}} state-set stage_file_proxy_origin "' . $stageFileProxySource . '"');
-  }
-});
-*/
-
-/**
  * Make a fresh install for the drupal site.
  * Depending on what we're doing exactly this can either be the initial set up
  * of a production environment. Or just the building of a test env.

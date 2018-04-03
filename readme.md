@@ -1,6 +1,6 @@
-# HeavyD platform 
+# HeavyD project 
 
-Contains the basic platform template that will be used as the base files 
+Contains the basic project template that will be used as the base files 
 for any HeavyD setup. This is an opiniated basepoint for a light 
 project setup. 
 It's a personal used project that should be flexible enough to get some 

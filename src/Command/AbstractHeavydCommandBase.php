@@ -31,7 +31,7 @@ abstract class AbstractHeavydCommandBase extends Command {
   /**
    * Get the properties currently loaded into the application.
    *
-   * @return \surangapg\Heavyd\Components\Properties\PropertiesInterface
+   * @return \surangapg\HeavydComponents\Properties\PropertiesInterface
    *   The properties currently loaded into the application.
    */
   function getProperties() {

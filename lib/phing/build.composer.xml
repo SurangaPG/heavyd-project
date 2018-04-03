@@ -14,7 +14,7 @@
             description="Install the main project ready for a deploy.">
         <exec dir="${project.basedir}"
               passthru="true"
-              command="${bin.composer} install --no-progress --no-dev --optimize-autoloader --ignore-platform-reqs"
+              command="${bin.composer} install --no-progress --no-dev --optimize-autoloader"
         />
     </target>
 
