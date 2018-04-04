@@ -6,10 +6,6 @@
         <exec passthru="true" command="${bin.phing} -l" />
     </target>
 
-    <target name="composer:full" description="Setup a full composer dev install.">
-        <phingcall target="composer:dev" />
-    </target>
-
     <target name="composer:build"
             description="Install the main project ready for a deploy.">
         <exec dir="${project.basedir}"

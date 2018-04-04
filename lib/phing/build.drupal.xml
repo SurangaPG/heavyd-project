@@ -7,13 +7,9 @@
         <exec passthru="true" command="${bin.phing} -l" />
     </target>
 
-    <!--
-        Activate all the special files from the /etc folders by adding them to the active
-        code base.
-    -->
     <target name="drupal:stage:activate-etc-files"
             description="activates all the correct extra files based on the stage for the dir."
-            depends="_drupal:validate:stage-properties">
+            depends="drupal:stage:validate-properties">
         <phingcall target="drupal:stage:robots" />
         <phingcall target="drupal:stage:htaccess" />
         <phingcall target="drupal:stage:htpasswd" />
@@ -24,256 +20,178 @@
 
     <target name="drupal:env:activate-etc-files"
             description="activates all the correct extra files based on the stage for the dir."
-            depends="_drupal:validate:env-properties">
+            depends="drupal:env:validate-properties">
         <phingcall target="drupal:env:settings-file" />
+        <phingcall target="drupal:env:services" />
     </target>
 
-    <target name="drupal:prepare-default-content">
-        <property name="active.site" value="default" />
-        <fail unless="active.from.stage" message="No stage to export default content from has been specified and none is currently active." />
-        <fail unless="domain.for.install" message="No domain has been specified for the import of the content." />
-
-        <!-- The exports depend on a url which was added by the exporting site, so we need to replace this. -->
-        <echo message="Moving content to source dir." />
-        <delete dir="${dir.web.root}/modules/custom/baseline_content/content" />
-        <mkdir dir="${dir.web.root}/modules/custom/baseline_content/content" />
-
-        <!-- Ensure this dir exists -->
-        <mkdir dir="${dir.etc.assets}/modules/custom/baseline_content/content" />
-        <copy todir="${dir.web.root}/modules/custom/baseline_content/content">
-            <fileset dir="${dir.etc.site}/${active.site}/stages/${active.from.stage}/default_content">
-                <include name="**" />
-            </fileset>
-        </copy>
-
-        <property name="project.uri" value="http://limburgnet.drupal.mamp"/>
-        <prepare-exported-data-for-import webRoot="${dir.web.root}" activeDomain="${domain.for.install}"/>
-    </target>
-
-    <target name="drupal:import-default-content">
-        <echo message="Adding baseline content" />
-        <exec passthru="true" command="${bin.drush} en baseline_content -y" dir="${dir.web.root}" />
-
-        <!-- Clean up the imported entities. -->
-        <exec passthru="true" command="${bin.drush} clean-imported-default-content" dir="${dir.web.root}" />
-
-        <echo message="Removing setup time modules" />
-        <exec passthru="true" command="${bin.drush} pm-uninstall baseline_content -y" dir="${dir.web.root}" />
-        <exec passthru="true" command="${bin.drush} pm-uninstall default_content -y" dir="${dir.web.root}" />
-    </target>
-
-    <!--
-        Enable the env setting file for a given drupal instance. This will add a basic settings.php
-        file based on the data for an environment such as level27.
-    -->
     <target name="drupal:env:settings-file"
-            depends="drupal:writable-settings-php,_drupal:validate:env-properties"
+            depends="drupal:writable-settings-php,drupal:env:validate-properties"
             description="Activates the correct settings files for the current context">
-        <delete file="${dir.web.root}/sites/default/settings.env.php" />
+        <delete file="${project.basedir}/${dir.web.root}/sites/default/settings.env.php" />
         <if>
-            <available file="${dir.etc.env}/${env.to.activate}/settings.env.php"
+            <available file="${project.basedir}/${dir.etc.env}/${env.to.activate}/settings.env.php"
                        type="file" property="env.to.activate.settings.available"
             />
             <then>
                 <echo message="Copying settings for ${env.to.activate} to active settings.env.php" />
-                <copy file="${dir.etc.env}/${env.to.activate}/settings.env.php"
-                      tofile="${dir.web.root}/sites/default/settings.env.php"
+                <copy file="${project.basedir}/${dir.etc.env}/${env.to.activate}/settings.env.php"
+                      tofile="${project.basedir}/${dir.web.root}/sites/default/settings.env.php"
                       overwrite="true"/>
             </then>
         </if>
     </target>
 
-    <!-- Enable the settings file for a given environment. Such as acc, prod, etc. -->
     <target name="drupal:stage:settings-file"
-            depends="drupal:writable-settings-php,_drupal:validate:stage-properties"
+            depends="drupal:writable-settings-php,drupal:stage:validate-properties"
             description="Activates the correct settings file for the current stage">
-        <delete file="${dir.web.root}/sites/default/settings.stage.php" />
+        <delete file="${project.basedir}/${dir.web.root}/sites/default/settings.stage.php" />
         <if>
-            <available file="${dir.etc.stage}/${stage.to.activate}/settings.stage.php"
+            <available file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/settings.stage.php"
                        type="file"
                        property="stage.to.activate.settings.available"/>
             <then>
                 <echo message="Copying sites for default to active settings.stage.php" />
-                <copy file="${dir.etc.stage}/${stage.to.activate}/settings.stage.php"
-                      tofile="${dir.web.root}/sites/default/settings.stage.php"
+                <copy file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/settings.stage.php"
+                      tofile="${project.basedir}/${dir.web.root}/sites/default/settings.stage.php"
                       overwrite="true"/>
             </then>
         </if>
     </target>
 
-    <!-- @TODO Untested -->
     <target name="drupal:stage:sites"
             description="Activates the correct sites.php file for the current stage"
-            depends="_drupal:validate:stage-properties">
-        <delete file="${dir.web.root}/sites/sites.stage.php" failonerror="false" />
+            depends="drupal:stage:validate-properties">
+        <delete file="${project.basedir}/${dir.web.root}/sites/sites.stage.php" failonerror="false" />
         <if>
-            <available file="${dir.etc.stage}/${stage.to.activate}/sites.stage.php"
+            <available file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/sites.stage.php"
                        type="file"
                        property="stage.to.activate.sites.available" />
             <then>
                 <echo message="Copying sites.php for ${stage.to.activate} to active sites.php" />
-                <copy file="${dir.etc.stage}/${stage.to.activate}/sites.stage.php"
-                      tofile="${dir.web.root}/sites/sites.stage.php"
+                <copy file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/sites.stage.php"
+                      tofile="${project.basedir}/${dir.web.root}/sites/sites.stage.php"
                       overwrite="true"/>
             </then>
         </if>
     </target>
 
-    <!-- Enable the stage services.yml  -->
     <target name="drupal:stage:services"
             description="Activates the correct services.yml file for the current stage"
-            depends="_drupal:validate:stage-properties">
-        <delete file="${dir.web.root}/sites/default/services.stage.yml" />
+            depends="drupal:stage:validate-properties">
+        <delete file="${project.basedir}/${dir.web.root}/sites/default/services.stage.yml" />
         <if>
-            <available file="${dir.etc.stage}/${stage.to.activate}/services.stage.yml"
+            <available file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/services.stage.yml"
                        type="file"
                        property="stage.to.activate.services.available" />
             <then>
                 <echo message="Copying services.yml for ${stage.to.activate} to active services.yml" />
-                <copy file="${dir.etc.stage}/${stage.to.activate}/services.stage.yml"
-                      tofile="${dir.web.root}/sites/default/services.stage.yml"
+                <copy file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/services.stage.yml"
+                      tofile="${project.basedir}/${dir.web.root}/sites/default/services.stage.yml"
                       overwrite="true"/>
             </then>
         </if>
     </target>
 
-    <!-- Enable the .htaccess for a given stage. -->
+    <target name="drupal:env:services"
+            description="Activates the correct services.yml file for the current env"
+            depends="drupal:env:validate-properties">
+        <delete file="${project.basedir}/${dir.web.root}/sites/default/services.env.yml" />
+        <if>
+            <available file="${project.basedir}/${dir.etc.env}/${env.to.activate}/services.env.yml"
+                       type="file"
+                       property="env.to.activate.services.available" />
+            <then>
+                <echo message="Copying services.yml for ${env.to.activate} to active services.yml" />
+                <copy file="${project.basedir}/${dir.etc.env}/${env.to.activate}/services.env.yml"
+                      tofile="${project.basedir}/${dir.web.root}/sites/default/services.env.yml"
+                      overwrite="true"/>
+            </then>
+        </if>
+    </target>
+
     <target name="drupal:stage:htaccess"
             description="Activates the correct .htaccess file for the current context"
-            depends="_drupal:validate:stage-properties">
+            depends="drupal:stage:validate-properties">
         <if>
-            <available file="${dir.etc.stage}/${stage.to.activate}/.htaccess" type="file" property="stage.to.activate.htaccess.available" />
+            <available file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/.htaccess" type="file" property="stage.to.activate.htaccess.available" />
             <then>
                 <echo message="Copying .htaccess for ${stage.to.activate} to active .htaccess" />
-                <copy file="${dir.etc.stage}/${stage.to.activate}/.htaccess"
-                      tofile="${dir.web.root}/.htaccess"
+                <copy file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/.htaccess"
+                      tofile="${project.basedir}/${dir.web.root}/.htaccess"
                       overwrite="true"/>
             </then>
             <else>
-                <echo message="No .htaccess for ${stage.to.activate} available at: ${dir.etc.stage}/${stage.to.activate}/.htaccess " />
+                <echo message="No .htaccess for ${stage.to.activate} available at: ${project.basedir}/${dir.etc.stage}/${stage.to.activate}/.htaccess " />
             </else>
         </if>
     </target>
 
-    <!-- Enable the .htpasswd for a given stage. -->
     <target name="drupal:stage:htpasswd"
             description="Activates the correct .htpasswd file for the current context"
-            depends="_drupal:validate:stage-properties">
+            depends="drupal:stage:validate-properties">
         <delete file="${project.basedir}/.htpasswd" />
         <if>
-            <available file="${dir.etc.stage}/${stage.to.activate}/.htpasswd" type="file" property="stage.to.activate.htpasswd.available" />
+            <available file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/.htpasswd" type="file" property="stage.to.activate.htpasswd.available" />
             <then>
                 <echo message="Copying .htpasswd for ${stage.to.activate} to active .htpasswd" />
-                <copy file="${dir.etc.stage}/${stage.to.activate}/.htpasswd"
+                <copy file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/.htpasswd"
                       tofile="${project.basedir}/.htpasswd"
                       overwrite="true"/>
             </then>
             <else>
-                <echo message="No .htpasswd for ${stage.to.activate} available at: ${dir.etc.stage}/${stage.to.activate}/.htpasswd " />
+                <echo message="No .htpasswd for ${stage.to.activate} available at: ${project.basedir}/${dir.etc.stage}/${stage.to.activate}/.htpasswd " />
             </else>
         </if>
     </target>
 
-    <!-- Enable the robots.txt file for a given environment. Such as acc, prod, etc. -->
     <target name="drupal:stage:robots"
             description="Activates the correct robots.txt file for the current context"
-            depends="_drupal:validate:stage-properties">
+            depends="drupal:stage:validate-properties">
         <if>
-            <available file="${dir.etc.stage}/${stage.to.activate}/robots.txt"
+            <available file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/robots.txt"
                        type="file"
                        property="stage.to.activate.robots.available" />
             <then>
                 <echo message="Copying robots.txt for ${stage.to.activate} to active robots.txt" />
-                <copy file="${dir.etc.stage}/${stage.to.activate}/robots.txt"
-                      tofile="${dir.web.root}/robots.txt"
+                <copy file="${project.basedir}/${dir.etc.stage}/${stage.to.activate}/robots.txt"
+                      tofile="${project.basedir}/${dir.web.root}/robots.txt"
                       overwrite="true"/>
             </then>
         </if>
         <!-- @TODO add support for the activating of our robots.txt here -->
     </target>
 
-    <!-- Sets up the settings.php and default.settings.php for the first time. -->
-    <target name="drupal:init:site-dir" description="Places the drupal site dir into the project.">
-        <copy file="${project.basedir}/.workflow/vendor/workflow/drupal/lib/settings/settings.php"
-              tofile="${project.basedir}/web/sites/default/settings.php"
-              overwrite="true"
-        />
-        <copy file="${project.basedir}/.workflow/vendor/workflow/drupal/lib/settings/settings.php"
-              tofile="${project.basedir}/web/sites/default/default.settings.php"
-              overwrite="true"
-        />
-    </target>
-
-    <!-- Sets up the config dir for the first time and default.settings.php for the first time. -->
-    <target name="drupal:init:config" description="Places the basic config into the config folder for the drupal site.">
-        <mkdir dir="${project.basedir}/etc/sites/default" />
-        <mkdir dir="${project.basedir}/etc/sites/default/config" />
-        <exec passthru="true" command="rsync -vr ${project.basedir}/.workflow/vendor/workflow/drupal/lib/profile/default/ ${project.basedir}/etc/sites/default/config/" />
-    </target>
-
-    <!-- Initialize a baseline module -->
-    <target name="drupal:init:baseline-module" description="Add a drupal base module to the project.">
-        <mkdir dir="${project.basedir}/web/modules/custom" />
-        <exec passthru="true" command="rsync -vr ${project.basedir}/.workflow/vendor/workflow/drupal/lib/baseline/baseline/ ${project.basedir}/web/modules/custom/baseline/" />
-    </target>
-
-    <!-- Initialize a baseline theme -->
-    <target name="drupal:init:baseline-theme" description="Add a drupal base theme to the project.">
-        <mkdir dir="${project.basedir}/web/themes/custom" />
-        <mkdir dir="${dir.etc.assets}/baseline_bootstrap" />
-        <exec passthru="true"
-              command="rsync -vr ${project.basedir}/.workflow/vendor/workflow/drupal/lib/baseline/baseline_bootstrap/ ${project.basedir}/web/themes/custom/baseline_bootstrap/" />
-        <if>
-            <available file="${project.basedir}/web/themes/custom/baseline_bootstrap/bower.json" type="file" property="theme-bower-available" />
-            <then>
-                <move file="${project.basedir}/web/themes/custom/baseline_bootstrap/bower.json" tofile="${dir.etc.assets}/baseline_bootstrap/bower.json" />
-            </then>
-        </if>
-        <if>
-            <available file="${project.basedir}/web/themes/custom/baseline_bootstrap/package.json" type="file" property="theme-npm-available" />
-            <then>
-                <move file="${project.basedir}/web/themes/custom/baseline_bootstrap/package.json" tofile="${dir.etc.assets}/baseline_bootstrap/package.json" />
-            </then>
-        </if>
-    </target>
-
-    <target name="drupal:init:cleanup" description="Cleans up the project after the init phase.">
-        <!-- @TODO Complete this command -->
-        <echo message="incomplete dummy command" />
-    </target>
-
-    <!-- Make the settings folder writeable so that the installer can copy settings.php. -->
     <target name="drupal:writable-settings-folder">
-        <chmod mode="0755" failonerror="true" verbose="true" quiet="false" file="${dir.web.root}/sites/default" />
+        <chmod mode="0755" failonerror="true" verbose="true" quiet="false" file="${project.basedir}/${dir.web.root}/sites/default" />
     </target>
 
-    <!-- Make settings.php writeable so that the installer save it. -->
     <target name="drupal:writable-settings-php" depends="drupal:writable-settings-folder">
         <if>
-            <available file="${dir.web.root}/sites/default/settings.php" type="file" property="website.settings.php.available" />
+            <available file="${project.basedir}/${dir.web.root}/sites/default/settings.php" type="file" property="website.settings.php.available" />
             <then>
-                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${dir.web.root}/sites/default/settings.php" />
+                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${project.basedir}/${dir.web.root}/sites/default/settings.php" />
             </then>
         </if>
         <if>
-            <available file="${dir.web.root}/sites/default/settings.stage.php" type="file" property="website.settings.stage.php.available" />
+            <available file="${project.basedir}/${dir.web.root}/sites/default/settings.stage.php" type="file" property="website.settings.stage.php.available" />
             <then>
-                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${dir.web.root}/sites/default/settings.stage.php" />
+                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${project.basedir}/${dir.web.root}/sites/default/settings.stage.php" />
             </then>
         </if>
         <if>
-            <available file="${dir.web.root}/sites/default/settings.env.php" type="file" property="website.settings.env.php.available" />
+            <available file="${project.basedir}/${dir.web.root}/sites/default/settings.env.php" type="file" property="website.settings.env.php.available" />
             <then>
-                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${dir.web.root}/sites/default/settings.env.php" />
+                <chmod mode="0644" failonerror="false" verbose="true" quiet="false" file="${project.basedir}/${dir.web.root}/sites/default/settings.env.php" />
             </then>
         </if>
     </target>
 
-    <target name="_drupal:validate:stage-properties">
+    <target name="drupal:stage:validate-properties">
         <fail unless="stage.to.activate" message="No Stage specified. Pass stage.to.activate as a property." />
     </target>
 
-    <target name="_drupal:validate:env-properties">
+    <target name="drupal:env:validate-properties">
         <fail unless="env.to.activate" message="No environment specified. Pass env.to.activate as a property." />
     </target>
 </project>

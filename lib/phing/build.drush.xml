@@ -2,7 +2,7 @@
 
 <project name="Drush tasks" default="drush:help" description="Contains all the task used to enable and disable the various environments">
 
-    <target name="drush:maintenance-mode-activate">
+    <target name="drush:maintenance-mode-activate" description="Activates maintenance mode for the project.">
         <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
@@ -12,7 +12,7 @@
         />
     </target>
 
-    <target name="drush:maintenance-mode-deactivate">
+    <target name="drush:maintenance-mode-deactivate" description="Deactivates maintenance mode for the project.">
         <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
@@ -22,7 +22,7 @@
         />
     </target>
 
-    <target name="drush:cache-rebuild">
+    <target name="drush:cache-rebuild" description="Rebuild the caches for the project.">
         <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
@@ -32,7 +32,7 @@
         />
     </target>
 
-    <target name="drush:config-import">
+    <target name="drush:config-import" description="Import the config for the project.">
         <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
@@ -42,7 +42,7 @@
         />
     </target>
 
-    <target name="drush:entity-updates">
+    <target name="drush:entity-updates" description="Complete the entity updates for the project.">
         <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
@@ -52,7 +52,7 @@
         />
     </target>
 
-    <target name="drush:update-database">
+    <target name="drush:update-database" description="Run all the database updates for the project.">
         <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
@@ -62,7 +62,7 @@
         />
     </target>
 
-    <target name="drush:cron">
+    <target name="drush:cron" description="Run the cron for the project.">
         <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
@@ -72,27 +72,18 @@
         />
     </target>
 
-    <target name="drush:site-install">
+    <target name="drush:site-install" description="Install the project.">
         <property name="active.site" value="default" />
+        <property name="install.profile" value="config_installer" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
-              command="${bin.drush} site-install -y config_installer"
+              command="${bin.drush} site-install -y ${install.profile}"
               dir="${dir.web.root}/sites/${active.site}"
               checkreturn="true"
         />
     </target>
 
-    <target name="drush:site-install-standard">
-        <property name="active.site" value="default" />
-        <fail unless="active.site" message="Active site not set." />
-        <exec passthru="true"
-              command="${bin.drush} site-install -y standard "
-              dir="${dir.web.root}/sites/${active.site}"
-              checkreturn="true"
-        />
-    </target>
-
-    <target name="drush:status">
+    <target name="drush:status" description="Display the status for the project.">
         <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
@@ -102,7 +93,7 @@
         />
     </target>
 
-    <target name="drush:help">
+    <target name="drush:help" description="Display the help for all the drush commands in the project.">
         <exec passthru="true" command="${bin.phing} -l" />
     </target>
 </project>
