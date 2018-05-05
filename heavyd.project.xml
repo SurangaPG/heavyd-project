@@ -85,23 +85,94 @@
         <exec passthru="true" command="${bin.drush} uli --uri=${host.default.domain}" dir="${dir.web.root}"/>
     </target>
 
+    <!-- Similar to install except that it is a lot faster, allowing for faster branch switches -->
+    <target name="project:update" description="Updates a local installation to be up to date with the default content/config in the project. This is a faster switch but it's less complete than a full install.">
+        <!-- @TODO Implement this, it should reimport all the config/content without reinstalling the site. -->
+    </target>
+
     <!-- Similar to install except that it prevents any form of file manipulation (handy for platform. Do not that this means the settings.php can't contain any non-install time valid cache ssettings -->
-    <target name="project:reset-install" description="Resets an installation to its chosen profile without triggering any file changes.">
+    <target name="project:reset" description="Resets an installation to its chosen profile without triggering any file changes.">
         <property name="domain.for.install" value="${host.default.domain}" />
 
         <phingcall target="drush:site-install" />
         <phingcall target="project:import-default-content" />
     </target>
 
+    <!-- Similar to install except that it is a lot faster, allowing for faster branch switches -->
+    <target name="project:pack" description="Package in an artifact for this project. This will generate a full data package and then save some it to the artifact folder. Making all the following installs for other devs a lot faster.">
+        <!-- @TODO Implement this, it should  reinstall and then make an artifact based on the data. -->
+    </target>
+
+    <!-- Similar to install except that it is a lot faster, allowing for faster branch switches -->
+    <target name="project:unpack" description="Unpacks the data from the artifacts. This will make it a lot faster to install a site provided a dev has previously packed the data.">
+        <!-- @TODO Implement this, it should  reinstall and then make an artifact based on the data. -->
+    </target>
+
     <!-- Crude but effective for now -->
     <target name="project:export-content">
         <property name="active.to.site" value="default"/>
-        <property name="active.to.stage" value="${project.active.stage}" />
-        <!-- @TODO Port the staged content implementation -->
+        <property name="active.to.stage" value="${project.basedir}/${project.active.stage}"/>
+
+        <fail unless="active.to.stage" message="No stage to export to has been specified and none is currently active."/>
+
+        <delete dir="${project.basedir}/${dir.etc.site}/${active.to.site}/stages/${active.to.stage}/staged_content" />
+        <delete dir="${project.basedir}/${dir.etc.site}/${active.to.site}/stages/${active.to.stage}/staged_fixtures" />
+
+        <!-- Enable the needed module(s) -->
+        <echo message="Enabling needed modules"/>
+        <exec passthru="true"
+              command="${bin.drush} en staged_content -y "
+              dir="${project.basedir}/${dir.web.root}/sites/${active.to.site}"/>
+
+        <!-- Export all the content -->
+        <phingcall target="drush:export-content-with-id">
+            <property name="entity.to.export" value="node" override="true"/>
+        </phingcall>
+
+        <phingcall target="drush:export-content">
+            <property name="entity.to.export" value="menu_link_content" override="true"/>
+        </phingcall>
+
+        <phingcall target="drush:export-content">
+            <property name="entity.to.export" value="taxonomy_term" override="true"/>
+        </phingcall>
+
+        <phingcall target="drush:export-content">
+            <property name="entity.to.export" value="user" override="true"/>
+        </phingcall>
+
+        <phingcall target="drush:export-content">
+            <property name="entity.to.export" value="block_content" override="true"/>
+        </phingcall>
+
+        <!-- Enable the needed module(s) -->
+        <echo message="Disable needed modules"/>
+
+        <exec passthru="true"
+              command="${bin.drush} pm-uninstall staged_content -y "
+              dir="${project.basedir}/${dir.web.root}/sites/${active.to.site}"/>
+
+        <staged-fixtures-export
+                stagedContentDir="${project.basedir}/${dir.etc.site}/${active.to.site}/stages/${active.to.stage}/staged_content"
+                stagedFixtureDir="${project.basedir}/${dir.etc.site}/${active.to.site}/stages/${active.to.stage}/staged_fixtures"
+                publicFileSystemRoot="${dir.files.public}" />
     </target>
 
-    <target name="project:import-default-content">
-        <phingcall target="content:import" />
+    <target name="project:import-content">
+        <property name="active.to.stage" value="${project.active.stage}" />
+        <property name="active.to.site" value="${project.active.site}" />
+        <!-- Ensure all the fixtures are in the correct place. -->
+        <echo message="Setting up Fixtures." />
+        <exec passthru="true" command="rsync -vr ${project.basedir}/${dir.etc.site}/${project.active.site}/stages/${project.active.stage}/staged_fixtures/public/ ${project.basedir}/${dir.files.public}/" />
+
+        <echo message="Adding baseline content" />
+        <exec passthru="true" command="${bin.drush} en staged_content -y" dir="${dir.web.root}" checkreturn="true"/>
+
+        <phingcall target="drush:staged-content-import" />
+
+        <echo message="Removing setup time modules" />
+        <exec passthru="true" command="${bin.drush} pm-uninstall staged_content -y" dir="${dir.web.root}" />
+
     </target>
 
     <target name="project:property-cleanse" description="Cleanses a project of all properties etc.">
@@ -133,6 +204,15 @@
         <phingcall target="property:activate-stage" />
         <phingcall target="property:write-full" />
         <phingcall target="drupal:stage:activate-etc-files" />
+    </target>
+
+    <target name="project:export-translations">
+        <phingcall target="drush:export-translations" />
+    </target>
+
+    <target name="project:import-translations">
+        <phingcall target="drush:cc-self" />
+        <phingcall target="drush:import-translations" />
     </target>
 
     <target name="project:unlock">

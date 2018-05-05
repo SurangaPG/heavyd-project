@@ -2,16 +2,25 @@
 
 namespace surangapg\Heavyd;
 
-use surangapg\Heavyd\Engine\DockerPhingEngine;
 use surangapg\Heavyd\Engine\EngineInterface;
 use surangapg\Heavyd\Engine\PhingEngine;
+
 use surangapg\HeavydComponents\Properties\Properties;
 use surangapg\HeavydComponents\Properties\PropertiesInterface;
+
+use surangapg\Heavyd\Command\Misc\SetupCommand as MiscSetupCommand;
+use surangapg\Heavyd\Command\Misc\InstallCommand as MiscInstallCommand;
+use surangapg\Heavyd\Command\Misc\ResetCommand as MiscResetCommand;
+
+use surangapg\HeavydComponents\Scope\ScopeInterface;
+
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+
 use Symfony\Component\Filesystem\Filesystem;
 
 class HeavydApplication extends Application {
@@ -37,13 +46,6 @@ class HeavydApplication extends Application {
   protected $engine;
 
   /**
-   * Basepath for the project.
-   *
-   * @var string
-   */
-  protected $basePath;
-
-  /**
    * All the properties for the project.
    *
    * @var \surangapg\HeavydComponents\Properties\PropertiesInterface
@@ -55,39 +57,30 @@ class HeavydApplication extends Application {
    * Creates and returns a fully functional heavyd application based on the current
    * data in a selected heavyd project (this is auto detected).
    *
-   * @param string $basePath|null The base directory to start searching for
-   *    the .workflow.yml file. Defaults to the current directory. if not set.
-   *    This mainly allows for the testing of the application from alternate
-   *    base locations.
+   * @param ScopeInterface[] $scopes
+   *   The various scopes available to the application.
    *
    * @return HeavydApplication
    *   Fully build application.
    *
    * @throws \Exception
-   *
+   *   If the project scope was invalid. E.g when run in a tree that identifies
+   *   as a heavyD project but without the needed marker to recognize the root.
    */
-  public static function create($basePath = null) {
+  public static function create(array $scopes = []) {
 
-    // Use the working directory if none was specified.
-    if (!isset($basePath)) {
-      $basePath = getcwd();
+    if (!isset($scopes['project'])) {
+      throw new \Exception("Couldn't locate .heavyd marker in any of the directories. Are you sure heavyd has been properly initialized?");
     }
 
-    // Find the .workflow.yml file and use that as source of the settings
-    $projectPath = self::defineBasePath($basePath);
+    $properties = new Properties();
+    $properties->setScopes($scopes, TRUE);
 
-    $properties = Properties::create($basePath);
-
-    $dockerProperties = $properties->get('docker');
-    if (isset($dockerProperties['containerActive']) && $dockerProperties['containerActive']) {
-      $engine = new DockerPhingEngine($projectPath);
-    }
-    else {
-      $engine = new PhingEngine($projectPath);
-    }
+    // @TODO Swap out the engine with a docker capable one if relevant.
+    $engine = new PhingEngine($properties->getBasePath());
 
     // Fully initialize the application with any extra data from the data file.
-    $application = new self($engine, $properties, $projectPath);
+    $application = new self($engine, $properties);
 
     return $application;
   }
@@ -99,15 +92,17 @@ class HeavydApplication extends Application {
    *   Engine to do all the heavy lifting.
    * @param \surangapg\HeavydComponents\Properties\PropertiesInterface $properties
    *   Properties set as loaded from the project.
-   * @param string $projectPath
-   *   The root location for the project.
    */
-  public function __construct(EngineInterface $engine, PropertiesInterface $properties, string $projectPath) {
+  public function __construct(EngineInterface $engine, PropertiesInterface $properties) {
     parent::__construct('HeavyD', static::VERSION);
 
     $this->engine = $engine;
     $this->properties = $properties;
-    $this->basePath = $projectPath;
+
+    // Misc commands.
+    $this->add(new MiscSetupCommand());
+    $this->add(new MiscInstallCommand());
+    $this->add(new MiscResetCommand());
   }
 
   /**
@@ -135,9 +130,14 @@ class HeavydApplication extends Application {
    */
   public function doRun(InputInterface $input, OutputInterface $output) {
 
-    /*
-     * Display some information about the properties as needed.
-     */
+    $isSilentEngine = (true === $input->hasParameterOption(array('--silent-engine', '-S'), true));
+    $this->getEngine()->setSilent($isSilentEngine);
+    $this->getEngine()->setOutput($output);
+
+    // Ensure that all the properties exist and are correct.
+    $this->ensureProperties($input, $output);
+
+    // Display some information about the properties as needed.
     $isInfo = (true === $input->hasParameterOption(array('--info', '-I'), true));
     if ($isInfo || $output->getVerbosity() >= OutputInterface::VERBOSITY_DEBUG) {
 
@@ -148,23 +148,34 @@ class HeavydApplication extends Application {
       }
     }
 
-    $isSilentEngine = (true === $input->hasParameterOption(array('--silent-engine', '-S'), true));
-    $this->getEngine()->setSilent($isSilentEngine);
-    $this->getEngine()->setOutput($output);
-
     parent::doRun($input, $output);
   }
 
   /**
-   * Define the project path for this command.
-   * @param string $basePath Basepath to start searching from
-   * @return string|null
-   * @throws \Exception
+   * Checks or the property files have been generated and if not, generate them.
+   *
+   * Since the heavyd project reads the data from the generated properties
+   * it's important to ensure they are generated.
+   * To prevent bugs we'll add a small sanity check here and regenerate them
+   * if needed.
+   *
+   * @param \Symfony\Component\Console\Input\InputInterface $input
+   *   Input interface for this item.
+   * @param \Symfony\Component\Console\Output\OutputInterface $output
+   *   Output interface for this item.
    */
-  public static function defineBasePath($basePath = null) {
-    $basePath = isset($basePath) ? $basePath : getcwd();
-    $marker = static::findHeavydMarkerInTree($basePath);
-    return dirname($marker);
+  protected function ensureProperties(InputInterface $input, OutputInterface $output) {
+    $propertyFiles = glob($this->getBasePath() . '/properties/*.yml');
+
+    if (count($propertyFiles) == 0) {
+      $io = new SymfonyStyle($input, $output);
+      $write = $io->confirm('The properties have not been generated yet, write them now?');
+
+      if ($write) {
+        $this->getEngine()->taskProjectWriteProperties();
+        $this->reloadProperties();
+      }
+    }
   }
 
   /**
@@ -175,7 +186,7 @@ class HeavydApplication extends Application {
    * For example when a command resets an environment and then needs access to
    * the properties of the new environment.
    */
-  function rebuildProperties() {
+  public function reloadProperties() {
     $this->setProperties(Properties::create($this->getProperties()->getBasePath()));
   }
 
@@ -185,7 +196,7 @@ class HeavydApplication extends Application {
    * @param \Symfony\Component\Console\Style\SymfonyStyle $io
    *   Symfony style to use.
    */
-  function outputCurrentState(SymfonyStyle $io) {
+  public function outputCurrentState(SymfonyStyle $io) {
     $projectProperties = $this->getProperties()->get('project');
 
     $io->writeln('<fg=yellow>Current state</>');
@@ -214,20 +225,6 @@ class HeavydApplication extends Application {
   }
 
   /**
-   * @return string
-   */
-  public function getBasePath() {
-    return $this->basePath;
-  }
-
-  /**
-   * @param $basePath
-   */
-  public function setBasePath(string $basePath) {
-    $this->basePath = $basePath;
-  }
-
-  /**
    * @return \surangapg\HeavydComponents\Properties\PropertiesInterface
    */
   public function getProperties() {
@@ -241,29 +238,4 @@ class HeavydApplication extends Application {
     $this->properties = $properties;
   }
 
-  /**
-   * Find the heavyD marker recursively in the directory tree.
-   *
-   * @param string $dir
-   *   The directory to search in.
-   *
-   * @return string
-   *   The heavyd file detected.
-   *
-   * @throws \Exception
-   *   If no file could be found in the current tree.
-   */
-  private static function findHeavydMarkerInTree(string $dir) {
-    $path = rtrim($dir, '/') . '/.heavyd.yml';
-    if (!file_exists($path)) {
-
-      if ($dir == '/') {
-        throw new \Exception("Couldn't locate .heavyd marker in any of the directories. Are you sure heavyd has been properly initialized?");
-      }
-
-      return static::findHeavydMarkerInTree(dirname($dir));
-    }
-
-    return $path;
-  }
 }

@@ -51,8 +51,8 @@ abstract class AbstractHeavydCommandBase extends Command {
   /**
    * Rebuilds the properties currently loaded into the application.
    */
-  function rebuildProperties() {
-    return $this->getApplication()->rebuildProperties();
+  function reloadProperties() {
+    return $this->getApplication()->reloadProperties();
   }
 
   /**

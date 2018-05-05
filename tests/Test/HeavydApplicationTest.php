@@ -5,6 +5,7 @@ namespace surangapg\Heavyd\Test;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use surangapg\Heavyd\HeavydApplication;
+use surangapg\HeavydComponents\Scope\Scope;
 
 class HeavydApplicationTest extends TestCase {
 
@@ -19,7 +20,8 @@ class HeavydApplicationTest extends TestCase {
   public function testCreate() {
     $sampleProjectRoot = $this->getFixtureDir() . '/full-project';
 
-    $app = HeavydApplication::create($sampleProjectRoot);
+    $scope = new Scope($sampleProjectRoot);
+    $app = HeavydApplication::create(['project' => $scope]);
 
     // Check or all the helpers were added correctly.
     Assert::assertInstanceOf('surangapg\Heavyd\HeavydApplication', $app);
@@ -29,46 +31,13 @@ class HeavydApplicationTest extends TestCase {
   }
 
   /**
-   * Test the creating of a new HeavyD project application.
+   * If no properties were found the application should prompt the user before
+   * running any command.
    *
-   * @covers HeavydApplication::create
+   * @see HeavydApplication::ensureProperties()
    */
-  public function testCreateInRoot() {
-
-    $sampleProjectRoot = $this->getFixtureDir() . '/full-project';
-
-    $app = HeavydApplication::create($sampleProjectRoot);
-
-    // Check that the project base path was detected correctly
-    Assert::assertEquals($this->getFixtureDir() . '/full-project', $app->getBasePath());
-
-  }
-
-  /**
-   * Test the creating of a new HeavyD project application.
-   *
-   * @covers HeavydApplication::create
-   */
-  public function testCreateInTree() {
-
-    $sampleProjectRoot = $this->getFixtureDir() . '/full-project/web/sites';
-
-    $app = HeavydApplication::create($sampleProjectRoot);
-
-    // Check that the project base path was detected correctly
-    Assert::assertEquals($this->getFixtureDir() . '/full-project', $app->getBasePath());
-
-  }
-
-  /**
-   * Test that starting an application outside the tree of a valid project.
-   *
-   * @expectedException \Exception
-   *
-   * @covers HeavydApplication::create
-   */
-  public function testCreateOutsideTree() {
-    $app = HeavydApplication::create($this->getFixtureDir());
+  public function testAutocreatedProperties() {
+    $this->markTestIncomplete('Ensure that properties are auto generated when running a command in an environment were no property files could be found.');
   }
 
   /**

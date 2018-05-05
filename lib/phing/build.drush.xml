@@ -2,12 +2,19 @@
 
 <project name="Drush tasks" default="drush:help" description="Contains all the task used to enable and disable the various environments">
 
+    <target name="drush:cc-self">
+        <exec passthru="true"
+              command="${bin.drush} cc drush "
+              dir="${project.basedir}"
+              checkreturn="true" />
+    </target>
+
     <target name="drush:maintenance-mode-activate" description="Activates maintenance mode for the project.">
         <property name="active.site" value="default" />
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} state-set maintenance_mode 1 "
-              dir="${dir.web.root}/sites/${active.site}"
+              dir="${project.basedir}/${dir.web.root}/sites/${active.site}"
               checkreturn="true"
         />
     </target>
@@ -17,7 +24,7 @@
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} state-set maintenance_mode 0 "
-              dir="${dir.web.root}/sites/${active.site}"
+              dir="${project.basedir}/${dir.web.root}/sites/${active.site}"
               checkreturn="true"
         />
     </target>
@@ -27,7 +34,7 @@
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} cache-rebuild"
-              dir="${dir.web.root}/sites/${active.site}"
+              dir="${project.basedir}/${dir.web.root}/sites/${active.site}"
               checkreturn="true"
         />
     </target>
@@ -37,7 +44,7 @@
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} config-import -y"
-              dir="${dir.web.root}/sites/${active.site}"
+              dir="${project.basedir}/${dir.web.root}/sites/${active.site}"
               checkreturn="true"
         />
     </target>
@@ -47,7 +54,7 @@
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} entity-updates -y"
-              dir="${dir.web.root}/sites/${active.site}"
+              dir="${project.basedir}/${dir.web.root}/sites/${active.site}"
               checkreturn="true"
         />
     </target>
@@ -57,7 +64,7 @@
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} updatedb -y"
-              dir="${dir.web.root}/sites/${active.site}"
+              dir="${project.basedir}/${dir.web.root}/sites/${active.site}"
               checkreturn="true"
         />
     </target>
@@ -67,7 +74,7 @@
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} cron -y"
-              dir="${dir.web.root}/sites/${active.site}"
+              dir="${project.basedir}/${dir.web.root}/sites/${active.site}"
               checkreturn="true"
         />
     </target>
@@ -78,7 +85,7 @@
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} site-install -y ${install.profile}"
-              dir="${dir.web.root}/sites/${active.site}"
+              dir="${project.basedir}/${dir.web.root}/sites/${active.site}"
               checkreturn="true"
         />
     </target>
@@ -88,10 +95,63 @@
         <fail unless="active.site" message="Active site not set." />
         <exec passthru="true"
               command="${bin.drush} status --sites-subdir=${active.site}"
-              dir="${dir.web.root}"
+              dir="${project.basedir}/${dir.web.root}"
               checkreturn="true"
         />
     </target>
+
+    <target name="drush:export-content">
+        <property name="active.to.site" value="default"/>
+        <fail unless="active.to.stage" message="No stage to export to has been specified and none is currently active." />
+        <fail unless="entity.to.export" message="No entity type to export has been specified.." />
+
+        <echo message="Exporting ${entity.to.export}" />
+        <!-- Note we add the placeholder uri to make it easier to port the default content between different setups, see the prepare content task.' -->
+        <exec passthru="true"
+              command="${bin.drush} staged-content-export-type ${entity.to.export} ${flag} --folder=${dir.etc.site}/${active.to.site}/stages/${active.to.stage}/staged_content --user=1 --uri=https://[--placeholder--]"
+              dir="${project.basedir}/${dir.web.root}/sites/${active.to.site}"
+              checkreturn="true" />
+    </target>
+
+    <target name="drush:export-content-with-id">
+        <property name="active.to.site" value="default"/>
+        <fail unless="active.to.stage" message="No stage to export to has been specified and none is currently active." />
+        <fail unless="entity.to.export" message="No entity type to export has been specified.." />
+
+        <echo message="Exporting ${entity.to.export}" />
+        <!-- Note we add the placeholder uri to make it easier to port the default content between different setups, see the prepare content task.' -->
+        <exec passthru="true"
+              command="${bin.drush} staged-content-export-type ${entity.to.export} --include-id --folder=${dir.etc.site}/${active.to.site}/stages/${active.to.stage}/staged_content --user=1 --uri=https://[--placeholder--]"
+              dir="${project.basedir}/${dir.web.root}/sites/${active.to.site}"
+              checkreturn="true" />
+    </target>
+
+    <target name="drush:staged-content-import">
+        <property name="active.to.site" value="default"/>
+        <fail unless="active.to.stage" message="No stage to export to has been specified and none is currently active." />
+
+        <exec passthru="true"
+              command="${bin.drush} staged-content-import ${project.basedir}/etc/sites/${active.to.site}/stages/${active.to.stage}/staged_content "
+              dir="${project.basedir}/${dir.web.root}/sites/${active.to.site}"
+              checkreturn="true" />
+    </target>
+
+    <target name="drush:export-translations">
+        <property name="active.to.site" value="default"/>
+        <exec passthru="true"
+              command="${bin.drush} locale-export --result-directory=${project.basedir}/${dir.etc.site}/${active.to.site}/translations "
+              dir="${project.basedir}/${dir.web.root}/sites/${active.to.site}"
+              checkreturn="true" />
+    </target>
+
+    <target name="drush:import-translations">
+        <property name="active.to.site" value="default"/>
+        <exec passthru="true"
+              command="${bin.drush} locale-import-dir ${project.basedir}/${dir.etc.site}/${active.to.site}/translations "
+              dir="${project.basedir}/${dir.web.root}/sites/${active.to.site}"
+              checkreturn="true" />
+    </target>
+
 
     <target name="drush:help" description="Display the help for all the drush commands in the project.">
         <exec passthru="true" command="${bin.phing} -l" />
