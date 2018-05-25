@@ -71,6 +71,7 @@
 
         <phingcall target="project:activate-env" />
         <phingcall target="project:activate-stage" />
+        <phingcall target="project:activate-site" />
 
         <!-- @TODO Look into the mails being sent during install? -->
         <phingcall target="drush:site-install" />
@@ -80,7 +81,7 @@
         <property name="stage.to.activate" value="${final.stage}" override="true" />
         <phingcall target="project:activate-stage" />
 
-        <phingcall target="project:import-default-content" />
+        <phingcall target="project:import-content" />
 
         <exec passthru="true" command="${bin.drush} uli --uri=${host.default.domain}" dir="${dir.web.root}"/>
     </target>
@@ -88,6 +89,7 @@
     <!-- Similar to install except that it is a lot faster, allowing for faster branch switches -->
     <target name="project:update" description="Updates a local installation to be up to date with the default content/config in the project. This is a faster switch but it's less complete than a full install.">
         <!-- @TODO Implement this, it should reimport all the config/content without reinstalling the site. -->
+        <echo message="Currently Incomplete" />
     </target>
 
     <!-- Similar to install except that it prevents any form of file manipulation (handy for platform. Do not that this means the settings.php can't contain any non-install time valid cache ssettings -->
@@ -101,11 +103,13 @@
     <!-- Similar to install except that it is a lot faster, allowing for faster branch switches -->
     <target name="project:pack" description="Package in an artifact for this project. This will generate a full data package and then save some it to the artifact folder. Making all the following installs for other devs a lot faster.">
         <!-- @TODO Implement this, it should  reinstall and then make an artifact based on the data. -->
+        <echo message="Currently Incomplete" />
     </target>
 
     <!-- Similar to install except that it is a lot faster, allowing for faster branch switches -->
     <target name="project:unpack" description="Unpacks the data from the artifacts. This will make it a lot faster to install a site provided a dev has previously packed the data.">
         <!-- @TODO Implement this, it should  reinstall and then make an artifact based on the data. -->
+        <echo message="Currently Incomplete" />
     </target>
 
     <!-- Crude but effective for now -->

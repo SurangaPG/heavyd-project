@@ -104,7 +104,7 @@ abstract class AbstractHeavydCommandBase extends Command {
       $default = $projectProperties['project']['active']['site'];
     }
 
-    $sites = glob($projectProperties['dir']['etc']['site'] . '/*', GLOB_ONLYDIR);
+    $sites = glob($this->makeDirAbsolute($projectProperties['dir']['etc']['site']) . '/*', GLOB_ONLYDIR);
     $options = [];
     foreach ($sites as $site) {
       $baseName = basename($site);
@@ -136,7 +136,7 @@ abstract class AbstractHeavydCommandBase extends Command {
       $default = $projectProperties['project']['active']['stage'];
     }
 
-    $stages = glob($projectProperties['dir']['etc']['stage'] . '/*', GLOB_ONLYDIR);
+    $stages = glob($this->makeDirAbsolute($projectProperties['dir']['etc']['stage']) . '/*', GLOB_ONLYDIR);
     $options = [];
     foreach ($stages as $stage) {
       $baseName = basename($stage);
@@ -168,7 +168,7 @@ abstract class AbstractHeavydCommandBase extends Command {
       $default = $projectProperties['project']['active']['env'];
     }
 
-    $envs = glob($projectProperties['dir']['etc']['env'] . '/*', GLOB_ONLYDIR);
+    $envs = glob($this->makeDirAbsolute($projectProperties['dir']['etc']['env']) . '/*', GLOB_ONLYDIR);
     $options = [];
     foreach ($envs as $env) {
       $baseName = basename($env);
@@ -178,5 +178,18 @@ abstract class AbstractHeavydCommandBase extends Command {
     }
 
     return $this->getIo()->choice('Which environment are you using', $options, $default);
+  }
+
+  /**
+   * Make a relative dir from the properties absolute.
+   *
+   * @param string $dir
+   *   The dir to make absolute.
+   *
+   * @return string
+   *   Absolute version for the dir.
+   */
+  protected function makeDirAbsolute($dir) {
+    return $this->getProperties()->getBasePath() . '/' . $dir;
   }
 }

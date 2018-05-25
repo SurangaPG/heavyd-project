@@ -21,6 +21,7 @@
 
     <target name="behat:run-tests" description="Run the actual behat test suite.">
         <!-- @TODO Run the tests -->
+        <echo message="Currently Incomplete" />
     </target>
 
 </project>

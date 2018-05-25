@@ -165,7 +165,7 @@ class HeavydApplication extends Application {
    *   Output interface for this item.
    */
   protected function ensureProperties(InputInterface $input, OutputInterface $output) {
-    $propertyFiles = glob($this->getBasePath() . '/properties/*.yml');
+    $propertyFiles = glob($this->getProperties()->getBasePath() . '/properties/*.yml');
 
     if (count($propertyFiles) == 0) {
       $io = new SymfonyStyle($input, $output);
