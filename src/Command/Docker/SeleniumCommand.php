@@ -68,9 +68,9 @@ class SeleniumCommand extends AbstractHeavydCommandBase {
       $this->getIo()->newLine();
       $this->getIo()->writeln('<fg=white>Stopping preexisting container:</>');
       $binRunner = new PhingBinRunner(
-        '.phing/vendor/bin/phing',
-        $output,
-        $this->getProperties()->getBasePath()
+        '.heavyd/vendor/bin/phing',
+        $this->getProperties()->getBasePath(),
+        $output
       );
       $binRunner->addArg('project:selenium-stop');
       $binRunner->run();
@@ -79,13 +79,13 @@ class SeleniumCommand extends AbstractHeavydCommandBase {
     $this->getIo()->newLine();
     $this->getIo()->writeln('<fg=white>Starting bridged container:</>');
 
-    $binRunner = new BinRunner(
-      '.phing/vendor/bin/phing',
+    $binRunner = new PhingBinRunner(
+      '.heavyd/vendor/bin/phing',
       $this->getProperties()->getBasePath(),
       $output
     );
 
-    $binRunner->addArg('project:selenium-bridged-start');
+    $binRunner->addArg('project:selenium-start');
     $binRunner->addOption('-Ddomain.to.bridge', $this->getDomainToBridge());
     $binRunner->run();
 
