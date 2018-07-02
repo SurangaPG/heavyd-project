@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<project name="Docker tasks" default="docker:help" description="Contains all the task used to help setting up docker.">
+
+    <target name="docker:help">
+        <exec passthru="true" command="${bin.phing} -l" />
+    </target>
+
+    <target name="docker:selenium-start" description="Starts a selenium container bridged which bridges to your local machine.">
+        <fail unless="domain.to.bridge" description="Pass the -Ddomain.to.bridge=mysite.local property to bridge a local installation."/>
+        <property name="browser" value="firefox" />
+        <echo message="Starting up temporary docker container" />
+        <!-- Dirty hack to bridge your local host to an ip -->
+        <exec passthru="true" command="sudo ifconfig lo0 alias 172.16.123.1" />
+        <exec passthru="true" command="${bin.docker} run -p 4444:4444 -p 5900:5900 --add-host ${domain.to.bridge}:172.16.123.1  --rm --name ${project.group}_${project.machineName}_selenium -d selenium/standalone-${browser}-debug:2.53.1-beryllium" />
+    </target>
+
+    <target name="docker:selenium-stop" description="Stops the selenium to run the regressions in.">
+        <echo message="Stopping container" />
+        <exec passthru="true" command="${bin.docker} stop ${project.group}_${project.machineName}_selenium" />
+    </target>
+
+</project>

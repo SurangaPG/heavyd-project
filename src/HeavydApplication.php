@@ -2,6 +2,7 @@
 
 namespace surangapg\Heavyd;
 
+use surangapg\Heavyd\Command\Docker\SeleniumCommand;
 use surangapg\Heavyd\Engine\EngineInterface;
 use surangapg\Heavyd\Engine\PhingEngine;
 
@@ -103,6 +104,15 @@ class HeavydApplication extends Application {
     $this->add(new MiscSetupCommand());
     $this->add(new MiscInstallCommand());
     $this->add(new MiscResetCommand());
+
+    // Not all the items require additional services.
+    // Those that do should list this property and we'll then add the docker
+    // commands accordingly.
+    // @TODO This should be replaced with a fully contained setup.
+    if (isset($this->properties->get('project')['requires']['additional_docker_services'])
+      && $this->properties->get('project')['requires']['additional_docker_services']) {
+      $this->add(new SeleniumCommand());
+    }
   }
 
   /**

@@ -243,10 +243,6 @@
         <phingcall target="docker:selenium-start" />
     </target>
 
-    <target name="project:selenium-start-debug" description="Start a stand alone selenium container in debug mode.">
-        <phingcall target="docker:selenium-bridged-start" />
-    </target>
-
     <target name="project:selenium-stop" description="Stop the selenium container.">
         <phingcall target="docker:selenium-stop" />
     </target>
